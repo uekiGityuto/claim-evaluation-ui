@@ -1,0 +1,46 @@
+{
+  "cards": [
+    {
+      "id": 1,
+      "title": "Seamlessly visualize quality",
+      "description": "Collaboratively administrate empowered markets via plug-and-play networks.",
+      "button_desc": "Here's why",
+      "img_uri": "/assets/img/23m.jpg"
+    },
+    {
+      "id": 2,
+      "title": "Seamlessly visualize quality",
+      "description": "Dramatically engage seamlessly visualize quality intellectual capital without superior collaboration and idea-sharing.",
+      "button_desc": "Here's how",
+      "img_uri": "/assets/img/24m.jpg"
+    },
+    {
+      "id": 3,
+      "title": "Dynamically Procrastinate",
+      "description": "Completely synergize resource taxing relationships via premier niche markets.",
+      "button_desc": "Read more",
+      "img_uri": "/assets/img/22l.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Best in class",
+      "description": "Imagine jumping into that boat, and just letting it sail wherever the wind takes you...",
+      "button_desc": "Just do it...",
+      "img_uri": "/assets/img/15l.jpg"
+    },
+    {
+      "id": 5,
+      "title": "Dynamically innovate supply chains",
+      "description": "Holisticly predominate extensible testing procedures for reliable supply chains.",
+      "button_desc": "Here's why",
+      "img_uri": "/assets/img/25m.jpg"
+    },
+    {
+      "id": 6,
+      "title": "Sanity check",
+      "description": "Objectively innovate empowered manufactured products whereas parallel platforms.",
+      "button_desc": "Stop here",
+      "img_uri": "/assets/img/16l.jpg"
+    }
+  ]
+}
