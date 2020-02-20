@@ -1,0 +1,35 @@
+<main class="cards">
+  <content class="card" *ngFor="let card of card_list; index as i">
+    <form><!-- [(formGroup)]="firstForm"</form> (ngSubmit)="onSubmit(cardForm{{i}})" action="/detail">-->
+      <input type="hidden" name="id" value="{{card.id}}">
+      <input type="hidden" name="title" value="{{card.id}}">
+      <input type="hidden" name="description" value="{{card.description}}">
+      <img src="{{card.img_uri}}" alt="Sample photo">
+      <div class="text">
+        <h3>{{card.title}}</h3>
+        <p>{{card.description}}</p>
+        <!-- <div [hidden]="submitted"> -->
+          <button type="submit">{{card.button_desc}}</button>
+        <!-- </div> -->
+      </div>
+    </form>
+  </content>
+</main>
+
+<!-- <div class="row between-xs">
+  <div class="col-xs-2">
+      <div class="box">
+          between
+      </div>
+  </div>
+  <div class="col-xs-2">
+      <div class="box">
+          between
+      </div>
+  </div>
+  <div class="col-xs-2">
+      <div class="box">
+          between
+      </div>
+  </div>
+</div> -->
