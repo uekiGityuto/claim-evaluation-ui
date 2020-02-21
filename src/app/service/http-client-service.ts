@@ -17,37 +17,15 @@ export class HttpClientService {
     // this.setAuthorization('my-auth-token');
     }
 
-    // public get(uri, method): Promise<any>{
-    public get(uri, method, params={}):any{
+    public get(uri, method, param={}):any{
         return this.http
             .request(
                 method,
                 uri, 
                 {
                     responseType:"json",
-                    params
+                    params: param
                 })
-        // let promise = new Promise((resolve, reject) => {
-            // let rtnHttp;
-            // switch(method) {
-            //     case "get":
-            //         rtnHttp = this.http.get(uri);
-            //         break;
-            //     case "post":
-            //         rtnHttp = this.http.post(uri, this.httpOptions);
-            //         break;
-            // }
-            
-            // rtnHttp.toPromise()
-            //     .then((res) => {
-            //         let results = res.json().results;
-            //         resolve(results);
-            //     }).catch(this.errorHandler);
-            // rtnHttp.subscribe((result:Card) => {
-            //     this.results = result;
-            // });
-            // this.results = rtnHttp.map(data => __values(data))
-        // });
     }
 
     // private errorHandler(err) {

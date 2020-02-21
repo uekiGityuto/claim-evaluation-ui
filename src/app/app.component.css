@@ -1,0 +1,8 @@
+/* autoprefixer grid: on */
+
+.app-container {
+    height: calc(100vh - 6.2em);
+    display: grid;
+    overflow-y: auto;
+    /* grid-template-rows: var(--layout-header-height) 0 auto; */
+  }

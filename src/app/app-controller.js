@@ -2,7 +2,7 @@ var app = angular.module("app", ["ngRoute"]);
 
 // app.config(function($routeProvider){
 //     $routeProvider
-//         .when("/first", { templateUrl: "first.component.html" });
+//         .when("/list", { templateUrl: "list.component.html" });
 // });
 
 app.controller("AppController", function($scope, $location){

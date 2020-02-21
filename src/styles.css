@@ -1,0 +1,113 @@
+/* autoprefixer grid: autoplace */
+
+body {
+    font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+    font-size: 0.9rem;
+    height: 100%;
+    overflow: hidden;
+}
+
+button {
+    cursor: pointer;
+}
+
+.grid-app {
+    margin: 0.3em;
+    display: grid;
+    grid-template-rows: 3em;
+    /* grid-gap: 0.5em; */
+}
+
+.grid-contents {
+    display: grid;
+    grid-template-columns: 9em;
+    /* grid-gap: 0.5em; */
+    grid-row: 2/2;
+    margin-top: 0.2em;
+}
+ 
+header,
+aside,
+article,
+footer {
+    background: #eaeaea;
+    padding: 1em;
+}
+
+header {
+    grid-row: 1/2;
+    height: 1em;
+}
+ 
+aside.sidebar-left {
+    grid-column: 1/2;
+    margin-right: 0.2em;
+}
+
+aside.sidebar-left li {
+    margin-top: 0.7em;
+    margin-left: 0.1em;
+}
+
+aside.sidebar-left a {
+    text-decoration: none;
+    color: white;
+}
+
+aside.sidebar-left a:hover {
+    color: #067fc1;
+}
+
+article {
+    grid-column: 2/2;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* content.card {
+    
+} */
+ 
+.grid > * {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.list-style-none {
+    list-style-type: none;
+    padding: 0;
+}
+
+.txt-deco-none {
+    text-decoration: none;
+}
+
+.ft-italic {
+    font-style: italic;
+}
+
+.ft-w {
+   color: white; 
+}
+
+.ft-b {
+    font-weight: 600;
+}
+
+.bg-menu {
+    background-color: #00ccca;
+}
+
+/* .br-wh {
+    width: 1280px;
+    height: 1024px;
+    min-width: 1280px;
+    min-height: 1024px;
+    max-width: 1280px;
+    max-height: 1024px;
+} */
+
+/* .background {
+    -webkit-gradient(linear, left top, left bottom, color-stop(0%, #36b0b6), color-stop(100%, #2a8a8f));
+} */

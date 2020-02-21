@@ -6,14 +6,15 @@ import { AppComponent } from './app.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientService } from './service/http-client-service';
-import { ExampleComponent } from './example/example.component';
-import { Example2Component } from './example2/example2.component';
-import { FirstComponent } from './first/first.component';
-import { DetailComponent } from './detail/detail.component';
+import { ExampleComponent } from './component/example/example.component';
+import { Example2Component } from './component/example2/example2.component';
+import { DetailComponent } from './component/detail/detail.component';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { ListComponent } from './component/list/list.component';
+import { ObservableClientService } from './service/ObservableClientService';
 
 const routes:Routes = [
-  { path: '', component: FirstComponent},
+  { path: '', component: ListComponent},
   { path: 'detail', component: DetailComponent},
   { path: 'example', component: ExampleComponent },
   { path: 'example2', component: Example2Component }
@@ -24,8 +25,8 @@ const routes:Routes = [
     AppComponent,
     ExampleComponent,
     Example2Component,
-    FirstComponent,
-    DetailComponent
+    DetailComponent,
+    ListComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +39,7 @@ const routes:Routes = [
     FormsModule,
     ReactiveFormsModule
   ],
-  providers: [HttpClientService],
+  providers: [HttpClientService, ObservableClientService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
