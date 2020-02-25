@@ -10,7 +10,7 @@ export class ObservableClientService {
     private result: Result;
 
     constructor(private http: HttpClient) {
-        this.result = new Result(null, false, []);
+        this.result = new Result();
     }
 
     public rxClient(uri, method, param={}): Observable<any> {

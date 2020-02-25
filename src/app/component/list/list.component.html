@@ -1,26 +1,54 @@
 <div *ngFor="let err_msg of err_msg_list; index as i" class="err-msg">
   <p>{{err_msg['key']}}: {{err_msg['value']}}</p><br>
 </div>
-<main class="cards">
-  <content class="card" *ngFor="let card of card_list; index as i">
-    <form #thisForm (ngSubmit)="onSubmit(thisForm)"><!-- [(formGroup)]="firstForm"</form> (ngSubmit)="onSubmit(cardForm{{i}})" action="/detail">-->
-      <input type="hidden" name="id" value="{{card.id}}">
-      <input type="hidden" name="title" value="{{card.title}}">
-      <input type="hidden" name="description" value="{{card.description}}">
-      <img src="{{card.img_uri}}" alt="Sample photo">
-      <div class="text">
-        <h3>{{card.title}}</h3>
-        <p>{{card.description}}</p>
-        <!-- <div [hidden]="submitted"> -->
-          <button type="submit" onclick="javascript:scrollInit()">{{card.button_desc}}</button>
-        <!-- </div> -->
-      </div>
-    </form>
-  </content>
+<main class="main">
+  <div class="header_area">
+    <table class="head_table">
+      <thead>
+        <tr>
+          <th class="w15">損害担当者</th>
+          <th class="w15">受付番号</th>
+          <th class="w20">契約者名</th>
+          <th class="w15">生年月日</th>
+          <th class="w5">種類</th>
+          <th class="w15">発生日</th>
+          <th class="w5">スコア</th>
+          <th></th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="scroll_area">
+    <table class="list_table">
+      <thead>
+        <tr>
+          <th class="w15"></th>
+          <th class="w15"></th>
+          <th class="w20"></th>
+          <th class="w15"></th>
+          <th class="w5"></th>
+          <th class="w15"></th>
+          <th class="w5"></th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="content" *ngFor="let item of list; index as i">
+            <td><span>{{item.staff}}</span></td>
+            <td><span>{{item.receipt_no}}</span></td>
+            <td><span>{{item.name}}</span></td>
+            <td><span>{{item.birthday}}</span></td>
+            <td><span>{{item.kind}}</span></td>
+            <td><span>{{item.occurence_date}}</span></td>
+            <td><span>{{item.score}}</span></td>
+            <td>
+              <form #thisForm (ngSubmit)="onSubmit(thisForm)">
+                <input type="hidden" name="receiptNo" value="{{item.receipt_no}}">
+                <button type="submit" ngClick="scrollInit()">詳細</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </main>
-<script>
-  function scrollInit() {
-    alert("test");
-    scrollTo(0, 0);
-  }
-</script>

@@ -4,9 +4,9 @@ export class Result {
     public errMsgList: {key: string, value: string}[];
 
     constructor(
-        data: any,
-        isSuccess: boolean,
-        errMsgList: {key: string, value: string}[]
+        data: any = null,
+        isSuccess: boolean = false,
+        errMsgList: {key: string, value: string}[] = []
     ){
         this.data = data;
         this.isSuccess = isSuccess;

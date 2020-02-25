@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Card } from '../../model/Card.model';
+import { Issue } from '../../model/Issue.model';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import {Router, NavigationExtras} from "@angular/router";
 import { Result } from '../../model/Result.model';
@@ -11,24 +11,24 @@ import { Result } from '../../model/Result.model';
   providers: [ObservableClientService]
 })
 export class ListComponent implements OnInit {
-  public card_list: Card[];
+  public list: Issue[];
   public err_msg_list: {key: string, value: string}[];
-  public tempData: Card;
 
   constructor(
-    private obClientService: ObservableClientService,
+    private ob: ObservableClientService,
     private router: Router
   ) {}
   
   getCardList() {
-    const uri = "http://localhost:3000/cards";
+    const uri = "http://localhost:3000/list";
     const method = "get";
-    this.card_list = [];
+    this.list = [];
+    this.err_msg_list = [];
 
-    let observer = this.obClientService.rxClient(uri , method);
+    let observer = this.ob.rxClient(uri , method);
     observer.subscribe(
       (result: Result) => {
-        result.isSuccess ? this.card_list = result.data : this.err_msg_list = result.errMsgList;
+        result.isSuccess ? this.list = result.data : this.err_msg_list = result.errMsgList;
       }
     );
   }
@@ -39,24 +39,17 @@ export class ListComponent implements OnInit {
 
 
   onSubmit(param:any): void {
-    const card = this.setRequestValue("card", param);
+    const receiptNo = param.receiptNo.value;
     let navigationExtras: NavigationExtras = {
       queryParams: {
-          "card": JSON.stringify(card)
+          "issue": JSON.stringify({receipt_no: receiptNo})
       }
     };
     this.router.navigate(["detail"], navigationExtras);
   }
 
-  setRequestValue(modelName, param) {
-    switch(modelName) {
-      case "card":
-        let card = new Card(param.id.value,
-                            param.title.value,
-                            param.description.value,
-                            "","");
-        return card;
-    }
-  }
-
+  // scrollInit() {
+  //   alert("test");
+  //   scrollTo(0, 0);
+  // }
 }

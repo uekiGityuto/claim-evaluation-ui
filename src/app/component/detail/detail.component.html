@@ -1,4 +1,15 @@
-<p>detail</p><br>
-<p>{{card.title}}</p><br>
-<p>{{card.id}}</p><br>
-<p>{{card.description}}</p><br>
+<p>{{issue.receipt_no}}</p>
+<p>{{issue.staff}}</p>
+<p>{{issue.name}}</p>
+<p>{{issue.birthday}}</p>
+<p>{{issue.kind}}</p>
+<p>{{issue.occurence_date}}</p>
+<p>{{issue.score}}</p>
+<div *ngFor="let history of issue.score_history">
+    <span>{{history.date}}: {{history.value}}</span>
+</div>
+<p>{{issue.estimation}}</p>
+<p>{{issue.estimation_memo}}</p>
+<div *ngFor="let f of issue.factors">
+    <span>{{f.factor}}: {{f.effect}}</span>
+</div>

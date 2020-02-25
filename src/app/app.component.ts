@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Result } from './model/Result.model';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,9 @@ import { Component } from '@angular/core';
   styleUrls: ['../assets/css/flexbox.css', './app.component.css']
 })
 export class AppComponent {
-  title = 'Sample App Hello';
+  result: Result;
+
+  constructor() {
+    this.result = new Result();
+  }
 }
