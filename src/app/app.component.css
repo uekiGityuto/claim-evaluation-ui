@@ -2,6 +2,7 @@
 
 .app-container {
     height: calc(100vh - 4.8em);
+    min-width: 58em;
     overflow-y: hidden;
     /* overflow-y: auto; */
   }
@@ -57,10 +58,6 @@ article {
   padding: 0.2em;
 }
 
-/* content.card {
-  
-} */
-
 .grid > * {
   display: flex;
   align-items: center;
@@ -79,16 +76,58 @@ article {
 .ft-italic {
   font-style: italic;
 }
-
-.ft-w {
- color: white; 
-}
-
-.ft-b {
+.ft-bold {
   font-weight: 600;
 }
 
+.ft-wt {
+  color: white; 
+}
+.ft-bk {
+  color: black;
+}
+.ft-gr {
+  color: gray;
+}
+.ft-sv {
+  color: silver;
+}
+.ft-bl {
+  color: blue;
+}
+.ft-nv {
+  color: navy;
+}
+.ft-tl {
+  color: teal;
+}
+.ft-lm {
+  color: lime;
+}
+.ft-aq {
+  color: aqua;
+}
+.ft-yl {
+  color: yellow;
+}
+.ft-rd {
+  color: red;
+}
+.ft-fc {
+  color: fuchsia;
+}
+.ft-ol {
+  color: olive;
+}
+.ft-pr {
+  color: purple;
+}
+.ft-mr {
+  color: maroon;
+}
+
 .bg-menu {
+  /* background-color: var(--color-scheme-menu); */
   background-color: #00ccca;
 }
 

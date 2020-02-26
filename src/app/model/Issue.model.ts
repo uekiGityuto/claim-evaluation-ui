@@ -1,27 +1,27 @@
 export class Issue {
+    receipt_no: string;
     staff: string;
-    receipt_no: number;
     name: string;
     birthday: Date;
     kind: string;
-    occurence_date:  Date;
+    occurence_date: Date;
     score: number;
     score_history: {date: string, value: number}[];
     factors: {factor: string, effect: number}[];
     estimation: boolean;
     estimation_memo: string;
 
-    constructor(staff: string = "",
-                receiptNo: number = null,
-                name: string = "",
-                birthday: string = "",
-                kind: string = "",
-                occurenceDate: string = "",
+    constructor(receiptNo: string = '',
+                staff: string = '',
+                name: string = '',
+                birthday: string = '',
+                kind: string = '',
+                occurenceDate: string = '',
                 score: number = 0,
                 score_history: {date: string, value: number}[] = [],
                 factors: {factor: string, effect: number}[] = [],
                 estimation: boolean = false,
-                estimation_memo: string = "") {
+                estimation_memo: string = '') {
         this.staff = staff;
         this.receipt_no = receiptNo;
         this.name = name;
@@ -33,41 +33,40 @@ export class Issue {
         this.factors = factors;
         this.estimation = estimation;
         this.estimation_memo = estimation_memo;
-
     }
 
-    setRequestData(data: Object) {
-        this.staff = data['staff'];
-        this.receipt_no = data['receipt_no'];
-        this.name = data['name'];
-        this.birthday = new Date(data['birthday']);
-        this.kind = data['kind'];
-        this.occurence_date = new Date(data['occurence_date']);
-        this.score = data['score'];
-        this.setScoreHistory(data['score_history']);
-        this.setFactors(data['factors']);
-        this.estimation = data['estimation'];
-        this.estimation_memo = data['estimation_memo'];
+    setRequestData(data: object) {
+        this.staff = data['staff'.toString()];
+        this.receipt_no = data['receipt_no'.toString()];
+        this.name = data['name'.toString()];
+        this.birthday = new Date(data['birthday'.toString()]);
+        this.kind = data['kind'.toString()];
+        this.occurence_date = new Date(data['occurence_date'.toString()]);
+        this.score = data['score'.toString()];
+        this.setScoreHistory(data['score_history'.toString()]);
+        this.setFactors(data['factors'.toString()]);
+        this.estimation = data['estimation'.toString()];
+        this.estimation_memo = data['estimation_memo'.toString()];
     }
 
-    setScoreHistory(score_history: Object[]): void {
+    setScoreHistory(score_history: object[]): void {
         this.score_history = [];
-        for (let score of score_history) {
-            if(score) {
+        for (const score of score_history) {
+            if (score) {
                 try {
-                    this.score_history.push({date: score['date'], value: score['value']});
-                } catch(e) {}
+                    this.score_history.push({date: score['date'.toString()], value: score['value'.toString()]});
+                } catch (e) {}
             }
         }
     }
 
-    setFactors(factors: Object[]): void {
+    setFactors(factors: object[]): void {
         this.factors = [];
-        for (let f of factors) {
-            if(f) {
+        for (const f of factors) {
+            if (f) {
                 try {
-                    this.factors.push({factor: f['factor'], effect: f['effect']});
-                } catch(e) {}
+                    this.factors.push({factor: f['factor'.toString()], effect: f['effect'.toString()]});
+                } catch (e) {}
             }
         }
     }

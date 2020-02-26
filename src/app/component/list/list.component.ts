@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Issue } from '../../model/Issue.model';
 import { ObservableClientService } from '../../service/ObservableClientService';
-import {Router, NavigationExtras} from "@angular/router";
+import {Router, NavigationExtras} from '@angular/router';
 import { Result } from '../../model/Result.model';
 
 @Component({
@@ -12,23 +12,23 @@ import { Result } from '../../model/Result.model';
 })
 export class ListComponent implements OnInit {
   public list: Issue[];
-  public err_msg_list: {key: string, value: string}[];
+  public errMsgList: {key: string, value: string}[];
 
   constructor(
     private ob: ObservableClientService,
     private router: Router
   ) {}
-  
-  getCardList() {
-    const uri = "http://localhost:3000/list";
-    const method = "get";
-    this.list = [];
-    this.err_msg_list = [];
 
-    let observer = this.ob.rxClient(uri , method);
+  getCardList() {
+    const uri = 'http://localhost:3000/list';
+    const method = 'get';
+    this.list = [];
+    this.errMsgList = [];
+
+    const observer = this.ob.rxClient(uri , method);
     observer.subscribe(
       (result: Result) => {
-        result.isSuccess ? this.list = result.data : this.err_msg_list = result.errMsgList;
+        result.isSuccess ? this.list = result.data : this.errMsgList = result.errMsgList;
       }
     );
   }
@@ -37,19 +37,18 @@ export class ListComponent implements OnInit {
     this.getCardList();
   }
 
-
-  onSubmit(param:any): void {
+  onSubmit(param: any): void {
     const receiptNo = param.receiptNo.value;
-    let navigationExtras: NavigationExtras = {
+    const navigationExtras: NavigationExtras = {
       queryParams: {
-          "issue": JSON.stringify({receipt_no: receiptNo})
+          issue: JSON.stringify({receipt_no: receiptNo})
       }
     };
-    this.router.navigate(["detail"], navigationExtras);
+    this.router.navigate(['detail'], navigationExtras);
   }
 
   // scrollInit() {
-  //   alert("test");
+  //   alert('test');
   //   scrollTo(0, 0);
   // }
 }

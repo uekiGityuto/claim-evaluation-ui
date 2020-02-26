@@ -12,34 +12,44 @@ import { Result } from '../../model/Result.model';
 
 export class DetailComponent implements OnInit {
   public issue: Issue;
-  public err_msg_list = [];
+  public errMsgList = [];
 
   constructor(private route: ActivatedRoute,
               private ob: ObservableClientService) {
-    this.route.queryParams.subscribe(params => {
-      if(params["issue"]) {
-        let object = JSON.parse(params["issue"]);
-        object ? this.castToIsuue(object) : false;
-      }
-    });
+    // let receipt_no : string = this.route.snapshot.paramMap.get('receipt_no');
+    // if(receipt_no) {
+    //   this.issue = new Issue(receipt_no);
+    //   this.issue.receipt_no = receipt_no;
+    // } else {
+      this.route.queryParams.subscribe(params => {
+        if (params['receipt_no'.toString()]) {
+          this.issue.receipt_no = params['receipt_no'.toString()];
+        } else if (params['issue'.toString()]) {
+          const object = JSON.parse(params['issue'.toString()]);
+          if (object) {
+            this.castToIsuue(object);
+          }
+        }
+      });
+    // }
   }
 
   getIssueInfo() {
-    const uri = "http://localhost:3001/issue";
-    const param = {"receipt_no": this.issue.receipt_no};
-    const method = "get";
+    const uri = 'http://localhost:3001/issue';
+    const param = {receipt_no: this.issue.receipt_no};
+    const method = 'get';
     this.issue = new Issue();
-    this.err_msg_list = [];
+    this.errMsgList = [];
 
-    let observer = this.ob.rxClient(uri , method, param);
+    const observer = this.ob.rxClient(uri , method, param);
     observer.subscribe(
       (result: Result) => {
-        result.isSuccess ? this.issue.setRequestData(result.data[0]) : this.err_msg_list = result.errMsgList;
+        result.isSuccess ? this.issue.setRequestData(result.data[0]) : this.errMsgList = result.errMsgList;
       }
     );
   }
 
-  castToIsuue(object:Issue):void {
+  castToIsuue(object: Issue): void {
     this.issue = object;
   }
 

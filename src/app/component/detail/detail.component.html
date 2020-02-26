@@ -1,15 +1,20 @@
-<p>{{issue.receipt_no}}</p>
-<p>{{issue.staff}}</p>
-<p>{{issue.name}}</p>
-<p>{{issue.birthday}}</p>
-<p>{{issue.kind}}</p>
-<p>{{issue.occurence_date}}</p>
-<p>{{issue.score}}</p>
-<div *ngFor="let history of issue.score_history">
-    <span>{{history.date}}: {{history.value}}</span>
+<div *ngFor="let errMsg of errMsgList; index as i" class="err-msg">
+    <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
 </div>
-<p>{{issue.estimation}}</p>
-<p>{{issue.estimation_memo}}</p>
-<div *ngFor="let f of issue.factors">
-    <span>{{f.factor}}: {{f.effect}}</span>
+<div *ngIf="issue.receipt_no.length > 0">
+    <p>{{issue.receipt_no}}</p>
+    <p>{{issue.staff}}</p>
+    <p>{{issue.name}}</p>
+    <p>{{issue.birthday | date:'yyyy/M/d'}}</p>
+    <p>{{issue.kind}}</p>
+    <p>{{issue.occurence_date | date:'yyyy/M/d'}}</p>
+    <p>{{issue.score}}</p>
+    <div *ngFor="let history of issue.score_history">
+        <span>{{history.date}}: {{history.value}}</span>
+    </div>
+    <p>{{issue.estimation}}</p>
+    <p>{{issue.estimation_memo}}</p>
+    <div *ngFor="let f of issue.factors">
+        <span>{{f.factor}}: {{f.effect}}</span>
+    </div>
 </div>

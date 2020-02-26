@@ -1,7 +1,7 @@
-<div *ngFor="let err_msg of err_msg_list; index as i" class="err-msg">
-  <p>{{err_msg['key']}}: {{err_msg['value']}}</p><br>
+<div *ngFor="let errMsg of errMsgList; index as i" class="err-msg">
+  <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
 </div>
-<main class="main">
+<main class="main" *ngIf="list.length > 0">
   <div class="header_area">
     <table class="head_table">
       <thead>
@@ -34,18 +34,19 @@
       </thead>
       <tbody>
         <tr class="content" *ngFor="let item of list; index as i">
-            <td><span>{{item.staff}}</span></td>
-            <td><span>{{item.receipt_no}}</span></td>
-            <td><span>{{item.name}}</span></td>
-            <td><span>{{item.birthday}}</span></td>
-            <td><span>{{item.kind}}</span></td>
-            <td><span>{{item.occurence_date}}</span></td>
-            <td><span>{{item.score}}</span></td>
-            <td>
-              <form #thisForm (ngSubmit)="onSubmit(thisForm)">
-                <input type="hidden" name="receiptNo" value="{{item.receipt_no}}">
-                <button type="submit" ngClick="scrollInit()">詳細</button>
+          <td><span>{{item.staff}}</span></td>
+          <td><span>{{item.receipt_no}}</span></td>
+          <td><span>{{item.name}}</span></td>
+          <td><span>{{item.birthday | date:'yyyy/M/d'}}</span></td>
+          <td><span>{{item.kind}}</span></td>
+          <td><span>{{item.occurence_date | date:'yyyy/M/d'}}</span></td>
+          <td><span>{{item.score}}</span></td>
+          <td>
+            <form #thisForm (ngSubmit)="onSubmit(thisForm)">
+              <input type="hidden" name="receiptNo" value="{{item.receipt_no}}">
+              <button type="submit" ngClick="scrollInit()">詳細</button>
             </form>
+            <!-- <a [routerLink]="['detail', {receipt_no:item.receipt_no}]">詳細</a> -->
           </td>
         </tr>
       </tbody>
