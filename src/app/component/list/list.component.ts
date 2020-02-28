@@ -3,24 +3,25 @@ import { Issue } from '../../model/Issue.model';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import {Router, NavigationExtras} from '@angular/router';
 import { Result } from '../../model/Result.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  styleUrls: ['./list.component.css'],
-  providers: [ObservableClientService]
+  styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
   public list: Issue[];
   public errMsgList: {key: string, value: string}[];
 
-  constructor(
-    private ob: ObservableClientService,
-    private router: Router
-  ) {}
+  constructor(private ob: ObservableClientService,
+              private router: Router) {
+    this.list = [];
+    this.errMsgList = [];
+  }
 
-  getCardList() {
-    const uri = 'http://localhost:3000/list';
+  public getList() {
+    const uri = environment.list_url;
     const method = 'get';
     this.list = [];
     this.errMsgList = [];
@@ -34,7 +35,7 @@ export class ListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getCardList();
+    this.getList();
   }
 
   onSubmit(param: any): void {

@@ -3,6 +3,7 @@ import { Issue } from '../../model/Issue.model';
 import { ActivatedRoute } from '@angular/router';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import { Result } from '../../model/Result.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-detail',
@@ -14,28 +15,14 @@ export class DetailComponent implements OnInit {
   public issue: Issue;
   public errMsgList = [];
 
-  constructor(private route: ActivatedRoute,
-              private ob: ObservableClientService) {
-    // let receipt_no : string = this.route.snapshot.paramMap.get('receipt_no');
-    // if(receipt_no) {
-    //   this.issue = new Issue(receipt_no);
-    //   this.issue.receipt_no = receipt_no;
-    // } else {
-      this.route.queryParams.subscribe(params => {
-        if (params['receipt_no'.toString()]) {
-          this.issue.receipt_no = params['receipt_no'.toString()];
-        } else if (params['issue'.toString()]) {
-          const object = JSON.parse(params['issue'.toString()]);
-          if (object) {
-            this.castToIsuue(object);
-          }
-        }
-      });
-    // }
+  constructor(private ob: ObservableClientService,
+              private route: ActivatedRoute) {
+    this.issue = new Issue();
+    this.errMsgList = [];
   }
 
-  getIssueInfo() {
-    const uri = 'http://localhost:3001/issue';
+  public getIssueInfo() {
+    const uri = environment.issue_url;
     const param = {receipt_no: this.issue.receipt_no};
     const method = 'get';
     this.issue = new Issue();
@@ -54,6 +41,22 @@ export class DetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    // let receipt_no : string = this.route.snapshot.paramMap.get('receipt_no');
+    // if(receipt_no) {
+    //   this.issue = new Issue(receipt_no);
+    //   this.issue.receipt_no = receipt_no;
+    // } else {
+      this.route.queryParams.subscribe(params => {
+        if (params['receipt_no'.toString()]) {
+          this.issue.receipt_no = params['receipt_no'.toString()];
+        } else if (params['issue'.toString()]) {
+          const object = JSON.parse(params['issue'.toString()]);
+          if (object) {
+            this.castToIsuue(object);
+          }
+        }
+      });
+    // }
     this.getIssueInfo();
   }
 

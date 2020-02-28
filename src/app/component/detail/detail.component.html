@@ -1,7 +1,24 @@
 <div *ngFor="let errMsg of errMsgList; index as i" class="err-msg">
     <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
 </div>
-<div *ngIf="issue.receipt_no.length > 0">
+
+<div *ngIf="issue.receipt_no.length > 0" class="scroll_area">
+    <!-- icon sample code -->
+    <!-- <mat-icon class="done-square">done</mat-icon>
+    <mat-icon class="done-square active">done</mat-icon>
+    <mat-icon class="clear-square">clear</mat-icon>
+    <mat-icon class="clear-square active">clear</mat-icon>
+    <mat-icon class="star">star</mat-icon>
+    <mat-icon class="star active">star</mat-icon>
+    <div class="icon-high">高</div>
+    <div class="icon-fiddle">詐欺</div>
+    <div class="crop-square-green"></div>
+    <div class="crop-square-green active"></div>
+    <div class="crop-square-red"></div>
+    <div class="crop-square-red active"></div>
+    <div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
+    <div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> -->
+    
     <p>{{issue.receipt_no}}</p>
     <p>{{issue.staff}}</p>
     <p>{{issue.name}}</p>
@@ -9,12 +26,22 @@
     <p>{{issue.kind}}</p>
     <p>{{issue.occurence_date | date:'yyyy/M/d'}}</p>
     <p>{{issue.score}}</p>
-    <div *ngFor="let history of issue.score_history">
+    <div *ngFor="let history of issue.score_history" style="display:inline">
         <span>{{history.date}}: {{history.value}}</span>
     </div>
     <p>{{issue.estimation}}</p>
     <p>{{issue.estimation_memo}}</p>
     <div *ngFor="let f of issue.factors">
-        <span>{{f.factor}}: {{f.effect}}</span>
+        <div *ngIf="f.effect > 0" class="inline-block">
+            <div class="crop-square-red active" *ngFor="let i of [].constructor(f.effect | filter:'abs')"></div>
+            <div class="crop-square-red" *ngFor="let i of [].constructor(3 - (f.effect | filter:'abs'))"></div>
+        </div>
+        <div *ngIf="f.effect < 0" class="inline-block">
+            <div class="crop-square-green active" *ngFor="let i of [].constructor(f.effect | filter:'abs')"></div>
+            <div class="crop-square-green" *ngFor="let i of [].constructor(3 - (f.effect | filter:'abs'))"></div>
+        </div>
+        <div class="inline-block v-t">
+            <span>{{f.factor}}</span>
+        </div>
     </div>
 </div>

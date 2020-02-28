@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  list_url: "http://localhost:3000/list",
+  issue_url: "http://localhost:3001/issue",
+  token: "test123456789asdfghjkl"
 };
 
 /*

@@ -42,6 +42,7 @@
 }
 
 .list_table {
+  margin-top: 0.2em;
   width: inherit;
 }
 
@@ -49,6 +50,10 @@
   /* background-color: darkgrey; */
   border-bottom: solid 1px #232323;
   height: 1.2em;
+}
+
+.list_table > tbody > tr {
+  height: 2.1em;
 }
 
 .list_table > tbody > tr > td {
@@ -64,4 +69,10 @@
   padding-bottom: 0.2em;
   padding-left: 0.8em;
   width: 4em;
+  box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+}
+
+.list_table button:hover {
+  background: #979797;
+  box-shadow: none;
 }

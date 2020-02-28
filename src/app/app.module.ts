@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 
 // import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,9 @@ import { DetailComponent } from './component/detail/detail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ListComponent } from './component/list/list.component';
 import { ObservableClientService } from './service/ObservableClientService';
+import { MatIconModule } from '@angular/material/icon';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FilterPipe } from '../app/module/filter.pipe';
 
 const routes: Routes = [
   { path: '', component: ListComponent},
@@ -25,7 +28,8 @@ const routes: Routes = [
     ExampleComponent,
     Example2Component,
     DetailComponent,
-    ListComponent
+    ListComponent,
+    FilterPipe
   ],
   imports: [
     BrowserModule,
@@ -36,9 +40,13 @@ const routes: Routes = [
     ),
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatIconModule,
+    BrowserAnimationsModule
   ],
-  providers: [ObservableClientService],
+  providers: [
+    ObservableClientService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

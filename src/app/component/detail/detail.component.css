@@ -1,1 +1,11 @@
 /* autoprefixer grid: on */
+
+.scroll_area {
+    width: calc(100vw - 9.8em);
+    height: calc(100vh - 4.5em);
+    overflow-y: auto;
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    padding: 0;
+  }

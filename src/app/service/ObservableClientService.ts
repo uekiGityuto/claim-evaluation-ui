@@ -2,22 +2,29 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Result } from '../model/Result.model';
+import { environment } from '../../environments/environment'
 
 @Injectable({
     providedIn: 'root'
 })
 export class ObservableClientService {
     private result: Result;
+    private headers: any;
 
     constructor(private http: HttpClient) {
         this.result = new Result();
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + environment.token
+        };
     }
 
-    public rxClient(uri, method, param= {}): Observable<any> {
+    public rxClient(uri, method= 'get', param= {}): Observable<any> {
         return new Observable(observer => {
             const rtn = this.http.request(method,
                             uri,
                             {
+                                headers: this.headers,
                                 responseType: 'json',
                                 params: param
                             });
@@ -42,12 +49,4 @@ export class ObservableClientService {
                 });
         });
     }
-
-    // public setAuthorization(token: string = null): void {
-    //     if (!token) {
-    //       return;
-    //     }
-    //     const bearerToken: string = `Bearer ${token}`;
-    //     this.httpOptions.headers = this.httpOptions.headers.set('Authorization', bearerToken);
-    //   }
 }

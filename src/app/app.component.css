@@ -2,7 +2,6 @@
 
 .app-container {
     height: calc(100vh - 4.8em);
-    min-width: 58em;
     overflow-y: hidden;
     /* overflow-y: auto; */
   }
@@ -127,7 +126,7 @@ article {
 }
 
 .bg-menu {
-  /* background-color: var(--color-scheme-menu); */
+  /* background-color:var(--color-scheme-menu); */
   background-color: #00ccca;
 }
 
