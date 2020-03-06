@@ -1,5 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, Type } from '@angular/core';
+import { ModalComponent } from './component/modal/modal.component';
 import { Result } from './model/Result.model';
+import { Subscription } from 'rxjs';
+import { ModalService } from './service/modal-service';
+import { Modal } from './model/Modal.model';
 
 @Component({
   selector: 'app-root',
@@ -7,9 +11,32 @@ import { Result } from './model/Result.model';
   styleUrls: ['../assets/css/flexbox.css', './app.component.css']
 })
 export class AppComponent {
-  result: Result;
+  public result: Result;
+  public modal: any;
+  private subscription: Subscription;
 
-  constructor() {
+  constructor(public ms: ModalService) {
     this.result = new Result();
+    this.modal = null;
+  }
+
+  public openModal(model: Modal, callback: FunctionStringCallback, cmpt: any) {
+    this.modal = ModalComponent;
+    this.ms.model = model;
+    this.subscription = this.ms.ob.subscribe(
+      (param) => {
+        const result = JSON.parse(param);
+        if (result != 'close') {
+          this.ms.model.memo = (<Modal>result).memo;
+          callback(param);
+        }
+        this.modal = null;
+        this.closeModal();
+      }
+    );
+  }
+
+  public closeModal() {
+    this.subscription.unsubscribe();
   }
 }

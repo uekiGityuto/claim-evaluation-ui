@@ -1,0 +1,66 @@
+.overlay {
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: rgba(105, 119, 134, 0.4);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal {
+    overflow: hidden;
+    height: 22em;
+    width: 25em;
+    background-color: #FFFFFF;
+    border-radius: 0.4em;
+    box-shadow: 10px 10px 10px rgba(0,0,0,0.4);
+    border: solid 1px rgb(196, 222, 235);
+    z-index: 1001;
+    padding: 1.5em;
+  }
+
+  .modal-top {
+      margin: 0;
+      font-size: 1.1em;
+  }
+
+  .modal-title {
+    width: 100%;
+  }
+  
+  .modal-header {
+    height: 5em;
+    width: 100%;
+    line-height: 0.9em;
+    margin: 0.4em 0.2em 0.2em 0;
+    vertical-align: middle;
+  }
+  
+  .modal-header > #modal_title {
+    display: block;
+  }
+  
+  .modal-contents {
+    height: calc(100% - 7em);
+    margin: 0.5em 0 0.5em 0;
+  }
+  .modal-contents textarea.memo {
+    width: calc(100% - 1.15em);
+    height: calc(100% - 1.1em);
+  }
+
+  .modal-footer {
+    width: 100%;
+    text-align: center;
+    margin-top: 0.2em;
+  }
+
+  .modal mat-icon.clear {
+      font-size: large;
+  }

@@ -1,11 +1,135 @@
 /* autoprefixer grid: on */
 
-.scroll_area {
-    width: calc(100vw - 9.8em);
-    height: calc(100vh - 4.5em);
-    overflow-y: auto;
-    margin-left: 0;
-    margin-right: 0;
-    margin-bottom: 0;
-    padding: 0;
-  }
+:host {
+  width: 100%;
+  height: 100%;
+}
+
+.detail-head {
+  width: 100%;
+  height: 3.8em;
+  line-height: 2.1em;
+  background-color: #FFFFFF;
+  display: flex;
+  vertical-align: middle;
+}
+
+.detail-head table {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+.detail-head button {
+  margin-top: 0.9em;
+  height: 2.2em;
+}
+
+.detail-container {
+  display: grid;
+  grid-template-areas: "d-main d-right"
+                       "d-foot d-right";
+  grid-template-rows: 1fr 10em;
+  grid-template-columns: 1fr 22em;
+  width: 100%;
+  height: calc(100% - 3.8em);
+  line-height: calc(100% - 3.8em);
+  margin: 0;
+  padding: 0;
+}
+
+.detail-main {
+  grid-area: d-main;
+  margin: 0.7em 0 0.5em 0.5em;
+  padding-top: 0.5em;
+  border: solid 1px rgb(231, 239, 243);
+  border-radius: 0.3em;
+  background-color: #FFFFFF;
+  overflow-y: auto;
+}
+
+.detail-main div.title {
+  min-height: 1.5em;
+}
+
+.detail-main div.chart {
+  height: calc(100% - 17.5em);
+  min-height: 10em;
+  border: solid 1px #dddddd;
+  margin: 0.4em 0.9em 0.9em 0.9em;
+  overflow-y: hidden;
+}
+
+.detail-main div.risk-list-area {
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+.detail-main div.risk-list-area div.title {
+  width: 100%;
+  height: 1.5em;
+  display: flex;
+  text-align: center;
+  padding-top: 0.5em;
+  background-color: #F3F3F3;
+}
+
+.detail-main div.factor {
+  width: calc(100% - 4em);
+}
+
+.detail-side {
+  grid-area: d-right;
+  margin-left: 0.2em;
+  margin-top: 0.2em;
+  /* border: solid 1px rgb(196, 222, 235); */
+}
+
+.detail-side div.title {
+  height: 1em;
+  margin: 0.5em 0.8em 0.3em 0.8em;
+  font-size: 13pt;
+}
+
+.detail-side div.filter {
+  height: 1.5em;
+  margin: 0.3em 1em 0.5em 1em;
+}
+.detail-side div.filter span.active {
+  font-weight: 600;
+  color: #00a5a2;
+}
+.detail-side div.filter span:hover {
+  font-weight: 600;
+  background-color: #eff7fc;
+  cursor: pointer;
+}
+
+.detail-side div.contents {
+  margin: 0.5em 0 0.5em 0;
+  background-color: rgb(248, 249, 250);
+}
+
+.detail-side div.contents textarea {
+  height: calc(100% - 6.2em);
+  margin: 1em 1em 0em 1em;
+}
+
+.detail-side div.contents button {
+  width: 7em;
+  height: 2.5em;
+  margin: 0 1em 1em 1em;
+}
+
+.detail-side mat-icon {
+  color: #e4f3fa;
+}
+
+.detail-foot {
+  grid-area: d-foot;
+  margin: 0.2em 0 0 0.5em;
+  padding-top: 0.5em;
+  border: solid 1px rgb(231, 239, 243);
+  border-radius: 0.3em;
+  background-color: #FFFFFF;
+}

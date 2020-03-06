@@ -5,17 +5,78 @@
     --color-scheme-menu: #00ccca;
 } */
 
+html, body { width: 100%; height: 100%; }
+/* body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 body {
     font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
     font-size: 0.9rem;
     height: 100%;
     overflow: hidden;
     min-width: 74em;
+    margin: 0;
+}
+
+table { width: 100%; }
+table th { text-align: center; font-weight: 600; }
+
+div {
+    line-height: 100%;
+}
+
+textarea {
+    padding: 0.5em;
+    border-radius: 0.2em;
+    background-color: rgb(244, 251, 253);
+    border: solid 1px rgb(196, 222, 235);
+    overflow: auto;
+    resize: none;
 }
 
 button {
+    background: #00a5a2;
+    border: 0;
+    color: white;
+    padding-top: 0.2em;
+    padding-right: 0.8em;
+    padding-bottom: 0.2em;
+    padding-left: 0.8em;
+    width: 4em;
+    height: 1.7em;
+    box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
+    border-radius: 0.2em;
     cursor: pointer;
+}  
+button:hover {
+    background: #6cbebd;
+    box-shadow: none;
 }
+
+a.notdeco {
+    text-decoration: none;
+    color: #000000;
+}
+
+
+.ft-wt { color: white; }
+.ft-bk { color: black; }
+.ft-gr { color: gray; }
+.ft-sv { color: silver; }
+.ft-bl { color: blue; }
+.ft-nv { color: navy; }
+.ft-tl { color: teal; }
+.ft-lm { color: lime; }
+.ft-aq { color: aqua; }
+.ft-yl { color: yellow; }
+.ft-rd { color: red; }
+.ft-fc { color: fuchsia; }
+.ft-ol { color: olive; }
+.ft-pr { color: purple; }
+.ft-mr { color: maroon; }
+
+.ft-small { font-size: 0.7rem; }
+.ft-normar { font-size: 0.9rem; }
+.ft-large { font-size: 1rem; }
+.ft-xlarge { font-size: 1.1rem; }
 
 .w5 { width: 5%; }
 .w10 { width: 10%; }
@@ -37,8 +98,180 @@ button {
 .w90 { width: 90%; }
 .w95 { width: 95%; }
 .w100 { width: 100%; }
+.h5 { height: 5%; }
+.h10 { height: 10%; }
+.h15 { height: 15%; }
+.h20 { height: 20%; }
+.h25 { height: 25%; }
+.h30 { height: 30%; }
+.h35 { height: 35%; }
+.h40 { height: 40%; }
+.h45 { height: 45%; }
+.h50 { height: 50%; }
+.h55 { height: 55%; }
+.h60 { height: 60%; }
+.h65 { height: 65%; }
+.h70 { height: 70%; }
+.h75 { height: 75%; }
+.h80 { height: 80%; }
+.h85 { height: 85%; }
+.h90 { height: 90%; }
+.h95 { height: 95%; }
+.h100 { height: 100%; }
+.wp1em { width: 0.1em; min-width: 0.1em; }
+.wp2em { width: 0.2em; min-width: 0.2em; }
+.wp3em { width: 0.3em; min-width: 0.3em; }
+.wp4em { width: 0.4em; min-width: 0.4em; }
+.wp5em { width: 0.5em; min-width: 0.5em; }
+.wp6em { width: 0.6em; min-width: 0.6em; }
+.wp7em { width: 0.7em; min-width: 0.7em; }
+.wp8em { width: 0.8em; min-width: 0.8em; }
+.wp9em { width: 0.9em; min-width: 0.9em; }
+.w1em { width: 1em; min-width: 1em; }
+.w2em { width: 2em; min-width: 2em; }
+.w3em { width: 3em; min-width: 3em; }
+.w4em { width: 4em; min-width: 4em; }
+.w5em { width: 5em; min-width: 5em; }
+.w6em { width: 6em; min-width: 6em; }
+.w7em { width: 7em; min-width: 7em; }
+.w8em { width: 8em; min-width: 8em; }
+.w9em { width: 9em; min-width: 9em; }
+.w10em { width: 10em; }
+.w15em { width: 15em; }
+.w20em { width: 20em; }
+.w25em { width: 25em; }
+.w30em { width: 30em; }
+.hp1em { height: 0.1em; min-height: 0.1em; }
+.hp2em { height: 0.2em; min-height: 0.2em; }
+.hp3em { height: 0.3em; min-height: 0.3em; }
+.hp4em { height: 0.4em; min-height: 0.4em; }
+.hp5em { height: 0.5em; min-height: 0.5em; }
+.hp6em { height: 0.6em; min-height: 0.6em; }
+.hp7em { height: 0.7em; min-height: 0.7em; }
+.hp8em { height: 0.8em; min-height: 0.8em; }
+.hp9em { height: 0.9em; min-height: 0.9em; }
+.h1em { height: 1em; min-height: 1em; }
+.h1p5em { height: 1.5em; min-height: 1.5em; }
+.h2em { height: 2em; min-height: 2em; }
+.h2p5em { height: 2em; min-height: 2.5em; }
+.h3em { height: 3em; min-height: 3em; }
+.h3p5em { height: 3em; min-height: 3.5em; }
+.h4em { height: 4em; min-height: 4em; }
+.h4p5em { height: 4.5em; min-height: 4.5em; }
+.h5em { height: 5em; min-height: 5em; }
+.h5p5em { height: 5em; min-height: 5.5em; }
+.h6em { height: 6em; min-height: 6em; }
+.h6p5em { height: 6.5em; min-height: 6.5em; }
+.h7em { height: 7em; min-height: 7em; }
+.h7p5em { height: 7.5em; min-height: 7.5em; }
+.h8em { height: 8em; min-height: 8em; }
+.h8p5em { height: 8.5em; min-height: 8.5em; }
+.h9em { height: 9em; min-height: 9em; }
+.h9p5em { height: 9.5em; min-height: 9.5em; }
+.h10em { height: 10em; min-height: 10em; }
+.h15em { height: 15em; min-height: 15em; }
+.h20em { height: 20em; min-height: 20em; }
+.h25em { height: 25em; min-height: 25em; }
+.h30em { height: 30em; min-height: 30em; }
+
+.ma { margin: auto; }
+.m1 { margin: 0.1em; }
+.m2 { margin: 0.2em; }
+.m3 { margin: 0.3em; }
+.m4 { margin: 0.4em; }
+.m5 { margin: 0.5em; }
+.m6 { margin: 0.6em; }
+.m7 { margin: 0.7em; }
+.m8 { margin: 0.8em; }
+.m9 { margin: 0.9em; }
+.mt1 { margin-top: 0.1em; }
+.mt2 { margin-top: 0.2em; }
+.mt3 { margin-top: 0.3em; }
+.mt4 { margin-top: 0.4em; }
+.mt5 { margin-top: 0.5em; }
+.mr1 { margin-right: 0.1em; }
+.mr2 { margin-right: 0.2em; }
+.mr3 { margin-right: 0.3em; }
+.mr4 { margin-right: 0.4em; }
+.mr5 { margin-right: 0.5em; }
+.ml1 { margin-left: 0.1em; }
+.ml2 { margin-left: 0.2em; }
+.ml3 { margin-left: 0.3em; }
+.ml4 { margin-left: 0.4em; }
+.ml5 { margin-left: 0.5em; }
+.mb1 { margin-bottom: 0.1em; }
+.mb2 { margin-bottom: 0.2em; }
+.mb3 { margin-bottom: 0.3em; }
+.mb4 { margin-bottom: 0.4em; }
+.mb5 { margin-bottom: 0.5em; }
+
+.p1 { padding: 0.1em; }
+.p2 { padding: 0.2em; }
+.p3 { padding: 0.3em; }
+.p4 { padding: 0.4em; }
+.p5 { padding: 0.5em; }
+.p6 { padding: 0.6em; }
+.p7 { padding: 0.7em; }
+.p8 { padding: 0.8em; }
+.p9 { padding: 0.9em; }
+.pt1 { padding-top: 0.1em; }
+.pt2 { padding-top: 0.2em; }
+.pt3 { padding-top: 0.3em; }
+.pt4 { padding-top: 0.4em; }
+.pt5 { padding-top: 0.5em; }
+.pr1 { padding-right: 0.1em; }
+.pr2 { padding-right: 0.2em; }
+.pr3 { padding-right: 0.3em; }
+.pr4 { padding-right: 0.4em; }
+.pr5 { padding-right: 0.5em; }
+.pl1 { padding-left: 0.1em; }
+.pl2 { padding-left: 0.2em; }
+.pl3 { padding-left: 0.3em; }
+.pl4 { padding-left: 0.4em; }
+.pl5 { padding-left: 0.5em; }
+.pb1 { padding-bottom: 0.1em; }
+.pb2 { padding-bottom: 0.2em; }
+.pb3 { padding-bottom: 0.3em; }
+.pb4 { padding-bottom: 0.4em; }
+.pb5 { padding-bottom: 0.5em; }
 
 .v-t { vertical-align: top; }
+.v-m { vertical-align: middle; }
+.v-b { vertical-align: bottom; }
+.t-c { text-align: center; }
+.f-l { float: left; }
+.f-r { float: right; }
+
+.flex { display: flex;}
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.flex-center {
+    display: flex;
+    justify-content: center;
+}
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+.flex-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.flex-col-between {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.flex-col-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 
 .err-msg {
     position:absolute;
@@ -49,9 +282,7 @@ button {
     color:red;
     text-align:center;
     font-weight: 600;
-  }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+}
 
 .inline-block {
     display: inline-block;
@@ -66,7 +297,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: gray;
     border: solid 1px #BBBBBB;
     border-radius: 0.2em;
+    cursor: pointer;
 }
+.done-square:hover {
+    color: #CCCCCC;
+    border: solid 1px #CCCCCC;
+}
+
 .done-square.active {
     margin: 0.1em;
     height: 1.1em !important;
@@ -76,6 +313,24 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #00B030;
     border: solid 1px #00B030;
     border-radius: 0.2em;
+    cursor: pointer;
+}
+.done-square.active:hover {
+    color: rgb(92, 216, 125);
+    border: solid 1px rgb(92, 216, 125);
+}
+
+.clear {
+    margin: 0.1em;
+    height: 1.1em !important;
+    width: 1.1em !important;
+    line-height: 1.1em;
+    font-size: small;
+    color: gray;
+    cursor: pointer;
+}
+.clear:hover {
+    color: #CCCCCC;
 }
 
 .clear-square {
@@ -87,7 +342,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: gray;
     border: solid 1px #BBBBBB;
     border-radius: 0.2em;
-
+    cursor: pointer;
+}
+.clear-square:hover {
+    color: #CCCCCC;
+    border: solid 1px #CCCCCC;
 }
 .clear-square.active {
     margin: 0.1em;
@@ -98,7 +357,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #D70000;
     border: solid 1px #D70000;
     border-radius: 0.2em;
-    
+    cursor: pointer;
+}
+.clear-square.active:hover {
+    color: rgb(255, 73, 73);
+    border: solid 1px rgb(255, 73, 73);
 }
 
 .star {
@@ -109,7 +372,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: small;
     color: #BBBBBB;
     filter: drop-shadow(1px 1px 1px #818181);
-
+    cursor: pointer;
 }
 .star.active {
     margin: 0.1em;
@@ -119,6 +382,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     font-size: small;
     color: rgb(225, 233, 12);
     filter: drop-shadow(1px 1px 1px #777301);
+    cursor: pointer;
 }
 
 .crop-square-red {
@@ -128,7 +392,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     width: 1.1em;
     background-color: rgb(235, 220, 220);
     border-radius: 0.2em;
-
 }
 .crop-square-red.active {
     display: inline-block;
@@ -188,6 +451,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: #D70000;
     border-radius: 0.2em;
 }
+.icon-high::before {
+    content: "高";
+}
 
 .icon-fiddle {
     display: inline-block;
@@ -201,4 +467,22 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #FFFFFF;
     background-color: #555555;
     border-radius: 0.2em;
+}
+.icon-fiddle::before {
+    content: "詐欺";
+}
+
+.lt-h { border-top: solid 1px #232323; }
+.lb-h { border-bottom: solid 1px #232323; }
+.lt-b { border-top: solid 1px #BBBBBB; }
+.lb-b { border-bottom: solid 1px #BBBBBB; }
+
+
+.bg-wt { background-color: #FFFFFF; }
+
+.contents-area {
+    margin: 0.5em;
+    border: solid 1px rgb(231, 239, 243);
+    border-radius: 0.4em;
+    background-color: #FFFFFF;
 }

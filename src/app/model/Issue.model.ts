@@ -8,7 +8,7 @@ export class Issue {
     score: number;
     score_history: {date: string, value: number}[];
     factors: {factor: string, effect: number}[];
-    estimation: boolean;
+    estimation_agreement: boolean;
     estimation_memo: string;
 
     constructor(receiptNo: string = '',
@@ -20,7 +20,7 @@ export class Issue {
                 score: number = 0,
                 score_history: {date: string, value: number}[] = [],
                 factors: {factor: string, effect: number}[] = [],
-                estimation: boolean = false,
+                estimation_agreement: boolean = null,
                 estimation_memo: string = '') {
         this.staff = staff;
         this.receipt_no = receiptNo;
@@ -31,7 +31,7 @@ export class Issue {
         this.score = score;
         this.score_history = score_history;
         this.factors = factors;
-        this.estimation = estimation;
+        this.estimation_agreement = estimation_agreement;
         this.estimation_memo = estimation_memo;
     }
 
@@ -45,7 +45,7 @@ export class Issue {
         this.score = data['score'.toString()];
         this.setScoreHistory(data['score_history'.toString()]);
         this.setFactors(data['factors'.toString()]);
-        this.estimation = data['estimation'.toString()];
+        this.estimation_agreement = data['estimation_agreement'.toString()];
         this.estimation_memo = data['estimation_memo'.toString()];
     }
 

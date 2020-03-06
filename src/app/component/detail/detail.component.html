@@ -2,46 +2,136 @@
     <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
 </div>
 
-<div *ngIf="issue.receipt_no.length > 0" class="scroll_area">
-    <!-- icon sample code -->
-    <!-- <mat-icon class="done-square">done</mat-icon>
-    <mat-icon class="done-square active">done</mat-icon>
-    <mat-icon class="clear-square">clear</mat-icon>
-    <mat-icon class="clear-square active">clear</mat-icon>
-    <mat-icon class="star">star</mat-icon>
-    <mat-icon class="star active">star</mat-icon>
-    <div class="icon-high">高</div>
-    <div class="icon-fiddle">詐欺</div>
-    <div class="crop-square-green"></div>
-    <div class="crop-square-green active"></div>
-    <div class="crop-square-red"></div>
-    <div class="crop-square-red active"></div>
-    <div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
-    <div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> -->
-    
-    <p>{{issue.receipt_no}}</p>
-    <p>{{issue.staff}}</p>
-    <p>{{issue.name}}</p>
-    <p>{{issue.birthday | date:'yyyy/M/d'}}</p>
-    <p>{{issue.kind}}</p>
-    <p>{{issue.occurence_date | date:'yyyy/M/d'}}</p>
-    <p>{{issue.score}}</p>
-    <div *ngFor="let history of issue.score_history" style="display:inline">
-        <span>{{history.date}}: {{history.value}}</span>
+<div class="detail-head">
+    <div class="w75 flex-row t-c">
+        <div class="w20 flex-column ma">
+            <strong class="mb5">受付番号</strong>
+            <span>{{issue.receipt_no}}</span>
+        </div>
+        <div class="w20 flex-column ma">
+            <strong class="mb5">契約者名</strong>
+            <span>{{issue.name}}</span>
+        </div>
+        <div class="w20 flex-column ma">
+            <strong class="mb5">生年月日</strong>
+            <span>{{issue.birthday | date:'yyyy/M/d'}}</span>
+        </div>
+        <div class="w20 flex-column ma">
+            <strong class="mb5">種類</strong>
+            <span>{{issue.kind}}</span>
+        </div>
+        <div class="w20 flex-column ma">
+            <strong class="mb5">発生日</strong>
+            <span>{{issue.occurence_date | date:'yyyy/M/d'}}</span>
+        </div>
     </div>
-    <p>{{issue.estimation}}</p>
-    <p>{{issue.estimation_memo}}</p>
-    <div *ngFor="let f of issue.factors">
-        <div *ngIf="f.effect > 0" class="inline-block">
-            <div class="crop-square-red active" *ngFor="let i of [].constructor(f.effect | filter:'abs')"></div>
-            <div class="crop-square-red" *ngFor="let i of [].constructor(3 - (f.effect | filter:'abs'))"></div>
-        </div>
-        <div *ngIf="f.effect < 0" class="inline-block">
-            <div class="crop-square-green active" *ngFor="let i of [].constructor(f.effect | filter:'abs')"></div>
-            <div class="crop-square-green" *ngFor="let i of [].constructor(3 - (f.effect | filter:'abs'))"></div>
-        </div>
-        <div class="inline-block v-t">
-            <span>{{f.factor}}</span>
-        </div>
+    <div class="w25 v-m t-c">
+        <button class="w15em h2em">調査を終了する</button>
     </div>
 </div>
+
+<div class="detail-container">
+    <div class="detail-main flex-col-between">
+        <div class="title flex-between">
+            <div>
+                リスクスコア&nbsp;<div class="icon-high"></div>&nbsp;812
+            </div>
+            <div>
+                評価&nbsp;
+                <mat-icon id="d-icon-done" class="done-square" (click)="riskScoreFeedback($event)">done</mat-icon>
+                <mat-icon id="d-icon-clear" class="clear-square" (click)="riskScoreFeedback($event)">clear</mat-icon>
+            </div>
+        </div>
+        <div class="chart">
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+            Chart<br>
+        </div>
+        <div class="risk-list-area">
+            <div class="title">
+                <div class="w50 flex-row">
+                    <div class="w4em">影響</div>
+                    <div>↑ リスクスコアを高める要因</div>
+                </div>
+                <div class="w50 flex-row">
+                    <div class="w4em">影響</div>
+                    <div>↓ リスクスコアを低下させる要因</div>
+                </div>
+            </div>
+            <div class="flex-row w100 mt3">
+                <div class="w50">
+                    <div class='flex'*ngFor="let f of rFactors; let i = index">
+                        <div class='w4em pt2'>
+                            <div class='crop-square-red active' *ngFor="let j of [].constructor(f.effect | filter:'abs')"></div>
+                            <div class='crop-square-red' *ngFor="let j of [].constructor(3 - (f.effect | filter:'abs'))"></div>
+                        </div>
+                        <div class='factor ml5 pt4 w100'>
+                            <span>{{f.factor}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="w50">
+                    <div class='flex'*ngFor="let f of gFactors; let i = index">
+                        <div class='w4em pt2'>
+                            <div class='crop-square-green active' *ngFor="let j of [].constructor(f.effect | filter:'abs')"></div>
+                            <div class='crop-square-green' *ngFor="let j of [].constructor(3 - (f.effect | filter:'abs'))"></div>
+                        </div>
+                        <div class='factor ml5 pt4 w100'>
+                            <span>{{f.factor}}</span>
+                        </div>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="w100 v-m t-c mt5 mb5">
+                <button id="btnShowAllRiskList" class="w15em h2em" (click)="getAllRiskList()">全てを見る</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="detail-side">
+        <div class="contents-area">
+            <div class="h2p5em">
+                <div class="title"><strong>史</strong></div>
+                <div class="filter">
+                    <span class="side-memo notdeco" id="side-memo-all" (click)="filterSideMemoList('side-memo-all')">All</span>&nbsp;<span>|</span>&nbsp;
+                    <span class="side-memo notdeco" id="side-memo-manual" (click)="filterSideMemoList('side-memo-manual')">使い手</span>&nbsp;<span>|</span>&nbsp;
+                    <span class="side-memo notdeco" id="side-memo-auto" (click)="filterSideMemoList('side-memo-auto')">自動化</span>
+                </div>
+            </div>
+            <div class="contents h10em flex-col-between">
+                <textarea placeholder="メモを追加"></textarea>
+                <button>申し出る</button>
+            </div>
+            <div class="w100 p5 flex-row">
+                <div>
+                    <mat-icon class="icon-flag m1">flag</mat-icon>
+                </div>
+                <div class="flex-column ft-small ml5 mr5">
+                    <div class="m2">申し立てが作成されました：<span class="ft-rd">940</span>|<span class="ft-rd">HIGH</span></div>
+                    <div class="m2">2019/05/03 @ 15:13</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="detail-foot">
+        detail-foot
+    </div>
+</div>
+
+<!-- icon sample code -->
+<!-- <mat-icon class="star">star</mat-icon>
+<mat-icon class="star active">star</mat-icon>
+<div class="icon-high"></div>
+<div class="icon-fiddle"></div>
+<div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
+<div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> --> -->
+    

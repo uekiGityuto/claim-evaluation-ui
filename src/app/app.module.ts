@@ -14,6 +14,7 @@ import { ObservableClientService } from './service/ObservableClientService';
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FilterPipe } from '../app/module/filter.pipe';
+import { ModalComponent } from './component/modal/modal.component';
 
 const routes: Routes = [
   { path: '', component: ListComponent},
@@ -29,7 +30,8 @@ const routes: Routes = [
     Example2Component,
     DetailComponent,
     ListComponent,
-    FilterPipe
+    FilterPipe,
+    ModalComponent
   ],
   imports: [
     BrowserModule,
