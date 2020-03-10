@@ -16,14 +16,14 @@
 
 .header_area {
   width: inherit;
-  height: 1em;
+  height: var(--height-title-small);
 }
 
 .scroll_area {
   width: inherit;
   height: calc(100vh - 5.7em);
   overflow-y: scroll;
-  margin-top: 0.3em;
+  margin-top: var(--mx);
   margin-left: 0;
   margin-right: 0;
   margin-bottom: 0;
@@ -37,42 +37,24 @@
 }
 
 .head_table {
-  width: calc(100% - 1em);
+  width: calc(100% - var(--mxxxx));
   height: inherit;
 }
 
 .list_table {
-  margin-top: 0.2em;
+  margin-top: var(--mn);
   width: inherit;
 }
 
 .head_table > thead > tr > th {
-  /* background-color: darkgrey; */
-  border-bottom: solid 1px #232323;
-  height: 1.5em;
+  border-bottom: var(--border-underline-title);
+  height: var(--height-title-normal);
 }
 
 .list_table > tbody > tr {
-  height: 2.1em;
+  height: var(--height-data-large);
 }
 
 .list_table > tbody > tr > td {
-  border-bottom: solid 1px #BBBBBB;
+  border-bottom: var(--border-underline-data);
 }
-
-/* .list_table button {
-  background: #00a5a2;
-  border: 0;
-  color: white;
-  padding-top: 0.2em;
-  padding-right: 0.8em;
-  padding-bottom: 0.2em;
-  padding-left: 0.8em;
-  width: 4em;
-  box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
-}
-
-.list_table button:hover {
-  background: #a4d6d5;
-  box-shadow: none;
-} */

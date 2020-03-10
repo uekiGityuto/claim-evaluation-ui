@@ -17,8 +17,8 @@ export class ModalComponent implements OnInit, OnDestroy {
 
   public ngOnInit(): void {
     const modalElement: HTMLInputElement = <HTMLInputElement>document.getElementById('modal-dialog');
-    modalElement.style.width = this.model.width + 'em';
-    modalElement.style.height = this.model.height + 'em';
+    if (this.model.width > 0) { modalElement.style.width = this.model.width + 'em'; }
+    if (this.model.height > 0) { modalElement.style.height = this.model.height + 'em'; }
     const header = <HTMLInputElement>document.getElementById('modal-header');
     header.style.display = this.ms.model.isHeader ? '' : 'none';
     const contents = <HTMLInputElement>document.getElementById('modal-contents');

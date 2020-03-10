@@ -17,7 +17,7 @@ export class Issue {
                 birthday: string = '',
                 kind: string = '',
                 occurenceDate: string = '',
-                score: number = 0,
+                score: number = null,
                 score_history: {date: string, value: number}[] = [],
                 factors: {factor: string, effect: number}[] = [],
                 estimation_agreement: boolean = null,

@@ -14,7 +14,7 @@
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">生年月日</strong>
-            <span>{{issue.birthday | date:'yyyy/M/d'}}</span>
+            <span>{{issue.birthday | filter:'date'}}</span>
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">種類</strong>
@@ -22,22 +22,22 @@
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">発生日</strong>
-            <span>{{issue.occurence_date | date:'yyyy/M/d'}}</span>
+            <span>{{issue.occurence_date | filter:'date'}}</span>
         </div>
     </div>
     <div class="w25 v-m t-c">
-        <button class="w15em h2em">調査を終了する</button>
+        <button>調査を終了する</button>
     </div>
 </div>
 
 <div class="detail-container">
     <div class="detail-main flex-col-between">
         <div class="title flex-between">
-            <div>
-                リスクスコア&nbsp;<div class="icon-high"></div>&nbsp;812
+            <div class="w50 flex-row flex-center-v">
+                <div class="ft-xxlarge">リスクスコア</div>&nbsp;<div class="icon-high"></div>&nbsp;<div class="ft-xxxlarge ft-lightbold">{{issue.score}}</div>
             </div>
-            <div>
-                評価&nbsp;
+            <div class="flex-row flex-center-v">
+                <div class="ft-xlarge">評価</div>&nbsp;
                 <mat-icon id="d-icon-done" class="done-square" (click)="riskScoreFeedback($event)">done</mat-icon>
                 <mat-icon id="d-icon-clear" class="clear-square" (click)="riskScoreFeedback($event)">clear</mat-icon>
             </div>
@@ -91,7 +91,7 @@
                
             </div>
             <div class="w100 v-m t-c mt5 mb5">
-                <button id="btnShowAllRiskList" class="w15em h2em" (click)="getAllRiskList()">全てを見る</button>
+                <button id="btnShowAllRiskList" (click)="getAllRiskList()">全てを見る</button>
             </div>
         </div>
     </div>
@@ -106,7 +106,7 @@
                     <span class="side-memo notdeco" id="side-memo-auto" (click)="filterSideMemoList('side-memo-auto')">自動化</span>
                 </div>
             </div>
-            <div class="contents h10em flex-col-between">
+            <div class="contents flex-col-between">
                 <textarea placeholder="メモを追加"></textarea>
                 <button>申し出る</button>
             </div>

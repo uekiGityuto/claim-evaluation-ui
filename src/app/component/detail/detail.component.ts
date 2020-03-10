@@ -6,7 +6,7 @@ import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
 import { AppComponent } from '../../app.component';
 import { Modal } from 'src/app/model/Modal.model';
-import { element } from 'protractor';
+import { FilterPipe } from '../../module/filter.pipe';
 
 @Component({
   selector: 'app-detail',
@@ -21,6 +21,9 @@ export class DetailComponent implements OnInit, OnDestroy {
   public noLimit: number;
   public rFactors: {factor: string, effect: number}[];
   public gFactors: {factor: string, effect: number}[];
+  private rFactorsAll: {factor: string, effect: number}[];
+  private gFactorsAll: {factor: string, effect: number}[];
+  private fp: FilterPipe;
 
   constructor(private ob: ObservableClientService,
               private route: ActivatedRoute,
@@ -31,6 +34,8 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.noLimit = -1;
     this.rFactors = [];
     this.gFactors = [];
+    this.rFactorsAll = [];
+    this.gFactorsAll = [];
   }
 
   public getIssueInfo() {
@@ -55,7 +60,6 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.setFactors();
     const element: HTMLInputElement = <HTMLInputElement>document.getElementById('btnShowAllRiskList');
     element.style.display = 'none';
-    window.dispatchEvent(new Event('resize'));
   }
 
   public riskScoreFeedback(event: Event) {
@@ -84,23 +88,30 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.issue = object;
   }
 
-  private setFactors(factors: {factor: string, effect: number}[] = this.issue.factors) {
-    let rCount = 0;
-    let gCount = 0;
+  private setFactors(factors: {factor: string, effect: number}[] = []) {
     this.rFactors = [];
     this.gFactors = [];
-    for (let i=0; i<factors.length; i++) {
-      const f = factors[i];
-      if (f.effect > 0 && (rCount < this.riskListLimit || this.riskListLimit === this.noLimit)) {
-        this.rFactors.push(f);
-        rCount += 1;
-      } else if (f.effect < 0 && (gCount < this.riskListLimit || this.riskListLimit === this.noLimit)) {
-        this.gFactors.push(f);
-        gCount += 1;
+
+    if (factors.length > 0) {
+      for (let i=0; i<factors.length; i++) {
+        const f = factors[i];
+        if (f.effect > 0) {
+          this.rFactorsAll.push(f);
+        } else if (f.effect < 0) {
+          this.gFactorsAll.push(f);
+        }
       }
-      if (this.riskListLimit != this.noLimit && rCount > this.riskListLimit && gCount > this.riskListLimit) {
-        break;
-      }
+      this.fp.transform(this.rFactorsAll, 'sort', ['effect','desc']);
+      this.fp.transform(this.gFactorsAll, 'sort', ['effect','asc']);
+    }
+
+    for (let i=0; i<this.rFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
+      const f = this.rFactorsAll[i];
+      this.rFactors.push(f);
+    }
+    for (let i=0; i<this.gFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
+      const f = this.gFactorsAll[i];
+      this.gFactors.push(f);
     }
   }
 
@@ -115,6 +126,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.fp = new FilterPipe();
     this.route.queryParams.subscribe(params => {
       if (params['receipt_no'.toString()]) {
         this.issue.receipt_no = params['receipt_no'.toString()];
@@ -135,7 +147,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private openModal(id, memo) {
     let modal = new Modal();
     if (this.appCmpt.ms.model.id != id) {
-      modal.memo = memo;
+      modal.memo = "";//memo;
     } else {
       modal.memo = this.appCmpt.ms.model.memo;
     }

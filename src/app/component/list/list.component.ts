@@ -4,6 +4,7 @@ import { ObservableClientService } from '../../service/ObservableClientService';
 import {Router, NavigationExtras} from '@angular/router';
 import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
+import { FilterPipe } from '../../module/filter.pipe';
 
 @Component({
   selector: 'app-list',
@@ -13,11 +14,14 @@ import { environment } from '../../../environments/environment';
 export class ListComponent implements OnInit {
   public list: Issue[];
   public errMsgList: {key: string, value: string}[];
+  private fp: FilterPipe;
+  private filterHistory: Map<string, string>;
 
   constructor(private ob: ObservableClientService,
               private router: Router) {
     this.list = [];
     this.errMsgList = [];
+    this.filterHistory = new Map();
   }
 
   public getList() {
@@ -34,7 +38,23 @@ export class ListComponent implements OnInit {
     );
   }
 
+  public sort(name) {
+    let asc = "";
+    if (this.filterHistory.has(name)) {
+      if (this.filterHistory.get(name) === "asc") {
+        asc = 'desc';
+      } else {
+        asc = 'asc';
+      }
+    } else {
+      asc = 'asc';
+    }
+    this.filterHistory.set(name, asc);
+    this.fp.transform(this.list, 'sort', [name, asc]);
+  }
+
   ngOnInit(): void {
+    this.fp = new FilterPipe();
     this.getList();
   }
 
@@ -47,9 +67,4 @@ export class ListComponent implements OnInit {
     };
     this.router.navigate(['detail'], navigationExtras);
   }
-
-  // scrollInit() {
-  //   alert('test');
-  //   scrollTo(0, 0);
-  // }
 }

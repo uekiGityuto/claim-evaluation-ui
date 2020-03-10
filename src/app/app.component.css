@@ -1,15 +1,15 @@
 /* autoprefixer grid: on */
 
 .app-container {
-    height: calc(100vh - 4.2em);
+    height: calc(100vh - 4em);
     overflow-y: hidden;
   }
 
 .grid-app {
-  margin: 0.3em;
+  margin: var(--mn);
   display: grid;
-  grid-template-rows: 3em 1fr;
-  grid-template-columns: 9em 1fr;
+  grid-template-rows: var(--height-menu-head) 1fr;
+  grid-template-columns: var(--height-menu-lside) 1fr;
   grid-template-areas: "header header"
                        "sidebar article";
   grid-auto-flow: row;
@@ -20,40 +20,39 @@ header,
 aside,
 article,
 footer {
-  background: #faf9f9;
-  padding: 1em;
+  background: var(--color-background-contents);
+  padding: var(--pxxxx);
 }
 
 header {
   grid-area: header;
-  height: 1em;
 }
 
 aside.sidebar-left {
   grid-area: sidebar;
-  margin-top: 0.2em;
+  margin-top: var(--mn);
 }
 
 aside.sidebar-left li {
-  margin-top: 0.7em;
-  margin-left: 0.1em;
+  margin-top: var(--mxxx);
+  margin-left: var(--ms);
 }
 
 aside.sidebar-left a {
   text-decoration: none;
-  color: white;
+  color: var(--color-white);
 }
 
 aside.sidebar-left a:hover {
-  color: #067fc1;
+  color: var(--color-active-menu);
 }
 
 article {
   grid-area: article;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 0.2em;
-  padding: 0.2em;
+  margin-top: var(--mn);
+  padding: var(--pn);
 }
 
 .grid > * {
@@ -75,12 +74,11 @@ article {
   font-style: italic;
 }
 .ft-bold {
-  font-weight: 600;
+  font-weight: var(--font-bold);
 }
 
 .bg-menu {
-  /* background-color:var(--color-scheme-menu); */
-  background-color: #00ccca;
+  background-color:var(--color-background-menu);
 }
 
 /* .br-wh {

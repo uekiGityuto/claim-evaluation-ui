@@ -76,22 +76,3 @@ import 'core-js/es/object';
 import 'core-js/es/array';
 import 'core-js/es/reflect';
 // import 'classlist.js';
-// import 'web-animations-js';
-
-// import cssVars from 'css-vars-ponyfill';
-// cssVars();
-// import cssVars from 'src/app/module/css-vars-ponyfill';
-// cssVars({
-//   rootElement   : document,
-//   shadowDOM     : false,
-//   include       : 'link[rel=stylesheet],style',
-//   exclude       : '',
-//   variables     : {},
-//   onlyLegacy    : true,
-//   preserveStatic: true,
-//   preserveVars  : false,
-//   silent        : false,
-//   updateDOM     : true,
-//   updateURLs    : true,
-//   watch         : false,
-// });

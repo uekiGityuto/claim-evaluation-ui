@@ -1,82 +1,176 @@
 /* autoprefixer grid: autoplace */
 
 /* IEはサポートしないため使用不可 (可能Browser: Edge, Chrome, Firefox, Opera, Sapari, Android WebBrowser, SamsungInternet) */
-/* :root {
-    --color-scheme-menu: #00ccca;
-} */
+:root {
+    /* Primary Color */
+    --color-background-menu: #00ccca;
+    --color-active-menu: #067fc1;
+    --color-hover: #6cbebd;
+    --color-active: #00a5a2;
+    --color-inactive: #e4f3fa;
+    --color-background-textarea: rgb(244, 251, 253);
+    --color-skyblue: rgb(196, 222, 235);
+
+    /* Secondary Color */
+    --color-background-contents: #faf9f9;
+    --color-background-title: #F3F3F3;
+    --color-shadow-gray: rgba(0,0,0,0.15);/*#818181*/
+    --color-shadow-dialog: rgba(0,0,0,0.4);
+    --color-inactive-gray: #cccccc;
+    --color-lightgray: rgb(223, 232, 236);
+    --color-gray: #BBBBBB;
+    --color-darkgray: #555555;
+    --color-black: #232323;
+    --color-white: #FFFFFF;
+    --color-overlay: rgba(105, 119, 134, 0.4);
+
+    /* Individual Color */
+    --color-red: #D70000;
+    --color-red-active: rgb(255, 73, 73);
+    --color-inactive-red: rgb(248, 205, 205);
+    --color-green: #00B030;
+    --color-green-active: rgb(92, 216, 125);
+    --color-green-inactive: rgb(190, 231, 202);
+    --color-yellow: rgb(225, 233, 12);
+    --color-shadow-yellow: olive;/*#777301;*/
+
+    /* Border */
+    --border-contents: solid 1px var(--color-inactive);
+    --border-contents-gray: solid 1px var(--color-lightgray);
+    --border-underline-title: solid 1px var(--color-black);
+    --border-underline-data: solid 1px var(--color-gray);
+    
+    /* Font */
+    --font-small: 0.7em;
+    --font-normal: 0.9em;
+    --font-large: 1em;
+    --font-xlarge: 1.1em;
+    --font-xxlarge: 1.2em;
+    --font-xxxlarge: 1.6em;
+    --font-lightbold: 500;
+    --font-bold: 600;
+
+    /* Icon */
+    --icon-ws: 1.1em;
+    --icon-wl: 1.5em;
+    --icon-wx: 2em;
+    --icon-hs: 1.1em;
+    --icon-hl: 1.5em;
+    --icon-hx: 2em;
+
+    /* Gap */
+    --ms: 0.1em;
+    --mn: 0.2em;
+    --mx: 0.3em;
+    --mxx: 0.5em;
+    --mxxx: 0.8em;
+    --mxxxx: 1em;
+    --m2: 2em;
+    --m3: 3em;
+    --m4: 4em;
+    --ps: 0.1em;
+    --pn: 0.2em;
+    --px: 0.3em;
+    --pxx: 0.5em;
+    --pxxx: 0.8em;
+    --pxxxx: 1em;
+    --pxxxxx: 1.5em;
+
+
+    /* Radius */
+    --radius-normal: 0.2em;
+    --radius-large: 0.3em;
+    --radius-xlarge: 0.4em;
+
+    /* Size */
+    --height-menu-head: 3em;
+    --height-menu-lside: 9em;
+    --height-detail-head: 3.8em;
+    --height-detail-foot: 10em;
+    --height-detail-chart-min: 10em;
+    --height-detail-rside-memo: 10em;
+    --height-title-small: 1em;
+    --height-title-normal: 1.5em;
+    --height-data-normal: 1.5em;
+    --height-data-large: 2.1em;
+    --height-modal-init: 20em;
+    --width-modal-init: 22em;
+    --width-body-min: 74em;
+    --width-detail-rside: 20em;
+
+    --btn-h-s: 1.7em;
+    --btn-h-n: 2.2em;
+    --btn-h-l: 2.5em;
+    --btn-h-xl: 2.7em;
+    --btn-w-s: 4em;
+    --btn-w-n: 7em;
+    --btn-w-l: 10em;
+    --btn-w-xl: 14em;
+}
 
 html, body { width: 100%; height: 100%; }
-/* body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; } */
 body {
     font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
-    font-size: 0.9rem;
+    font-size: var(--font-normal);
     height: 100%;
     overflow: hidden;
-    min-width: 74em;
+    min-width: var(--width-body-min);
     margin: 0;
 }
 
 table { width: 100%; }
-table th { text-align: center; font-weight: 600; }
+table th { text-align: center; font-weight: var(--font-bold); }
 
 div {
     line-height: 100%;
 }
 
 textarea {
-    padding: 0.5em;
-    border-radius: 0.2em;
-    background-color: rgb(244, 251, 253);
-    border: solid 1px rgb(196, 222, 235);
+    padding: var(--pxx);
+    border-radius: var(--radius-normal);
+    background-color: var(--color-background-textarea);
+    border: solid 1px var(--color-skyblue);
     overflow: auto;
     resize: none;
 }
 
 button {
-    background: #00a5a2;
+    background: var(--color-active);
     border: 0;
-    color: white;
-    padding-top: 0.2em;
-    padding-right: 0.8em;
-    padding-bottom: 0.2em;
-    padding-left: 0.8em;
-    width: 4em;
-    height: 1.7em;
-    box-shadow: 3px 3px 3px rgba(0,0,0,0.1);
-    border-radius: 0.2em;
+    color: var(--color-white);
+    padding-top: var(--pn);
+    padding-right: var(--pxxx);
+    padding-bottom: var(--pn);
+    padding-left: var(--pxxx);
+    width: var(--btn-w-s);
+    height: --btn-h-s;
+    box-shadow: 3px 3px 3px var(--color-shadow-gray);
+    border-radius: var(--radius-normal);
     cursor: pointer;
 }  
 button:hover {
-    background: #6cbebd;
+    background: var(--color-hover);
     box-shadow: none;
 }
 
 a.notdeco {
     text-decoration: none;
-    color: #000000;
+    color: var(--color-black);
 }
 
+.ft-wt { color: var(--color-white); }
+.ft-bk { color: var(--color-black); }
+.ft-rd { color: var(--color-red-active); }
 
-.ft-wt { color: white; }
-.ft-bk { color: black; }
-.ft-gr { color: gray; }
-.ft-sv { color: silver; }
-.ft-bl { color: blue; }
-.ft-nv { color: navy; }
-.ft-tl { color: teal; }
-.ft-lm { color: lime; }
-.ft-aq { color: aqua; }
-.ft-yl { color: yellow; }
-.ft-rd { color: red; }
-.ft-fc { color: fuchsia; }
-.ft-ol { color: olive; }
-.ft-pr { color: purple; }
-.ft-mr { color: maroon; }
+.ft-small { font-size: var(--font-small); }
+.ft-normar { font-size: var(--font-normal); }
+.ft-large { font-size: var(--font-large); }
+.ft-xlarge { font-size: var(--font-xlarge); }
+.ft-xxlarge { font-size: var(--font-xxlarge); }
+.ft-xxxlarge { font-size: var(--font-xxxlarge); }
 
-.ft-small { font-size: 0.7rem; }
-.ft-normar { font-size: 0.9rem; }
-.ft-large { font-size: 1rem; }
-.ft-xlarge { font-size: 1.1rem; }
+.ft-lightbold { font-weight: var(--font-lightbold); }
+.ft-bold { font-weight: var(--font-bold); }
 
 .w5 { width: 5%; }
 .w10 { width: 10%; }
@@ -253,6 +347,10 @@ a.notdeco {
     display: flex;
     justify-content: center;
 }
+.flex-center-v {
+    display: flex;
+    align-items: center;
+}
 .flex-row {
     display: flex;
     flex-direction: row;
@@ -274,14 +372,14 @@ a.notdeco {
 }
 
 .err-msg {
-    position:absolute;
-    top:3em;
-    margin-top:1em;
-    margin-left:-6.2em;
+    position: absolute;
+    top: 3em;
+    margin-top: var(--mxxxx);
+    margin-left: -6.2em;
     width: 100vw;
-    color:red;
-    text-align:center;
-    font-weight: 600;
+    color: var(--color-red-active);
+    text-align: center;
+    font-weight: var(--font-bold);
 }
 
 .inline-block {
@@ -289,200 +387,217 @@ a.notdeco {
 }
 
 .done-square {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: gray;
-    border: solid 1px #BBBBBB;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-wl) !important;
+    height: var(--icon-hl) !important;
+    line-height: var(--icon-hl);
+    font-size: var(--font-normal);
+    color: var(--color-gray);
+    border: solid 1px var(--color-gray);
+    border-radius: var(--radius-normal);
+    text-align: center;
     cursor: pointer;
 }
 .done-square:hover {
-    color: #CCCCCC;
-    border: solid 1px #CCCCCC;
+    color: var(--color-lightgray);
+    border: solid 1px var(--color-lightgray);
 }
 
 .done-square.active {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: #00B030;
-    border: solid 1px #00B030;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-wl) !important;
+    height: var(--icon-hl) !important;
+    line-height: var(--icon-hl);
+    font-size: var(--font-normal);
+    color: var(--color-green);
+    border: solid 1px var(--color-green);
+    border-radius: var(--radius-normal);
+    text-align: center;
     cursor: pointer;
 }
 .done-square.active:hover {
-    color: rgb(92, 216, 125);
-    border: solid 1px rgb(92, 216, 125);
+    color: var(--color-green-active);
+    border: solid 1px var(--color-green-active);
 }
 
 .clear {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: gray;
+    margin: var(--ms);
+    width: var(--icon-wl) !important;
+    height: var(--icon-hl) !important;
+    line-height: var(--icon-hl);
+    font-size: var(--font-normal);
+    color: var(--color-gray);
+    text-align: center;
     cursor: pointer;
 }
 .clear:hover {
-    color: #CCCCCC;
+    color: var(--color-lightgray);
 }
 
 .clear-square {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: gray;
-    border: solid 1px #BBBBBB;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    padding-right: var(--ps);
+    width: var(--icon-wl) !important;
+    height: var(--icon-hl) !important;
+    line-height: var(--icon-hl);
+    font-size: var(--font-normal);
+    color: var(--color-gray);
+    border: solid 1px var(--color-gray);
+    border-radius: var(--radius-normal);
+    text-align: center;
     cursor: pointer;
 }
 .clear-square:hover {
-    color: #CCCCCC;
-    border: solid 1px #CCCCCC;
+    color: var(--color-lightgray);
+    border: solid 1px var(--color-lightgray);
 }
 .clear-square.active {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: #D70000;
-    border: solid 1px #D70000;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    padding-right: var(--ps);
+    width: var(--icon-wl) !important;
+    height: var(--icon-hl) !important;
+    line-height: var(--icon-hl);
+    font-size: var(--font-normal);
+    color: var(--color-red);
+    border: solid 1px var(--color-red);
+    border-radius: var(--radius-normal);
+    text-align: center;
     cursor: pointer;
 }
 .clear-square.active:hover {
-    color: rgb(255, 73, 73);
-    border: solid 1px rgb(255, 73, 73);
+    color: var(--color-red-active);
+    border: solid 1px var(--color-red-active);
 }
 
 .star {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: #BBBBBB;
-    filter: drop-shadow(1px 1px 1px #818181);
+    margin: var(--ms);
+    width: var(--icon-ws) !important;
+    height: var(--icon-hs) !important;
+    line-height: var(--icon-hs);
+    font-size: var(--font-normal);
+    color: var(--color-gray);
+    filter: drop-shadow(1px 1px 1px var(--color-shadow-gray));
     cursor: pointer;
 }
 .star.active {
-    margin: 0.1em;
-    height: 1.1em !important;
-    width: 1.1em !important;
-    line-height: 1.1em;
-    font-size: small;
-    color: rgb(225, 233, 12);
-    filter: drop-shadow(1px 1px 1px #777301);
+    margin: var(--ms);
+    width: var(--icon-ws) !important;
+    height: var(--icon-hs) !important;
+    line-height: var(--icon-hs);
+    font-size: var(--font-normal);
+    color: var(--color-yellow);
+    filter: drop-shadow(1px 1px 1px var(--color-shadow-yellow));
     cursor: pointer;
 }
 
 .crop-square-red {
     display: inline-block;
-    margin: 0.1em;
-    height: 1.1em;
-    width: 1.1em;
-    background-color: rgb(235, 220, 220);
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-ws);
+    height: var(--icon-hs);
+    background-color: var(--color-inactive-red);
+    border-radius: var(--radius-normal);
 }
 .crop-square-red.active {
     display: inline-block;
-    margin: 0.1em;
-    height: 1.1em;
-    width: 1.1em;
-    background-color: #D70000;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-ws);
+    height: var(--icon-hs);
+    background-color: var(--color-red);
+    border-radius: var(--radius-normal);
 }
 
 .crop-square-green {
     display: inline-block;
-    margin: 0.1em;
-    height: 1.1em;
-    width: 1.1em;
-    background-color: rgb(190, 231, 202);
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-ws);
+    height: var(--icon-hs);
+    background-color: var(--color-green-inactive);
+    border-radius: var(--radius-normal);
 }
 .crop-square-green.active {
     display: inline-block;
-    margin: 0.1em;
-    height: 1.1em;
-    width: 1.1em;
-    background-color: #00B030;
-    border-radius: 0.2em;
+    margin: var(--ms);
+    width: var(--icon-ws);
+    height: var(--icon-hs);
+    background-color: var(--color-green);
+    border-radius: var(--radius-normal);
 }
 
 .icon-flag {
     display: inline-block;
-    height: 1.1em;
-    width: 1.1em;
+    width: var(--icon-ws);
+    height: var(--icon-hs);
 }
 .icon-flag mat-icon {
-    font-size: medium;
-    color: #CDCDCD;
+    font-size: var(--font-normal);
+    color: var(--color-inactive-gray);
     margin-left: -7.95em;
-    margin-right: -1em;
+    margin-right: -var(--mxxxx);
 }
 .icon-flag mat-icon.active {
-    font-size: medium;
-    color: rgb(225, 233, 12);
+    font-size: var(--font-normal);
+    color: var(--color-yellow);
     margin-left: -7.95em;
-    margin-right: -1em;
-    filter: drop-shadow(1px 1px 1px #777301);
+    margin-right: -var(--mxxxx);
+    filter: drop-shadow(1px 1px 1px var(--color-shadow-yellow));
 }
 
 .icon-high {
     display: inline-block;
-    margin: 0.1em;
-    line-height: 1.5em;
-    height: 1.5em;
-    width: 1.5em;
+    margin: var(--ms);
+    line-height: var(--icon-hl);
+    height: var(--icon-hl);
+    width: var(--icon-wl);
     font: status-bar;
     text-align: center;
     vertical-align: middle;
-    color: #FFFFFF;
-    background-color: #D70000;
-    border-radius: 0.2em;
+    color: var(--color-white);
+    background-color: var(--color-red);
+    border-radius: var(--radius-normal);
 }
-.icon-high::before {
+.icon-high:before {
     content: "高";
 }
 
 .icon-fiddle {
     display: inline-block;
-    margin: 0.1em;
-    line-height: 1.5em;
-    height: 1.5em;
+    margin: var(--ms);
+    line-height: var(--icon-hl);
+    height: var(--icon-hl);
     width: 3em;
     font: status-bar;
     text-align: center;
     vertical-align: middle;
-    color: #FFFFFF;
-    background-color: #555555;
-    border-radius: 0.2em;
+    color: var(--color-white);
+    background-color: var(--color-darkgray);
+    border-radius: var(--radius-normal);
 }
 .icon-fiddle::before {
     content: "詐欺";
 }
 
-.lt-h { border-top: solid 1px #232323; }
-.lb-h { border-bottom: solid 1px #232323; }
-.lt-b { border-top: solid 1px #BBBBBB; }
-.lb-b { border-bottom: solid 1px #BBBBBB; }
+.icon-sort {
+    margin: var(--mn);
+    width: var(--icon-ws) !important;
+    height: var(--icon-hs) !important;
+    font-size: var(--font-small);
+    cursor: pointer;
+}
+.icon-sort:hover {
+    color: var(--color-gray);
+}
+
+.lt-h { border-top: solid 1px var(--color-black); }
+.lb-h { border-bottom: solid 1px var(--color-black); }
+.lt-b { border-top: solid 1px var(--color-gray); }
+.lb-b { border-bottom: solid 1px var(--color-gray); }
 
 
-.bg-wt { background-color: #FFFFFF; }
+.bg-wt { background-color: var(--color-white); }
 
 .contents-area {
-    margin: 0.5em;
-    border: solid 1px rgb(231, 239, 243);
-    border-radius: 0.4em;
-    background-color: #FFFFFF;
+    border: solid 1px var(--color-lightgray);
+    border-radius: var(--radius-xlarge);
+    background-color: var(--color-white);
 }

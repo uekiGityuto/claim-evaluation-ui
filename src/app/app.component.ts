@@ -1,4 +1,4 @@
-import { Component, Type } from '@angular/core';
+import { Component, Type, OnInit } from '@angular/core';
 import { ModalComponent } from './component/modal/modal.component';
 import { Result } from './model/Result.model';
 import { Subscription } from 'rxjs';

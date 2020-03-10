@@ -20,8 +20,8 @@ export class Modal {
         isMemo: boolean = true,
         memo: string = "",
         btnName: string = "確認",
-        width: number = 25,
-        height: number = 22,
+        width: number = 0,
+        height: number = 0,
         obj: any = null
     ) {
         this.id = id;

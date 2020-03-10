@@ -7,9 +7,9 @@
 
 .detail-head {
   width: 100%;
-  height: 3.8em;
+  height: var(--height-detail-head);
   line-height: 2.1em;
-  background-color: #FFFFFF;
+  background-color: var(--color-white);
   display: flex;
   vertical-align: middle;
 }
@@ -21,115 +21,126 @@
 }
 
 .detail-head button {
-  margin-top: 0.9em;
-  height: 2.2em;
+  margin-top: var(--mxxx);
+  width: var(--btn-w-xl);
+  height: var(--btn-h-n);
 }
 
 .detail-container {
   display: grid;
   grid-template-areas: "d-main d-right"
                        "d-foot d-right";
-  grid-template-rows: 1fr 10em;
-  grid-template-columns: 1fr 22em;
-  width: 100%;
-  height: calc(100% - 3.8em);
-  line-height: calc(100% - 3.8em);
+  grid-template-rows: 1fr var(--height-detail-foot);
+  grid-template-columns: 1fr var(--width-detail-rside);
+  width: calc(100% - var(--mn));
+  height: calc(100% - var(--height-detail-head));
+  line-height: calc(100% - var(--height-detail-head));
   margin: 0;
   padding: 0;
 }
 
 .detail-main {
   grid-area: d-main;
-  margin: 0.7em 0 0.5em 0.5em;
-  padding-top: 0.5em;
-  border: solid 1px rgb(231, 239, 243);
-  border-radius: 0.3em;
-  background-color: #FFFFFF;
+  margin: var(--mxx) 0 var(--mx) var(--mx);
+  padding-top: var(--pxx);
+  border: var(--border-contents-gray);
+  border-radius: var(--radius-large);
+  background-color: var(--color-white);
   overflow-y: auto;
 }
 
 .detail-main div.title {
-  min-height: 1.5em;
+  min-height: var(--height-title-normal);
 }
 
 .detail-main div.chart {
   height: calc(100% - 17.5em);
-  min-height: 10em;
-  border: solid 1px #dddddd;
-  margin: 0.4em 0.9em 0.9em 0.9em;
+  min-height: var(--height-detail-chart-min);
+  border: var(--border-contents-gray);
+  margin: var(--mxx) var(--mxxxx) var(--mxxxx) var(--mxxxx);
   overflow-y: hidden;
 }
 
 .detail-main div.risk-list-area {
-  margin-left: 1em;
-  margin-right: 1em;
+  margin-left: var(--mxxxx);
+  margin-right: var(--mxxxx);
 }
 
 .detail-main div.risk-list-area div.title {
   width: 100%;
-  height: 1.5em;
+  height: var(--height-title-normal);
   display: flex;
   text-align: center;
-  padding-top: 0.5em;
-  background-color: #F3F3F3;
+  padding-top: var(--pxx);
+  background-color: var(--color-background-title);
 }
 
 .detail-main div.factor {
-  width: calc(100% - 4em);
+  width: calc(100% - var(--m4));
+}
+
+.detail-main button {
+  width: var(--btn-w-xl);
+  height: var(--btn-h-n);
 }
 
 .detail-side {
   grid-area: d-right;
-  margin-left: 0.2em;
-  margin-top: 0.2em;
-  /* border: solid 1px rgb(196, 222, 235); */
+  margin-left: var(--ms);
+  margin-top: 0;
+}
+
+.detail-side div.contents-area {
+  margin: var(--mxx);
 }
 
 .detail-side div.title {
-  height: 1em;
-  margin: 0.5em 0.8em 0.3em 0.8em;
-  font-size: 13pt;
+  height: var(--height-title-small);
+  line-height: var(--height-title-small);
+  margin: var(--mxx) var(--mxxx) var(--mx) var(--mxxx);
+  font-size: var(--font-xxlarge);
 }
 
 .detail-side div.filter {
-  height: 1.5em;
-  margin: 0.3em 1em 0.5em 1em;
+  height: var(--height-title-normal);
+  line-height: var(--height-title-normal);
+  margin: var(--mx) var(--mxxxx) var(--mxx) var(--mxxxx);
 }
 .detail-side div.filter span.active {
-  font-weight: 600;
-  color: #00a5a2;
+  font-weight: var(--font-bold);
+  color: var(--color-active);
 }
 .detail-side div.filter span:hover {
-  font-weight: 600;
-  background-color: #eff7fc;
+  font-weight: var(--font-bold);
   cursor: pointer;
 }
 
 .detail-side div.contents {
-  margin: 0.5em 0 0.5em 0;
-  background-color: rgb(248, 249, 250);
+  margin: var(--mxx) 0 var(--mxx) 0;
+  height: var(--height-detail-rside-memo);
+  background-color: var(--color-background-contents);
 }
 
 .detail-side div.contents textarea {
   height: calc(100% - 6.2em);
-  margin: 1em 1em 0em 1em;
+  margin: var(--mxxxx) var(--mxxxx) 0em var(--mxxxx);
 }
 
 .detail-side div.contents button {
-  width: 7em;
-  height: 2.5em;
-  margin: 0 1em 1em 1em;
+  width: var(--btn-w-n);
+  height: var(--btn-h-n);
+  margin: 0 var(--mxxxx) var(--mxxxx) var(--mxxxx);
 }
 
 .detail-side mat-icon {
-  color: #e4f3fa;
+  color: var(--color-inactive);
 }
 
 .detail-foot {
   grid-area: d-foot;
-  margin: 0.2em 0 0 0.5em;
-  padding-top: 0.5em;
-  border: solid 1px rgb(231, 239, 243);
-  border-radius: 0.3em;
-  background-color: #FFFFFF;
+  margin: var(--mn) 0 0 var(--mx);
+  padding-top: var(--pxx);
+  border: var(--border-contents-gray);
+  border-radius: var(--radius-large);
+  background-color: var(--color-white);
 }
