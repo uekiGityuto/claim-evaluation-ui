@@ -6,6 +6,10 @@ import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
 import { FilterPipe } from '../../module/filter.pipe';
 
+/**
+ * 一覧画面
+ * @author SKK231099 李
+ */
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',

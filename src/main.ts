@@ -13,6 +13,10 @@ platformBrowserDynamic().bootstrapModule(AppModule)
 
   // import 'web-animations-js';
 
+/**
+ * IE11対応：CSS共通化(ponyfill)
+ * @author SKK231099 李
+ */
 cssVars({
   include: 'style',
   onlyLegacy: false,

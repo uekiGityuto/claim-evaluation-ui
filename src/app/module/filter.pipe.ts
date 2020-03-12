@@ -1,4 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
+/**
+ * フィルターパイプ
+ * @author SKK231099 李
+ */
 @Pipe({
   name: 'filter'
 })

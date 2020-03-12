@@ -4,6 +4,10 @@ import { Observable } from 'rxjs';
 import { Result } from '../model/Result.model';
 import { environment } from '../../environments/environment'
 
+/**
+ * 非同期通信ClientService
+ * @author SKK231099 李
+ */
 @Injectable({
     providedIn: 'root'
 })

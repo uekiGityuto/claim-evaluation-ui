@@ -1,6 +1,9 @@
 /* autoprefixer grid: autoplace */
 
-/* IEはサポートしないため使用不可 (可能Browser: Edge, Chrome, Firefox, Opera, Sapari, Android WebBrowser, SamsungInternet) */
+/**
+ * CSS共通化, Grid, Flex
+ * @author SKK231099 李
+ */
 :root {
     /* Primary Color */
     --color-background-menu: #00ccca;

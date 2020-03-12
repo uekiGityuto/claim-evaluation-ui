@@ -5,6 +5,10 @@ import { Subscription } from 'rxjs';
 import { ModalService } from './service/modal-service';
 import { Modal } from './model/Modal.model';
 
+/**
+ * Main App Component
+ * @author SKK231099 李
+ */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',

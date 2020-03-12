@@ -2,6 +2,10 @@ import { Injectable, Component } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Modal } from '../model/Modal.model';
 
+/**
+ * Modal Service
+ * @author SKK231099 李
+ */
 @Injectable({
   providedIn: 'root'
 })

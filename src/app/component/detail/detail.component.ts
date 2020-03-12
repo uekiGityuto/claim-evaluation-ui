@@ -8,6 +8,10 @@ import { AppComponent } from '../../app.component';
 import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
 
+/**
+ * 詳細画面
+ * @author SKK231099 李
+ */
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',

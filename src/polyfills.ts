@@ -59,6 +59,11 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+ /**
+ * IE11対応
+ * @author SKK231099 李
+ */
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 import 'core-js/es/symbol';
 import 'core-js/es/function';
