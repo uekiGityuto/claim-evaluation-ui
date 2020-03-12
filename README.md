@@ -1,9 +1,33 @@
 # TMNFSpeechMiningUI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.0.6.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.0.2
+
+# install ponyfill
+npm install ponyfill
 
 # material-icon
 ng add @angular/material
+
+# git
+git clone <github uri>
+git config --global --add user.name <name> ex> "Jesica"
+git congig --global --add user.pasword <password> ex> "12345678"
+git pull origin master
+git add .
+git commit -m "description"
+git push origin master
+
+# git branch
+git fetch origin <branchname>
+git checkout <branchname>
+git add .
+git commit ...
+git push ...
+git merge <branchname>
+
+# git other
+git cherry-pick ...
+git rebase ...
 
 ## Development server
 
