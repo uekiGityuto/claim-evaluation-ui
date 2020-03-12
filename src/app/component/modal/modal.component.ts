@@ -2,6 +2,10 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalService } from '../../service/modal-service';
 import { Modal } from '../../model/Modal.model';
 
+/**
+ * Modal Dialog
+ * @author SKK231099 李
+ */
 @Component({
   selector: 'app-modal',
   templateUrl: './modal.component.html',
