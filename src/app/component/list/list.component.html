@@ -6,12 +6,12 @@
     <table class="head_table">
       <thead>
         <tr>
-          <th class="w15">損害担当者</th><!--<mat-icon class="icon-sort" (click)="sort('staff')">sort</mat-icon></th>-->
-          <th class="w15">受付番号</th><!--<mat-icon class="icon-sort" (click)="sort('receipt_no')">sort</mat-icon></th>-->
+          <th class="w15">損害担当者</th><!--<mat-icon class="icon-sort" (click)="sort('userName')">sort</mat-icon></th>-->
+          <th class="w15">受付番号</th><!--<mat-icon class="icon-sort" (click)="sort('claimId')">sort</mat-icon></th>-->
           <th class="w20">契約者名</th>
           <th class="w15">生年月日</th>
           <th class="w5">種類</th>
-          <th class="w15">発生日</th><!--<mat-icon class="icon-sort" (click)="sort('occurence_date')">sort</mat-icon></th>-->
+          <th class="w15">発生日</th><!--<mat-icon class="icon-sort" (click)="sort('occurenceDate')">sort</mat-icon></th>-->
           <th class="w5">スコア</th>
           <th></th>
         </tr>
@@ -34,19 +34,19 @@
       </thead>
       <tbody>
         <tr class="content" *ngFor="let item of list; index as i">
-          <td><span>{{item.staff}}</span></td>
-          <td><span>{{item.receipt_no}}</span></td>
-          <td><span>{{item.name}}</span></td>
-          <td><span>{{item.birthday | filter:'date'}}</span></td>
-          <td><span>{{item.kind}}</span></td>
-          <td><span>{{item.occurence_date | filter:'date'}}</span></td>
+          <td><span>{{item.claim.userName}}</span></td>
+          <td><span>{{item.claim.claimId}}</span></td>
+          <td><span>{{item.claim.name}}</span></td>
+          <td><span>{{item.claim.birthday | filter:'date'}}</span></td>
+          <td><span>{{item.claim.kind}}</span></td>
+          <td><span>{{item.claim.occurenceDate | filter:'date'}}</span></td>
           <td><span>{{item.score}}</span></td>
           <td>
             <form #thisForm (ngSubmit)="onSubmit(thisForm)">
-              <input type="hidden" name="receiptNo" value="{{item.receipt_no}}">
+              <input type="hidden" name="receiptNo" value="{{item.claim.claimId}}">
               <button type="submit">詳細</button>
             </form>
-            <!-- <a [routerLink]="['detail', {receipt_no:item.receipt_no}]">詳細</a> -->
+            <!-- <a [routerLink]="['detail', {claimId:item.claimId}]">詳細</a> -->
           </td>
         </tr>
       </tbody>

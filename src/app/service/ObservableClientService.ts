@@ -18,7 +18,7 @@ export class ObservableClientService {
     constructor(private http: HttpClient) {
         this.result = new Result();
         this.headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': 'Bearer ' + environment.token
         };
     }

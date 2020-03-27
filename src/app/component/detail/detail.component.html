@@ -6,23 +6,23 @@
     <div class="w75 flex-row t-c">
         <div class="w20 flex-column ma">
             <strong class="mb5">受付番号</strong>
-            <span>{{issue.receipt_no}}</span>
+            <span>{{score.claim.claimId}}</span>
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">契約者名</strong>
-            <span>{{issue.name}}</span>
+            <span>{{score.claim.name}}</span>
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">生年月日</strong>
-            <span>{{issue.birthday | filter:'date'}}</span>
+            <span>{{score.claim.birthday | filter:'date'}}</span>
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">種類</strong>
-            <span>{{issue.kind}}</span>
+            <span>{{score.claim.kind}}</span>
         </div>
         <div class="w20 flex-column ma">
             <strong class="mb5">発生日</strong>
-            <span>{{issue.occurence_date | filter:'date'}}</span>
+            <span>{{score.claim.occurenceDate | filter:'date'}}</span>
         </div>
     </div>
     <div class="w25 v-m t-c">
@@ -34,7 +34,7 @@
     <div class="detail-main flex-col-between">
         <div class="title flex-between">
             <div class="w50 flex-row flex-center-v">
-                <div class="ft-xxlarge">リスクスコア</div>&nbsp;<div class="icon-high"></div>&nbsp;<div class="ft-xxxlarge ft-lightbold">{{issue.score}}</div>
+                <div class="ft-xxlarge">リスクスコア</div>&nbsp;<div class="icon-high"></div>&nbsp;<div class="ft-xxxlarge ft-lightbold">{{score.score}}</div>
             </div>
             <div class="flex-row flex-center-v">
                 <div class="ft-xlarge">評価</div>&nbsp;

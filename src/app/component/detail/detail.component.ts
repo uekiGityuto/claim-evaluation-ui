@@ -1,5 +1,4 @@
 import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__, OnDestroy } from '@angular/core';
-import { Issue } from '../../model/Issue.model';
 import { ActivatedRoute } from '@angular/router';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import { Result } from '../../model/Result.model';
@@ -7,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AppComponent } from '../../app.component';
 import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
+import { Score } from 'src/app/model/Score.model';
 
 /**
  * 詳細画面
@@ -19,7 +19,7 @@ import { FilterPipe } from '../../module/filter.pipe';
 })
 
 export class DetailComponent implements OnInit, OnDestroy {
-  public issue: Issue;
+  public score: Score;
   public errMsgList = [];
   public riskListLimit: number;
   public noLimit: number;
@@ -32,7 +32,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   constructor(private ob: ObservableClientService,
               private route: ActivatedRoute,
               private appCmpt: AppComponent) {
-    this.issue = new Issue();
+    this.score = new Score();
     this.errMsgList = [];
     this.riskListLimit = 5;
     this.noLimit = -1;
@@ -42,19 +42,22 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.gFactorsAll = [];
   }
 
-  public getIssueInfo() {
-    const uri = environment.issue_url;
-    const param = {receipt_no: this.issue.receipt_no};
+  public getClaimInfo() {
+    const uri = environment.restapi_url + "/score/detail";
+    const param = {claimId: this.score.claimId};
     const method = 'get';
-    this.issue = new Issue();
+    this.score = new Score();
     this.errMsgList = [];
 
     const observer = this.ob.rxClient(uri , method, param);
     observer.subscribe(
       (result: Result) => {
-        result.isSuccess ? this.issue.setRequestData(result.data[0]) : this.errMsgList = result.errMsgList;
-        this.setFactors(this.issue.factors);
-        this.setActiveEstimation(this.issue.estimation_agreement);
+        if (result.isSuccess) {
+          this.score.setRequestsData(result.data["score"]);
+         } else {
+           this.errMsgList = result.errMsgList;
+         }
+        this.setActiveEstimation(this.score.feedback.isCorrect);
       }
     );
   }
@@ -67,7 +70,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   public riskScoreFeedback(event: Event) {
-    this.openModal(this.issue.receipt_no, this.issue.estimation_memo);
+    this.openModal(this.score.claimId, this.score.feedback.comment);
     this.selectIcon(event);
   }
 
@@ -88,8 +91,8 @@ export class DetailComponent implements OnInit, OnDestroy {
     console.log("filtering: " + id);
   }
 
-  private castToIsuue(object: Issue): void {
-    this.issue = object;
+  private castToScore(object: Score): void {
+    this.score = object;
   }
 
   private setFactors(factors: {factor: string, effect: number}[] = []) {
@@ -132,16 +135,16 @@ export class DetailComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.fp = new FilterPipe();
     this.route.queryParams.subscribe(params => {
-      if (params['receipt_no'.toString()]) {
-        this.issue.receipt_no = params['receipt_no'.toString()];
-      } else if (params['issue'.toString()]) {
-        const object = JSON.parse(params['issue'.toString()]);
+      if (params['claimId'.toString()]) {
+        this.score.claimId = params['claimId'.toString()];
+      } else if (params['claim'.toString()]) {
+        const object = JSON.parse(params['claim'.toString()]);
         if (object) {
-          this.castToIsuue(object);
+          this.castToScore(object);
         }
       }
     });
-    this.getIssueInfo();
+    this.getClaimInfo();
   }
 
   ngOnDestroy(): void {
@@ -173,17 +176,17 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   private selectIcon(event: Event) {
     const id = (event.target as Element).id;
-    const before_agreement = this.issue.estimation_agreement;
-    this.issue.estimation_agreement = id === 'd-icon-done' ? true : false;
-    const another_id = this.issue.estimation_agreement ? 'd-icon-clear' : 'd-icon-done';
+    const before_agreement = this.score.feedback.isCorrect;
+    this.score.feedback.isCorrect = id === 'd-icon-done' ? true : false;
+    const another_id = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
     const clickedIcon: HTMLInputElement = <HTMLInputElement>document.getElementById(id);
     const anotherIcon: HTMLInputElement = <HTMLInputElement>document.getElementById(another_id);
     clickedIcon.classList.add('active');
     anotherIcon.classList.remove('active');
-    if (before_agreement != this.issue.estimation_agreement) {
+    if (before_agreement != this.score.feedback.isCorrect) {
 
       // TODO: update estimation_agreement
-      console.log(this.issue.estimation_agreement);
+      console.log(this.score.feedback.isCorrect);
     }
   }
 

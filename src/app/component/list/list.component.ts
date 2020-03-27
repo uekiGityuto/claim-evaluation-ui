@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Issue } from '../../model/Issue.model';
+import { List } from '../../model/List.model';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import {Router, NavigationExtras} from '@angular/router';
 import { Result } from '../../model/Result.model';
@@ -16,7 +16,7 @@ import { FilterPipe } from '../../module/filter.pipe';
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  public list: Issue[];
+  public list: List[];
   public errMsgList: {key: string, value: string}[];
   private fp: FilterPipe;
   private filterHistory: Map<string, string>;
@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
   }
 
   public getList() {
-    const uri = environment.list_url;
+    const uri = environment.restapi_url + "/score/list";
     const method = 'get';
     this.list = [];
     this.errMsgList = [];
@@ -37,7 +37,11 @@ export class ListComponent implements OnInit {
     const observer = this.ob.rxClient(uri , method);
     observer.subscribe(
       (result: Result) => {
-        result.isSuccess ? this.list = result.data : this.errMsgList = result.errMsgList;
+        if (result.isSuccess) {
+          this.list = result.data.scoreList;
+        } else {
+          this.errMsgList = result.errMsgList;
+        }
       }
     );
   }
@@ -63,10 +67,10 @@ export class ListComponent implements OnInit {
   }
 
   onSubmit(param: any): void {
-    const receiptNo = param.receiptNo.value;
+    const claimId = param.receiptNo.value;
     const navigationExtras: NavigationExtras = {
       queryParams: {
-          issue: JSON.stringify({receipt_no: receiptNo})
+          claimId: JSON.stringify({claimId: claimId})
       }
     };
     this.router.navigate(['detail'], navigationExtras);

@@ -4,8 +4,7 @@
 
 export const environment = {
   production: false,
-  list_url: "http://localhost:3000/list",
-  issue_url: "http://localhost:3001/issue",
+  restapi_url: "api",
   token: "test123456789asdfghjkl"
 };
 

@@ -1,0 +1,40 @@
+import { Timestamp } from 'rxjs';
+import { Claim } from './Claim.model';
+import { Reason } from './Reason.model';
+import { Feedback } from './Feedback.model';
+
+export class Score {
+    fraudScoreId: string;
+    score: number;
+    createDate: Date;
+    claimId: string;
+    claim: Claim;
+    reasons: Reason[];
+    feedback: Feedback;
+
+    constructor(fraudScoreId: string = '',
+                score: number = null,
+                createDate: string = '',
+                claimId: string = '',
+                claim: Claim = new Claim(),
+                reasons: Reason[] = [],
+                feedback: Feedback = new Feedback()) {
+        this.fraudScoreId = fraudScoreId;
+        this.score = score;
+        this.claimId = claimId;
+        this.createDate = new Date(createDate);
+        this.claim = claim;
+        this.reasons = reasons;
+        this.feedback = feedback;
+    }
+
+    setRequestsData(data: Object) {
+        this.fraudScoreId = data['fraudScoreId'.toString()];
+        this.score = data['score'.toString()];
+        this.claimId = data['claimId'.toString()];
+        this.createDate = data['new Date(createDate)'.toString()];
+        this.claim = data['claim'.toString()];
+        this.reasons = data['reasons'.toString()];
+        this.feedback = data['feedback'.toString()];
+    }
+}
