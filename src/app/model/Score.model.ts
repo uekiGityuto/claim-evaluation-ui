@@ -32,7 +32,7 @@ export class Score {
         this.fraudScoreId = data['fraudScoreId'.toString()];
         this.score = data['score'.toString()];
         this.claimId = data['claimId'.toString()];
-        this.createDate = data['new Date(createDate)'.toString()];
+        this.createDate = data['createDate'.toString()];
         this.claim = data['claim'.toString()];
         this.reasons = data['reasons'.toString()];
         this.feedback = data['feedback'.toString()];

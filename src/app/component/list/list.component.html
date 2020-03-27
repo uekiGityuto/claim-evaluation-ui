@@ -43,7 +43,7 @@
           <td><span>{{item.score}}</span></td>
           <td>
             <form #thisForm (ngSubmit)="onSubmit(thisForm)">
-              <input type="hidden" name="receiptNo" value="{{item.claim.claimId}}">
+              <input type="hidden" name="claimId" value="{{item.claim.claimId}}">
               <button type="submit">詳細</button>
             </form>
             <!-- <a [routerLink]="['detail', {claimId:item.claimId}]">詳細</a> -->

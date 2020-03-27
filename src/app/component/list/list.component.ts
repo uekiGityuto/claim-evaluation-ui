@@ -67,10 +67,10 @@ export class ListComponent implements OnInit {
   }
 
   onSubmit(param: any): void {
-    const claimId = param.receiptNo.value;
+    const claimId = param.claimId.value;
     const navigationExtras: NavigationExtras = {
       queryParams: {
-          claimId: JSON.stringify({claimId: claimId})
+          claimId: claimId
       }
     };
     this.router.navigate(['detail'], navigationExtras);

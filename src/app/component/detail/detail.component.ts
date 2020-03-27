@@ -42,7 +42,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.gFactorsAll = [];
   }
 
-  public getClaimInfo() {
+  public getScoreInfo() {
     const uri = environment.restapi_url + "/score/detail";
     const param = {claimId: this.score.claimId};
     const method = 'get';
@@ -58,6 +58,7 @@ export class DetailComponent implements OnInit, OnDestroy {
            this.errMsgList = result.errMsgList;
          }
         this.setActiveEstimation(this.score.feedback.isCorrect);
+        this.setFactors(this.score.reasons);
       }
     );
   }
@@ -144,7 +145,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
       }
     });
-    this.getClaimInfo();
+    this.getScoreInfo();
   }
 
   ngOnDestroy(): void {
