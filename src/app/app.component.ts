@@ -32,7 +32,9 @@ export class AppComponent {
         const result = JSON.parse(param);
         if (result != 'close') {
           this.ms.model.memo = (<Modal>result).memo;
-          callback(param);
+        }
+        if (callback) {
+          callback(null);
         }
         this.modal = null;
         this.closeModal();

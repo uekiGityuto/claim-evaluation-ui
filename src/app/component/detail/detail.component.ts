@@ -7,6 +7,7 @@ import { AppComponent } from '../../app.component';
 import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
 import { Score } from 'src/app/model/Score.model';
+import { Feedback } from 'src/app/model/Feedback.model';
 
 /**
  * 詳細画面
@@ -185,17 +186,37 @@ export class DetailComponent implements OnInit, OnDestroy {
     clickedIcon.classList.add('active');
     anotherIcon.classList.remove('active');
     if (before_agreement != this.score.feedback.isCorrect) {
-
-      // TODO: update estimation_agreement
-      console.log(this.score.feedback.isCorrect);
+      this.updateFeedback();
+      // console.log(this.score.feedback.isCorrect);
     }
   }
 
   private submitRiskScoreFeedback(param: any) {
-    const modalModel: Modal = JSON.parse(param);
-    const memo = modalModel.memo;
-    
-    // TODO: send mail memo to someone
-    console.log(memo);
+    if (param != null) {
+      const modalModel: Modal = JSON.parse(param);
+      const memo = modalModel.memo;
+      this.score.feedback.comment = memo;
+      // console.log(memo);
+      this.updateFeedback();
+    }
+  }
+
+  private updateFeedback() {
+    const uri = environment.restapi_url + "/score/updateFeedback";
+    const method = 'post';
+    this.errMsgList = [];
+
+    const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          if(result.data["update"]) {
+            this.errMsgList.push("Update Error", "Update Fail");
+          }
+         } else {
+           this.errMsgList = result.errMsgList;
+         }
+      }
+    );
   }
 }
