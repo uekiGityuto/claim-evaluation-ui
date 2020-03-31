@@ -206,11 +206,15 @@ export class DetailComponent implements OnInit, OnDestroy {
     const method = 'post';
     this.errMsgList = [];
 
+    if (this.score.feedback.fraudScoreId == undefined || this.score.feedback.fraudScoreId == '') {
+      this.score.feedback.fraudScoreId = this.score.fraudScoreId;
+    }
+
     const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          if(result.data["update"]) {
+          if(!result.data["update"]) {
             this.errMsgList.push("Update Error", "Update Fail");
           }
          } else {

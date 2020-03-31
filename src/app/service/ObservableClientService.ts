@@ -40,6 +40,12 @@ export class ObservableClientService {
                     observer.next(this.result);
                     observer.complete();
                 },
+                // response => {
+                //     this.result.data = response.;
+                //     this.result.isSuccess = true;
+                //     observer.next(this.result);
+                //     observer.complete();
+                // },
                 err => {
                     this.result.isSuccess = false;
                     this.result.errMsgList.push({key: 'rxClientError', value: '通信エラー'});
