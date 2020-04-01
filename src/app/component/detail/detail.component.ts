@@ -8,6 +8,7 @@ import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
 import { Score } from 'src/app/model/Score.model';
 import { Feedback } from 'src/app/model/Feedback.model';
+import { Parser } from '@angular/compiler/src/ml_parser/parser';
 
 /**
  * 詳細画面
@@ -72,7 +73,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   public riskScoreFeedback(event: Event) {
-    this.openModal(this.score.claimId, this.score.feedback.comment);
+    this.openModal(this.score.fraudScoreId, this.score.feedback.comment);
     this.selectIcon(event);
   }
 
@@ -156,7 +157,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private openModal(id, memo) {
     let modal = new Modal();
     if (this.appCmpt.ms.model.id != id) {
-      modal.memo = "";//memo;
+      modal.memo = memo;
     } else {
       modal.memo = this.appCmpt.ms.model.memo;
     }
@@ -169,7 +170,10 @@ export class DetailComponent implements OnInit, OnDestroy {
     modal.height = 20;
     modal.isMemo = true;
     modal.isHeader = true;
-    this.appCmpt.openModal(modal, this.submitRiskScoreFeedback, this);
+    modal.callback = this.submitRiskScoreFeedback;
+    modal.ob = this.ob;
+    modal.obj = this.score.feedback;
+    this.appCmpt.openModal(modal);
   }
   private clearModalInfo() {
     this.appCmpt.ms.model.id = "";
@@ -191,25 +195,10 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  private submitRiskScoreFeedback(param: any) {
-    if (param != null) {
-      const modalModel: Modal = JSON.parse(param);
-      const memo = modalModel.memo;
-      this.score.feedback.comment = memo;
-      // console.log(memo);
-      this.updateFeedback();
-    }
-  }
-
   private updateFeedback() {
     const uri = environment.restapi_url + "/score/updateFeedback";
     const method = 'post';
     this.errMsgList = [];
-
-    if (this.score.feedback.fraudScoreId == undefined || this.score.feedback.fraudScoreId == '') {
-      this.score.feedback.fraudScoreId = this.score.fraudScoreId;
-    }
-
     const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
     observer.subscribe(
       (result: Result) => {
@@ -222,5 +211,30 @@ export class DetailComponent implements OnInit, OnDestroy {
          }
       }
     );
+  }
+  
+  private submitRiskScoreFeedback(modalModel: Modal = null) {
+    if (modalModel != null) {
+      const memo = modalModel.memo;
+      let feedback = new Feedback();
+      feedback.setRequestData(modalModel.obj);
+      feedback.comment = memo;
+      
+      const uri = environment.restapi_url + "/score/updateFeedback";
+      const method = 'post';
+      let errMsgList = [];
+      const observer = modalModel.ob.rxClient(uri , method, {feedback: JSON.stringify(feedback)});
+      observer.subscribe(
+        (result: Result) => {
+          if (result.isSuccess) {
+            if(!result.data["update"]) {
+              errMsgList.push("Update Error", "Update Fail");
+            }
+          } else {
+            errMsgList = result.errMsgList;
+          }
+        }
+      );
+    }
   }
 }

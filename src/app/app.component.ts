@@ -4,6 +4,7 @@ import { Result } from './model/Result.model';
 import { Subscription } from 'rxjs';
 import { ModalService } from './service/modal-service';
 import { Modal } from './model/Modal.model';
+import { Plugins } from 'protractor/built/plugins';
 
 /**
  * Main App Component
@@ -16,27 +17,29 @@ import { Modal } from './model/Modal.model';
 })
 export class AppComponent {
   public result: Result;
-  public modal: any;
+  public modalCmpt: any;
   private subscription: Subscription;
 
   constructor(public ms: ModalService) {
     this.result = new Result();
-    this.modal = null;
+    this.modalCmpt = null;
   }
 
-  public openModal(model: Modal, callback: FunctionStringCallback, cmpt: any) {
-    this.modal = ModalComponent;
+  public openModal(model: Modal) {
+    this.modalCmpt = ModalComponent;
     this.ms.model = model;
+
     this.subscription = this.ms.ob.subscribe(
       (param) => {
         const result = JSON.parse(param);
         if (result != 'close') {
           this.ms.model.memo = (<Modal>result).memo;
+          const callback = model.callback;
+          if (callback) {
+            callback(this.ms.model);
+          }
         }
-        if (callback) {
-          callback(null);
-        }
-        this.modal = null;
+        this.modalCmpt = null;
         this.closeModal();
       }
     );

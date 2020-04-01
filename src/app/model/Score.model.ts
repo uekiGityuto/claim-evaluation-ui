@@ -36,5 +36,8 @@ export class Score {
         this.claim = data['claim'.toString()];
         this.reasons = data['reasons'.toString()];
         this.feedback = data['feedback'.toString()];
+        if (this.feedback.fraudScoreId == undefined || this.feedback.fraudScoreId == '') {
+            this.feedback.fraudScoreId = this.fraudScoreId;
+        }
     }
 }

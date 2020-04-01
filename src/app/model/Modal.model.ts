@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ObservableClientService } from '../service/ObservableClientService';
 
 export class Modal {
     public id: string;
@@ -10,7 +10,9 @@ export class Modal {
     public btnName: string;
     public width: number;
     public height: number;
+    public callback: Function;
     public obj: any;
+    public ob: ObservableClientService;
 
     constructor(
         id: string = "",

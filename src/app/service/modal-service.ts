@@ -1,7 +1,6 @@
 import { Injectable, Component } from '@angular/core';
 import { Subject } from 'rxjs';
 import { Modal } from '../model/Modal.model';
-
 /**
  * Modal Service
  * @author SKK231099 李
@@ -12,10 +11,10 @@ import { Modal } from '../model/Modal.model';
 export class ModalService {
     public model: Modal;
 
-  // データの変更を通知するためのオブジェクト
+  // // データの変更を通知するためのオブジェクト
   private subject = new Subject<string>();
 
-  // Subscribe するためのプロパティ( これでイベント通知をキャッチする )
+  // // Subscribe するためのプロパティ( これでイベント通知をキャッチする )
   public ob = this.subject.asObservable();
 
   constructor() {
@@ -29,5 +28,17 @@ export class ModalService {
 
   public closeModal(): void {
     this.subject.next(JSON.stringify('close'));
+    
   }
+
+  // public callbackModal(result: any) {
+  //   if (result != 'close') {
+  //     this.model.memo = (<Modal>result).memo;
+  //   }
+  //   if (this.model.callback) {
+  //     this.model.callback(JSON.stringify(this.model));
+  //   }
+    
+  //   this.subject.next();
+  // }
 }
