@@ -8,7 +8,8 @@ import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
 import { Score } from 'src/app/model/Score.model';
 import { Feedback } from 'src/app/model/Feedback.model';
-import { Parser } from '@angular/compiler/src/ml_parser/parser';
+import { Comment } from '../../model/Comment.model';
+import { User } from '../../model/User.model';
 
 /**
  * 詳細画面
@@ -92,6 +93,16 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     // TODO: filtering side memo list
     console.log("filtering: " + id);
+  }
+
+  public submitMemo(param: any) {
+    // TODO: get User Information from Session
+    const user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
+    
+    const idx = this.score.claim.commentList.length + 1;
+    const txt = param.sideMemoTxt.value;
+    let comment = new Comment(this.score.claim.claimId, idx, txt, user.userId, user.name);
+    this.submitRightSideComment(comment);
   }
 
   private castToScore(object: Score): void {
@@ -236,5 +247,26 @@ export class DetailComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  private submitRightSideComment(comment: Comment) {
+    const uri = environment.restapi_url + "/score/updateComment";
+    const method = 'post';
+    this.errMsgList = [];
+    const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          const data = result.data["update"];
+          if (data) {
+            this.score.claim.commentList.push(data);
+          } else {
+            this.errMsgList.push("Update Error", "Update Fail");
+          }
+        } else {
+          this.errMsgList = result.errMsgList;
+        }
+      }
+    );
   }
 }

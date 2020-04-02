@@ -92,6 +92,9 @@
 
 .detail-side div.contents-area {
   margin: var(--mxx);
+  max-height: calc(100% - 0.7em);
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .detail-side div.title {

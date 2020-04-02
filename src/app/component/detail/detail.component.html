@@ -106,17 +106,19 @@
                     <span class="side-memo notdeco" id="side-memo-auto" (click)="filterSideMemoList('side-memo-auto')">自動化</span>
                 </div>
             </div>
-            <div class="contents flex-col-between">
-                <textarea placeholder="メモを追加"></textarea>
-                <button>申し出る</button>
-            </div>
-            <div class="w100 p5 flex-row">
+            <form #commentForm (ngSubmit)="submitMemo(commentForm)" class="w100 h100">
+                    <div class="contents flex-col-between">
+                    <textarea placeholder="" name="sideMemoTxt"></textarea>
+                    <button type="submit">申し出る</button>
+                </div>
+            </form>
+            <div class="w100 p5 flex-row" *ngFor="let item of score.claim.commentList; let i = index">
                 <div>
                     <mat-icon class="icon-flag m1">flag</mat-icon>
                 </div>
                 <div class="flex-column ft-small ml5 mr5">
-                    <div class="m2">申し立てが作成されました：<span class="ft-rd">940</span>|<span class="ft-rd">HIGH</span></div>
-                    <div class="m2">2019/05/03 @ 15:13</div>
+                    <div class="m2">{{item.comment}}：<span>{{item.userName}}</span></div>
+                    <div class="m2">{{item.createDate | filter:'date'}}</div>
                 </div>
             </div>
         </div>
