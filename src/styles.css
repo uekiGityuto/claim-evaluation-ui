@@ -44,6 +44,7 @@
     --border-underline-data: solid 1px var(--color-gray);
     
     /* Font */
+    --font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝, メイリオ", serif;
     --font-small: 0.7em;
     --font-normal: 0.9em;
     --font-large: 1em;
@@ -71,6 +72,7 @@
     --m2: 2em;
     --m3: 3em;
     --m4: 4em;
+    --m5: 5em;
     --ps: 0.1em;
     --pn: 0.2em;
     --px: 0.3em;
@@ -113,7 +115,7 @@
 
 html, body { width: 100%; height: 100%; }
 body {
-    font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝", serif;
+    font-family: var(--font-family);
     font-size: var(--font-normal);
     height: 100%;
     overflow: hidden;
@@ -135,6 +137,7 @@ textarea {
     border: solid 1px var(--color-skyblue);
     overflow: auto;
     resize: none;
+    font-family: var(--font-family);
 }
 
 button {

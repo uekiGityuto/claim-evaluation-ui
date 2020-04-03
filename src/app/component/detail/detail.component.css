@@ -139,6 +139,24 @@
   color: var(--color-inactive);
 }
 
+.detail-side div.comment {
+  width: calc(100% - var(--m5));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: var(--font-small);
+  margin-left: var(--mxx);
+  margin-right: var(--mxx);
+}
+
+.detail-side div.comment textarea.txt {
+  border: none;
+  font-size: var(--font-normal);
+}
+.detail-side div.comment textarea.txt:focus {
+  outline: 1px var(--color-inactive);
+}
+
 .detail-foot {
   grid-area: d-foot;
   margin: var(--mn) 0 0 var(--mx);

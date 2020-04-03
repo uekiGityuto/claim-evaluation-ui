@@ -210,6 +210,9 @@ export class DetailComponent implements OnInit, OnDestroy {
     const uri = environment.restapi_url + "/score/updateFeedback";
     const method = 'post';
     this.errMsgList = [];
+    if (this.score.feedback.comment == undefined) {
+      this.score.feedback.comment = this.appCmpt.ms.model.memo;
+    }
     const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
     observer.subscribe(
       (result: Result) => {
