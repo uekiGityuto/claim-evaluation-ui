@@ -149,12 +149,27 @@
   margin-right: var(--mxx);
 }
 
+.detail-side div.comment div.head div.btn-update-comment {
+  float: right;
+  cursor: pointer;
+  font-weight: var(--font-bold);
+}
+.detail-side div.comment div.head div.btn-update-comment:hover {
+  color: var(--color-hover);
+}
+.detail-side div.comment div.head div.active {
+  color: var(--color-active);
+}
+
 .detail-side div.comment textarea.txt {
   border: none;
   font-size: var(--font-normal);
 }
 .detail-side div.comment textarea.txt:focus {
   outline: 1px var(--color-inactive);
+}
+.detail-side div.comment textarea.active {
+  border: solid 1px var(--color-skyblue);
 }
 
 .detail-foot {

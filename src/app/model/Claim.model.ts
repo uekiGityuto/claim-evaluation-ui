@@ -44,4 +44,8 @@ export class Claim {
         this.commentList = data['commentList'.toString()];
     }
 
+    setComment(cmt: Comment, idx: number) {
+        this.commentList[idx] = cmt;
+    }
+
 }

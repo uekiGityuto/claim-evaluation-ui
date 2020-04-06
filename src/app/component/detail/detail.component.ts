@@ -28,6 +28,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   public noLimit: number;
   public rFactors: {factor: string, effect: number}[];
   public gFactors: {factor: string, effect: number}[];
+  public user: User;
   private rFactorsAll: {factor: string, effect: number}[];
   private gFactorsAll: {factor: string, effect: number}[];
   private fp: FilterPipe;
@@ -43,6 +44,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.gFactors = [];
     this.rFactorsAll = [];
     this.gFactorsAll = [];
+    this.user = new User();
   }
 
   public getScoreInfo() {
@@ -91,17 +93,45 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
     }
 
-    // TODO: filtering side memo list
+    // Need filtering side comment list?
+    // then please add filtering funtion to todolist
     console.log("filtering: " + id);
   }
 
+  public changeCommentStatus(idx: number) {
+    const btnUpdate = <HTMLElement>document.getElementById("btn-cmt-update-" + idx);
+    const textarea = <HTMLInputElement>document.getElementById("txtarea-cmt-" + idx);
+    if (btnUpdate.innerHTML == "修正") {
+      btnUpdate.innerHTML = "保存";
+      textarea.readOnly = false;
+      if (!textarea.classList.contains('active')) {
+        btnUpdate.classList.add('active')
+        textarea.classList.add('active')
+      }
+    } else {
+      btnUpdate.innerHTML = "修正";
+      textarea.readOnly = true;
+      if (textarea.classList.contains('active')) {
+        btnUpdate.classList.remove('active')
+        textarea.classList.remove('active')
+      }
+      let cmt = new Comment();
+      let beforeComment: string;
+      for(let i=0; i<this.score.claim.commentList.length; i++) {
+        cmt.setRequestsData(this.score.claim.commentList[i]);
+        if (cmt.idx == idx) {
+          beforeComment = cmt.comment;
+          cmt.comment = textarea.value;
+          break;
+        }
+      };
+      this.updateRightSideComment(cmt, textarea, beforeComment);
+    }
+  }
+
   public submitMemo(param: any) {
-    // TODO: get User Information from Session
-    const user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
-    
-    const idx = this.score.claim.commentList.length + 1;
     const txt = param.sideMemoTxt.value;
-    let comment = new Comment(this.score.claim.claimId, idx, txt, user.userId, user.name);
+    let comment = new Comment(this.score.claim.claimId, null, txt, this.user.userId, this.user.name);
     this.submitRightSideComment(comment);
   }
 
@@ -146,6 +176,11 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  private getUserInfo() {
+    // TODO: get User Information from Session
+    this.user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
+  }
+
   ngOnInit(): void {
     this.fp = new FilterPipe();
     this.route.queryParams.subscribe(params => {
@@ -159,6 +194,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
     });
     this.getScoreInfo();
+    this.getUserInfo();
   }
 
   ngOnDestroy(): void {
@@ -256,15 +292,42 @@ export class DetailComponent implements OnInit, OnDestroy {
     const uri = environment.restapi_url + "/score/updateComment";
     const method = 'post';
     this.errMsgList = [];
+    let cmt: Comment;
     const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
           const data = result.data["update"];
           if (data) {
-            this.score.claim.commentList.push(data);
+            this.score.claim.commentList.push(data); 
+            const textarea: HTMLInputElement = <HTMLInputElement>document.getElementById('sideMemoTxt');
+            textarea.value = "";
           } else {
             this.errMsgList.push("Update Error", "Update Fail");
+          }
+        } else {
+          this.errMsgList = result.errMsgList;
+        }
+      }
+    );
+  }
+    
+  private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
+    const uri = environment.restapi_url + "/score/updateComment";
+    const method = 'post';
+    this.errMsgList = [];
+    let cmt: Comment;
+    const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          const data = result.data["update"];
+          if (data) {
+            const idx = cmt.idx - 1;
+            this.score.claim.setComment(data, idx);
+          } else {
+            this.errMsgList.push("Update Error", "Update Fail");
+            textarea.value = beforeComment;
           }
         } else {
           this.errMsgList = result.errMsgList;
