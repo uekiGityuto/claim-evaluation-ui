@@ -20,7 +20,7 @@ export class Claim {
                 occurenceDate: string = '',
                 createDate: string = '',
                 updateDate: string = '',
-                commentList: Comment[] = []) {
+            commentList: Comment[] = []) {
         this.userName = userName;
         this.claimId = ClaimId;
         this.name = name;
@@ -42,10 +42,6 @@ export class Claim {
         this.createDate = data['createDate'.toString()];
         this.updateDate = data['updateDate'.toString()];
         this.commentList = data['commentList'.toString()];
-    }
-
-    setComment(cmt: Comment, idx: number) {
-        this.commentList[idx] = cmt;
     }
 
 }

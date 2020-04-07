@@ -7,16 +7,16 @@ export class Comment {
     comment: string;
     userId: string;
     userName: string;
-    createDate: Timestamp<Date>;
-    updateDate: Timestamp<Date>;
+    createDate: Date;
+    updateDate: Date;
     constructor(
         claimId: string = '',
         idx: number = null,
         comment: string = '',
         userId: string = '',
         userName: string = '',
-        createDate: Timestamp<Date> = null,
-        updateDate: Timestamp<Date> = null,
+        createDate: Date = null,
+        updateDate: Date = null,
     ) {
         this.claimId = claimId;
         this.idx = idx;

@@ -243,12 +243,9 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private updateFeedback() {
-    const uri = environment.restapi_url + "/score/updateFeedback";
+    const uri = environment.restapi_url + "/score/updateFeedbackIsCorrect";
     const method = 'post';
     this.errMsgList = [];
-    if (this.score.feedback.comment == undefined) {
-      this.score.feedback.comment = this.appCmpt.ms.model.memo;
-    }
     const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
     observer.subscribe(
       (result: Result) => {
@@ -270,7 +267,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       feedback.setRequestData(modalModel.obj);
       feedback.comment = memo;
       
-      const uri = environment.restapi_url + "/score/updateFeedback";
+      const uri = environment.restapi_url + "/score/updateFeedbackComment";
       const method = 'post';
       let errMsgList = [];
       const observer = modalModel.ob.rxClient(uri , method, {feedback: JSON.stringify(feedback)});
@@ -292,7 +289,6 @@ export class DetailComponent implements OnInit, OnDestroy {
     const uri = environment.restapi_url + "/score/updateComment";
     const method = 'post';
     this.errMsgList = [];
-    let cmt: Comment;
     const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
     observer.subscribe(
       (result: Result) => {
@@ -316,15 +312,16 @@ export class DetailComponent implements OnInit, OnDestroy {
     const uri = environment.restapi_url + "/score/updateComment";
     const method = 'post';
     this.errMsgList = [];
-    let cmt: Comment;
     const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
           const data = result.data["update"];
           if (data) {
-            const idx = cmt.idx - 1;
-            this.score.claim.setComment(data, idx);
+            const idx = data.idx - 1;
+            this.score.claim.commentList.splice(idx, 1);
+            this.score.claim.commentList.push(data);
+            this.fp.transform(this.score.claim.commentList, 'sort', ['idx','asc']);
           } else {
             this.errMsgList.push("Update Error", "Update Fail");
             textarea.value = beforeComment;

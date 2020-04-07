@@ -2,6 +2,7 @@ import { Timestamp } from 'rxjs';
 import { Claim } from './Claim.model';
 import { Reason } from './Reason.model';
 import { Feedback } from './Feedback.model';
+import { logging } from 'protractor';
 
 export class Score {
     fraudScoreId: string;
@@ -39,5 +40,10 @@ export class Score {
         if (this.feedback.fraudScoreId == undefined || this.feedback.fraudScoreId == '') {
             this.feedback.fraudScoreId = this.fraudScoreId;
         }
+
+
+        let ludate: Number;
+        ludate = data['claim'.toString()].commentList[5].updateDate;
+        
     }
 }

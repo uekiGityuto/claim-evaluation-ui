@@ -8,8 +8,8 @@ export class List {
     kind: string;
     occurenceDate: Date;
     score: number;
-    createDate: Timestamp<Date>;
-    updateDate: Timestamp<Date>;
+    createDate: Date;
+    updateDate: Date;
 
     constructor(receiptNo: string = '',
                 userName: string = '',
