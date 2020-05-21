@@ -27,10 +27,10 @@ describe('DetailComponent', () => {
   beforeEach(() => {
     // component = new DetailComponent(ob, router)
   })
-  
+
   it('詳細画面用データ取得テスト', () => {
     component.claim.claimId = '00000865432';
-    spyOn(component, 'getClaimInfo'); 
+    spyOn(component, 'getClaimInfo');
     expect(component.errMsgList.length).toBe(0);
   });
 });

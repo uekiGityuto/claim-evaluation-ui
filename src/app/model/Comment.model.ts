@@ -2,24 +2,24 @@ import { Timestamp } from 'rxjs';
 import { create } from 'domain';
 
 export class Comment {
+    id: number;
     claimId: string;
-    idx: number;
     comment: string;
     userId: string;
     userName: string;
     createDate: Date;
     updateDate: Date;
     constructor(
+        id: number = -1,
         claimId: string = '',
-        idx: number = null,
         comment: string = '',
         userId: string = '',
         userName: string = '',
         createDate: Date = null,
-        updateDate: Date = null,
+        updateDate: Date = null
     ) {
+        this.id = id;
         this.claimId = claimId;
-        this.idx = idx;
         this.comment = comment;
         this.userId = userId;
         this.userName = userName;
@@ -28,8 +28,8 @@ export class Comment {
     }
 
     setRequestsData(data: Object) {
+        this.id = data['id'.toString()];
         this.claimId = data['claimId'.toString()];
-        this.idx = data['idx'.toString()];
         this.comment = data['comment'.toString()];
         this.userId = data['userId'.toString()];
         this.userName = data['userName'.toString()];

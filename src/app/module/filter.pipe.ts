@@ -43,11 +43,11 @@ export class FilterPipe implements PipeTransform {
             const asc = params[1];
             let isFirst = true;
             let isDate = false;
-            item.sort((a, b) : any => {
+            item.sort((a, b): any => {
               if (isFirst) {
                 isFirst = false;
                 if (Number.isNaN(Number(a[name]))) {
-                  if (String(new Date(a[name])) != "Invalid Date") {
+                  if (String(new Date(a[name])) !== 'Invalid Date') {
                     isDate = true;
                   }
                 }
@@ -65,7 +65,7 @@ export class FilterPipe implements PipeTransform {
                   return a[name] > b[name] ? -1 : 1;
                 }
               }
-            })
+            });
           }
           return item;
       }

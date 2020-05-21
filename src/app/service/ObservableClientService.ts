@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Result } from '../model/Result.model';
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
 
 /**
  * 非同期通信ClientService
@@ -24,6 +24,7 @@ export class ObservableClientService {
     }
 
     public rxClient(uri, method= 'get', param= {}): Observable<any> {
+        param = JSON.parse(JSON.stringify(param));
         return new Observable(observer => {
             const rtn = this.http.request(method,
                             uri,

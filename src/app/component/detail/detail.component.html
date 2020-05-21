@@ -88,14 +88,14 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
             <div class="w100 v-m t-c mt5 mb5">
                 <button id="btnShowAllRiskList" (click)="getAllRiskList()">全てを見る</button>
             </div>
         </div>
     </div>
-    
+
     <div class="detail-side">
         <div class="contents-area">
             <div class="h1em">
@@ -112,16 +112,16 @@
                     <button type="submit">申し出る</button>
                 </div>
             </form>
-            <div class="w100 p5 flex-row" *ngFor="let $item of (score.claim.commentList | filter:'sort':['idx','asc'])">
+            <div class="w100 p5 flex-row" *ngFor="let $item of (score.claim.commentList | filter:'sort':['id','asc'])">
                 <div>
                     <mat-icon class="icon-flag m1">flag</mat-icon>
                 </div>
                 <div class="comment">
                     <div class="m2 head">
                         <span>{{$item.userName}}</span>
-                        <div class="btn-update-comment" id="btn-cmt-update-{{$item.idx}}" *ngIf="$item.userId == user.userId" (click)="changeCommentStatus($item.idx)">修正</div>
+                        <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeCommentStatus($item.id)">修正</div>
                     </div>
-                    <textarea class="txt" id="txtarea-cmt-{{$item.idx}}" readonly>{{$item.comment}}</textarea>
+                    <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
                     <div class="m2">
                         <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy/M/dd hh:mm:ss.SSS'}}</span>
                         <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy/M/dd hh:mm:ss.SSS'}}</span>
@@ -130,7 +130,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="detail-foot">
         detail-foot
     </div>
@@ -143,4 +143,3 @@
 <div class="icon-fiddle"></div>
 <div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
 <div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> -->
-    

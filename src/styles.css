@@ -607,3 +607,5 @@ a.notdeco {
     border-radius: var(--radius-xlarge);
     background-color: var(--color-white);
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

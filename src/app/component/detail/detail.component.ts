@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { AppComponent } from '../../app.component';
 import { Modal } from 'src/app/model/Modal.model';
 import { FilterPipe } from '../../module/filter.pipe';
-import { Score } from 'src/app/model/Score.model';
+import { Score } from 'src/app/model/score.model';
 import { Feedback } from 'src/app/model/Feedback.model';
 import { Comment } from '../../model/Comment.model';
 import { User } from '../../model/User.model';
@@ -48,8 +48,8 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   public getScoreInfo() {
-    const uri = environment.restapi_url + "/score/detail";
-    const param = {claimId: this.score.claimId};
+    const uri = environment.restapi_url + '/scores/' + this.score.claimId;
+    const param = null;//{claimId: this.score.claimId};
     const method = 'get';
     this.score = new Score();
     this.errMsgList = [];
@@ -58,7 +58,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          this.score.setRequestsData(result.data["score"]);
+          this.score.setRequestsData(result.data);
          } else {
            this.errMsgList = result.errMsgList;
          }
@@ -71,7 +71,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   public getAllRiskList() {
     this.riskListLimit = this.noLimit;
     this.setFactors();
-    const element: HTMLInputElement = <HTMLInputElement>document.getElementById('btnShowAllRiskList');
+    const element: HTMLInputElement = document.getElementById('btnShowAllRiskList') as HTMLInputElement;
     element.style.display = 'none';
   }
 
@@ -83,7 +83,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   public filterSideMemoList(id: string) {
     const elements = Array.from(document.getElementsByClassName('side-memo'));
     for (let i=0; i<elements.length; i++) {
-      const em = <HTMLInputElement>elements[i];
+      const em = elements[i] as HTMLInputElement;
       if (em.id === id) {
         if (!em.classList.contains('active')) {
           em.classList.add('active');
@@ -95,31 +95,31 @@ export class DetailComponent implements OnInit, OnDestroy {
 
     // Need filtering side comment list?
     // then please add filtering funtion to todolist
-    console.log("filtering: " + id);
+    console.log('filtering: ' + id);
   }
 
-  public changeCommentStatus(idx: number) {
-    const btnUpdate = <HTMLElement>document.getElementById("btn-cmt-update-" + idx);
-    const textarea = <HTMLInputElement>document.getElementById("txtarea-cmt-" + idx);
-    if (btnUpdate.innerHTML == "修正") {
-      btnUpdate.innerHTML = "保存";
+  public changeCommentStatus(id: number) {
+    const btnUpdate = document.getElementById('btn-cmt-update-' + id) as HTMLElement;
+    const textarea = document.getElementById('txtarea-cmt-' + id) as HTMLInputElement;
+    if (btnUpdate.innerHTML === '修正') {
+      btnUpdate.innerHTML = '保存';
       textarea.readOnly = false;
       if (!textarea.classList.contains('active')) {
-        btnUpdate.classList.add('active')
-        textarea.classList.add('active')
+        btnUpdate.classList.add('active');
+        textarea.classList.add('active');
       }
     } else {
-      btnUpdate.innerHTML = "修正";
+      btnUpdate.innerHTML = '修正';
       textarea.readOnly = true;
       if (textarea.classList.contains('active')) {
-        btnUpdate.classList.remove('active')
-        textarea.classList.remove('active')
+        btnUpdate.classList.remove('active');
+        textarea.classList.remove('active');
       }
       let cmt = new Comment();
       let beforeComment: string;
       for(let i=0; i<this.score.claim.commentList.length; i++) {
         cmt.setRequestsData(this.score.claim.commentList[i]);
-        if (cmt.idx == idx) {
+        if (cmt.id === id) {
           beforeComment = cmt.comment;
           cmt.comment = textarea.value;
           break;
@@ -131,7 +131,7 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   public submitMemo(param: any) {
     const txt = param.sideMemoTxt.value;
-    let comment = new Comment(this.score.claim.claimId, null, txt, this.user.userId, this.user.name);
+    const comment = new Comment(-1, this.score.claim.claimId, txt, this.user.userId, this.user.name);
     this.submitRightSideComment(comment);
   }
 
@@ -144,8 +144,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.gFactors = [];
 
     if (factors.length > 0) {
-      for (let i=0; i<factors.length; i++) {
-        const f = factors[i];
+      for (const f of factors) {
         if (f.effect > 0) {
           this.rFactorsAll.push(f);
         } else if (f.effect < 0) {
@@ -156,23 +155,23 @@ export class DetailComponent implements OnInit, OnDestroy {
       this.fp.transform(this.gFactorsAll, 'sort', ['effect','asc']);
     }
 
-    for (let i=0; i<this.rFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
+    for (let i = 0; i < this.rFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
       const f = this.rFactorsAll[i];
       this.rFactors.push(f);
     }
-    for (let i=0; i<this.gFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
+    for (let i = 0; i < this.gFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
       const f = this.gFactorsAll[i];
       this.gFactors.push(f);
     }
   }
 
-  private setActiveEstimation(estimation_agreement: boolean) {
-    if (estimation_agreement === true) {
-      const icon_done: HTMLInputElement = <HTMLInputElement>document.getElementById('d-icon-done');
-      icon_done.classList.add('active');
-    } else if (estimation_agreement === false) {
-      const icon_clear: HTMLInputElement = <HTMLInputElement>document.getElementById('d-icon-clear');
-      icon_clear.classList.add('active');
+  private setActiveEstimation(estimationAgreement: boolean) {
+    if (estimationAgreement === true) {
+      const iconDone: HTMLInputElement = document.getElementById('d-icon-done') as HTMLInputElement;
+      iconDone.classList.add('active');
+    } else if (estimationAgreement === false) {
+      const iconClear: HTMLInputElement = document.getElementById('d-icon-clear') as HTMLInputElement;
+      iconClear.classList.add('active');
     }
   }
 
@@ -202,17 +201,17 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private openModal(id, memo) {
-    let modal = new Modal();
-    if (this.appCmpt.ms.model.id != id) {
+    const modal = new Modal();
+    if (this.appCmpt.ms.model.id !== id) {
       modal.memo = memo;
     } else {
       modal.memo = this.appCmpt.ms.model.memo;
     }
     modal.id = id;
     modal.isMemo = true;
-    modal.title = "リスクスコアフィードバック";
-    modal.header = "<span>リスクスコアに同意する理由を詳しく説明して、</span><br><span>チームメイトが状況を把握できるようにしてください。</span>";
-    modal.btnName = "申し出る";
+    modal.title = 'リスクスコアフィードバック';
+    modal.header = '<span>リスクスコアに同意する理由を詳しく説明して、</span><br><span>チームメイトが状況を把握できるようにしてください。</span>';
+    modal.btnName = '申し出る';
     modal.width = 25;
     modal.height = 20;
     modal.isMemo = true;
@@ -223,35 +222,35 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.appCmpt.openModal(modal);
   }
   private clearModalInfo() {
-    this.appCmpt.ms.model.id = "";
-    this.appCmpt.ms.model.memo = "";
+    this.appCmpt.ms.model.id = '';
+    this.appCmpt.ms.model.memo = '';
   }
 
   private selectIcon(event: Event) {
     const id = (event.target as Element).id;
-    const before_agreement = this.score.feedback.isCorrect;
+    const beforeAgreement = this.score.feedback.isCorrect;
     this.score.feedback.isCorrect = id === 'd-icon-done' ? true : false;
-    const another_id = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
-    const clickedIcon: HTMLInputElement = <HTMLInputElement>document.getElementById(id);
-    const anotherIcon: HTMLInputElement = <HTMLInputElement>document.getElementById(another_id);
+    const anotherId = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
+    const clickedIcon: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+    const anotherIcon: HTMLInputElement = document.getElementById(anotherId) as HTMLInputElement;
     clickedIcon.classList.add('active');
     anotherIcon.classList.remove('active');
-    if (before_agreement != this.score.feedback.isCorrect) {
+    if (beforeAgreement != this.score.feedback.isCorrect) {
       this.updateFeedback();
       // console.log(this.score.feedback.isCorrect);
     }
   }
 
   private updateFeedback() {
-    const uri = environment.restapi_url + "/score/updateFeedbackIsCorrect";
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackIsCorrect';
     const method = 'post';
     this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, {feedback: JSON.stringify(this.score.feedback)});
+    const observer = this.ob.rxClient(uri , method, this.score.feedback);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          if(!result.data["update"]) {
-            this.errMsgList.push("Update Error", "Update Fail");
+          if(!result.data) {
+            this.errMsgList.push('Update Error', 'Update Fail');
           }
          } else {
            this.errMsgList = result.errMsgList;
@@ -259,23 +258,22 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
     );
   }
-  
+
   private submitRiskScoreFeedback(modalModel: Modal = null) {
     if (modalModel != null) {
       const memo = modalModel.memo;
-      let feedback = new Feedback();
+      const feedback = new Feedback();
       feedback.setRequestData(modalModel.obj);
       feedback.comment = memo;
-      
-      const uri = environment.restapi_url + "/score/updateFeedbackComment";
+      const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedbackComment';
       const method = 'post';
       let errMsgList = [];
-      const observer = modalModel.ob.rxClient(uri , method, {feedback: JSON.stringify(feedback)});
+      const observer = modalModel.ob.rxClient(uri , method, feedback);
       observer.subscribe(
         (result: Result) => {
           if (result.isSuccess) {
-            if(!result.data["update"]) {
-              errMsgList.push("Update Error", "Update Fail");
+            if(!result.data) {
+              errMsgList.push('Update Error', 'Update Fail');
             }
           } else {
             errMsgList = result.errMsgList;
@@ -286,20 +284,20 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private submitRightSideComment(comment: Comment) {
-    const uri = environment.restapi_url + "/score/updateComment";
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
     const method = 'post';
     this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
+    const observer = this.ob.rxClient(uri , method, comment);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          const data = result.data["update"];
+          const data = result.data;
           if (data) {
-            this.score.claim.commentList.push(data); 
-            const textarea: HTMLInputElement = <HTMLInputElement>document.getElementById('sideMemoTxt');
-            textarea.value = "";
+            this.score.claim.commentList.push(data);
+            const textarea: HTMLInputElement = document.getElementById('sideMemoTxt') as HTMLInputElement;
+            textarea.value = '';
           } else {
-            this.errMsgList.push("Update Error", "Update Fail");
+            this.errMsgList.push('Update Error', 'Update Fail');
           }
         } else {
           this.errMsgList = result.errMsgList;
@@ -307,23 +305,30 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
     );
   }
-    
+
   private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
-    const uri = environment.restapi_url + "/score/updateComment";
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
     const method = 'post';
     this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, {comment: JSON.stringify(comment)});
+    const observer = this.ob.rxClient(uri , method, comment);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          const data = result.data["update"];
+          const data = result.data;
           if (data) {
-            const idx = data.idx - 1;
-            this.score.claim.commentList.splice(idx, 1);
-            this.score.claim.commentList.push(data);
-            this.fp.transform(this.score.claim.commentList, 'sort', ['idx','asc']);
+            const list = this.score.claim.commentList;
+            let idx = 0;
+            for (const cmt of list) {
+              if (cmt['id'] === data['id']) {
+                break;
+              }
+              idx += 1;
+            }
+            list.splice(idx, 1);
+            list.push(data);
+            this.fp.transform(list, 'sort', ['id', 'asc']);
           } else {
-            this.errMsgList.push("Update Error", "Update Fail");
+            this.errMsgList.push('Update Error', 'Update Fail');
             textarea.value = beforeComment;
           }
         } else {

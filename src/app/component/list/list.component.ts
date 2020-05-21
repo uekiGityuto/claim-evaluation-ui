@@ -29,7 +29,7 @@ export class ListComponent implements OnInit {
   }
 
   public getList() {
-    const uri = environment.restapi_url + "/score/list";
+    const uri = environment.restapi_url + "/scores";
     const method = 'get';
     this.list = [];
     this.errMsgList = [];
@@ -38,7 +38,7 @@ export class ListComponent implements OnInit {
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          this.list = result.data.scoreList;
+          this.list = result.data;
         } else {
           this.errMsgList = result.errMsgList;
         }
