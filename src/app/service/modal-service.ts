@@ -28,7 +28,7 @@ export class ModalService {
 
   public closeModal(): void {
     this.subject.next(JSON.stringify('close'));
-    
+
   }
 
   // public callbackModal(result: any) {
@@ -38,7 +38,7 @@ export class ModalService {
   //   if (this.model.callback) {
   //     this.model.callback(JSON.stringify(this.model));
   //   }
-    
+
   //   this.subject.next();
   // }
 }

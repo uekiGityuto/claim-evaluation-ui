@@ -20,7 +20,7 @@ export class Feedback {
         this.claimId = claimId;
     }
 
-    setRequestData(data: object) {
+    setRequestData(data: Object) {
         this.fraudScoreId = data['fraudScoreId'.toString()];
         this.isCorrect = data['isCorrect'.toString()];
         this.comment = data['comment'.toString()];

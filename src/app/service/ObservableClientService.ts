@@ -16,7 +16,6 @@ export class ObservableClientService {
     private headers: any;
 
     constructor(private http: HttpClient) {
-        this.result = new Result();
         this.headers = {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + environment.token
@@ -24,7 +23,8 @@ export class ObservableClientService {
     }
 
     public rxClient(uri, method= 'get', param= {}): Observable<any> {
-        param = JSON.parse(JSON.stringify(param));
+        this.result = new Result();
+        param = this.toParamObject(param);
         return new Observable(observer => {
             const rtn = this.http.request(method,
                             uri,
@@ -60,4 +60,30 @@ export class ObservableClientService {
                 });
         });
     }
+
+    private toParamObject(obj= {}) {
+      if (!obj) { return {}; }
+      for (const key of Object.keys(obj)) {
+        if (key.toLocaleLowerCase().indexOf('date') > -1 || key.toLocaleLowerCase().indexOf('time') > -1) {
+          if (obj[key]) {
+            obj[key] = this.formatDatetime(new Date(obj[key]), 'yyyy-mm-ddThh:ii:ss.SSSZ');
+          } else {
+            delete obj[key];
+          }
+        }
+      }
+      return JSON.parse(JSON.stringify(obj));
+    }
+
+    private formatDatetime(date: Date, format: string) {
+      const padStart = (value: number): string => value.toString().padStart(2, '0');
+      return format
+          .replace(/yyyy/g, padStart(date.getFullYear()))
+          .replace(/dd/g, padStart(date.getDate()))
+          .replace(/mm/g, padStart(date.getMonth() + 1))
+          .replace(/hh/g, padStart(date.getHours()))
+          .replace(/ii/g, padStart(date.getMinutes()))
+          .replace(/ss/g, padStart(date.getSeconds()))
+          .replace(/SSS/g, padStart(date.getMilliseconds()));
+   }
 }

@@ -1,7 +1,3 @@
-<div *ngFor="let errMsg of errMsgList; index as i" class="err-msg">
-    <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
-</div>
-
 <div class="detail-head">
     <div class="w75 flex-row t-c">
         <div class="w20 flex-column ma">
@@ -123,8 +119,8 @@
                     </div>
                     <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
                     <div class="m2">
-                        <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy/M/dd hh:mm:ss.SSS'}}</span>
-                        <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy/M/dd hh:mm:ss.SSS'}}</span>
+                        <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy-M-dd HH:mm'}}</span>
+                        <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy-M-dd HH:mm'}}</span>
                     </div>
                 </div>
             </div>

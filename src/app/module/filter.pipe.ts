@@ -32,8 +32,8 @@ export class FilterPipe implements PipeTransform {
               rtnDate = format.replace(/yyyy/g, date.getFullYear().toString());
               rtnDate = rtnDate.replace(/M/g, (date.getMonth() + 1).toString());
               rtnDate = rtnDate.replace(/d/g, date.getDate().toString());
-            } catch(e) {
-              rtnDate = "";
+            } catch (e) {
+              rtnDate ='';
             }
           }
           return rtnDate;

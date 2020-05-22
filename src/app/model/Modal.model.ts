@@ -15,13 +15,13 @@ export class Modal {
     public ob: ObservableClientService;
 
     constructor(
-        id: string = "",
-        title: string = "",
+        id: string = '',
+        title: string = '',
         isHeader: boolean = true,
-        header: string = "",
+        header: string = '',
         isMemo: boolean = true,
-        memo: string = "",
-        btnName: string = "確認",
+        memo: string = '',
+        btnName: string = '確認',
         width: number = 0,
         height: number = 0,
         obj: any = null

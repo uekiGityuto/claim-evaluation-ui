@@ -216,10 +216,41 @@ export class DetailComponent implements OnInit, OnDestroy {
     modal.height = 20;
     modal.isMemo = true;
     modal.isHeader = true;
-    modal.callback = this.submitRiskScoreFeedback;
     modal.ob = this.ob;
     modal.obj = this.score.feedback;
     this.appCmpt.openModal(modal);
+    this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
+      (param) => {
+        this.appCmpt.result.data = JSON.parse(param);
+        if (this.appCmpt.result.data !== 'close') {
+          const modalModel = this.appCmpt.ms.model;
+          if (modalModel != null) {
+            modalModel.memo = (this.appCmpt.result.data as Modal).memo;
+            const feedback = new Feedback();
+            feedback.setRequestData(modalModel.obj);
+            feedback.comment = modalModel.memo;
+            const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedback';
+            const method = 'post';
+            const observer = modalModel.ob.rxClient(uri , method, feedback);
+            observer.subscribe(
+              (result: Result) => {
+                if (result.isSuccess) {
+                  if (result.data) {
+                    this.score.feedback = result.data;
+                  } else {
+                    this.appCmpt.result.errMsgList.push({key: 'Update Error', value: 'Update Fail'});
+                  }
+                } else {
+                  this.appCmpt.result.errMsgList.concat(result.errMsgList);
+                }
+              }
+            );
+          }
+        }
+        this.appCmpt.modalCmpt = null;
+        this.appCmpt.closeModal();
+      }
+    );
   }
   private clearModalInfo() {
     this.appCmpt.ms.model.id = '';
@@ -242,14 +273,17 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private updateFeedback() {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackIsCorrect';
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedback';
     const method = 'post';
     this.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, this.score.feedback);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
-          if(!result.data) {
+          if (result.data) {
+            this.appCmpt.ms.model.obj = result.data;
+            this.score.feedback = result.data;
+          } else {
             this.errMsgList.push('Update Error', 'Update Fail');
           }
          } else {
@@ -257,30 +291,6 @@ export class DetailComponent implements OnInit, OnDestroy {
          }
       }
     );
-  }
-
-  private submitRiskScoreFeedback(modalModel: Modal = null) {
-    if (modalModel != null) {
-      const memo = modalModel.memo;
-      const feedback = new Feedback();
-      feedback.setRequestData(modalModel.obj);
-      feedback.comment = memo;
-      const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedbackComment';
-      const method = 'post';
-      let errMsgList = [];
-      const observer = modalModel.ob.rxClient(uri , method, feedback);
-      observer.subscribe(
-        (result: Result) => {
-          if (result.isSuccess) {
-            if(!result.data) {
-              errMsgList.push('Update Error', 'Update Fail');
-            }
-          } else {
-            errMsgList = result.errMsgList;
-          }
-        }
-      );
-    }
   }
 
   private submitRightSideComment(comment: Comment) {

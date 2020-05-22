@@ -12,6 +12,9 @@
     </ul>
   </aside>
   <article class="app-container">
+    <div *ngFor="let errMsg of result.errMsgList; index as i" class="err-msg">
+      <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
+    </div>
     <router-outlet></router-outlet>
   </article>
   <ng-container *ngComponentOutlet="modalCmpt"></ng-container>

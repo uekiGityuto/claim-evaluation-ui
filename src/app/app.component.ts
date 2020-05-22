@@ -18,7 +18,7 @@ import { Plugins } from 'protractor/built/plugins';
 export class AppComponent {
   public result: Result;
   public modalCmpt: any;
-  private subscription: Subscription;
+  public subscription: Subscription;
 
   constructor(public ms: ModalService) {
     this.result = new Result();
@@ -28,21 +28,6 @@ export class AppComponent {
   public openModal(model: Modal) {
     this.modalCmpt = ModalComponent;
     this.ms.model = model;
-
-    this.subscription = this.ms.ob.subscribe(
-      (param) => {
-        const result = JSON.parse(param);
-        if (result != 'close') {
-          this.ms.model.memo = (<Modal>result).memo;
-          const callback = model.callback;
-          if (callback) {
-            callback(this.ms.model);
-          }
-        }
-        this.modalCmpt = null;
-        this.closeModal();
-      }
-    );
   }
 
   public closeModal() {
