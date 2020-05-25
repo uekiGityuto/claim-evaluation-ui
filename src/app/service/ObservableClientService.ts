@@ -52,8 +52,8 @@ export class ObservableClientService {
                     this.result.errMsgList.push({key: 'rxClientError', value: '通信エラー'});
                     observer.next(this.result);
                     observer.complete();
-                    // if(err.status === 401) {'権限がありません。'}
-                    // if(err.status === 403) {'サーバーから拒否されました。'}
+                    if(err.status === 401) {console.log('権限がありません。')}
+                    if(err.status === 403) {console.log('サーバーから拒否されました。')}
                     // if(err.status === 407) {'Proxy認証が必要です。'}
                     // if(err.status === 500) {'内部サーバーエラー'}
                     // if(err.status === 503) {'サービスを利用できません。暫く時間をおいてから再度接続してください。'}
