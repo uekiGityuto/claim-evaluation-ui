@@ -72,7 +72,7 @@ export class ObservableClientService {
       for (const key of Object.keys(obj)) {
         if (key.toLocaleLowerCase().indexOf('date') > -1 || key.toLocaleLowerCase().indexOf('time') > -1) {
           if (obj[key]) {
-            obj[key] = this.formatDatetime(new Date(obj[key]), 'yyyy-mm-ddThh:ii:ss.SSSZ');
+            obj[key] = this.formatDatetime(new Date(obj[key]), 'yyyy-mm-ddThh:ii:ss.SSS');
           } else {
             delete obj[key];
           }
