@@ -42,7 +42,7 @@
     --border-contents-gray: solid 1px var(--color-lightgray);
     --border-underline-title: solid 1px var(--color-black);
     --border-underline-data: solid 1px var(--color-gray);
-    
+
     /* Font */
     --font-family: "ヒラギノ明朝 ProN W6", "HiraMinProN-W6", "HG明朝E", "ＭＳ Ｐ明朝", "MS PMincho", "MS 明朝, メイリオ", serif;
     --font-small: 0.7em;
@@ -153,7 +153,7 @@ button {
     box-shadow: 3px 3px 3px var(--color-shadow-gray);
     border-radius: var(--radius-normal);
     cursor: pointer;
-}  
+}
 button:hover {
     background: var(--color-hover);
     box-shadow: none;
@@ -378,10 +378,7 @@ a.notdeco {
 }
 
 .err-msg {
-    position: absolute;
-    top: 3em;
-    margin-top: var(--mxxxx);
-    margin-left: -6.2em;
+    margin: var(--mxxxx);
     width: 100vw;
     color: var(--color-red-active);
     text-align: center;

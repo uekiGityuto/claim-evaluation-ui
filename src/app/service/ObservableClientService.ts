@@ -48,15 +48,21 @@ export class ObservableClientService {
                 //     observer.complete();
                 // },
                 err => {
-                    this.result.isSuccess = false;
-                    this.result.errMsgList.push({key: 'rxClientError', value: '通信エラー'});
-                    observer.next(this.result);
-                    observer.complete();
-                    if(err.status === 401) {console.log('権限がありません。')}
-                    if(err.status === 403) {console.log('サーバーから拒否されました。')}
-                    // if(err.status === 407) {'Proxy認証が必要です。'}
-                    // if(err.status === 500) {'内部サーバーエラー'}
-                    // if(err.status === 503) {'サービスを利用できません。暫く時間をおいてから再度接続してください。'}
+                  this.result.isSuccess = false;
+                  if (err.status === 401) { this.result.errMsgList.push({key: '401', value: '権限がありません。'});
+                  } else if (err.status === 403) { this.result.errMsgList.push({key: '403', value: 'サーバーから拒否されました。'});
+                  } else if (err.status === 500) { this.result.errMsgList.push({key: '500', value: 'サービスを利用できません。暫く時間をおいてから再度接続してください。'});
+                  } else if (err.status === 510) { this.result.errMsgList.push({key: '510', value: '外部サービスを利用できません。管理者にお問い合わせください。'});
+                  } else if (err.status === 520) { this.result.errMsgList.push({key: '520', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 521) { this.result.errMsgList.push({key: '521', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 522) { this.result.errMsgList.push({key: '522', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 523) { this.result.errMsgList.push({key: '523', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 524) { this.result.errMsgList.push({key: '524', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 525) { this.result.errMsgList.push({key: '525', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 526) { this.result.errMsgList.push({key: '526', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  }
+                  observer.next(this.result);
+                  observer.complete();
                 });
         });
     }
@@ -72,7 +78,8 @@ export class ObservableClientService {
           }
         }
       }
-      return JSON.parse(JSON.stringify(obj));
+      const paramObj = JSON.parse(JSON.stringify(obj));
+      return paramObj;
     }
 
     private formatDatetime(date: Date, format: string) {

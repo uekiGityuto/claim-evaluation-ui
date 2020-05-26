@@ -37,17 +37,12 @@ export class Score {
         this.claim = data['claim'.toString()];
         this.reasons = data['reasons'.toString()];
         this.feedback = data['feedback'.toString()];
+        if (!this.feedback) {
+          this.feedback = new Feedback();
+        }
         this.feedback.claimId = this.claimId;
         if (this.feedback.fraudScoreId === null || this.feedback.fraudScoreId === undefined || this.feedback.fraudScoreId === '') {
-            this.feedback.fraudScoreId = this.fraudScoreId;
+          this.feedback.fraudScoreId = this.fraudScoreId;
         }
-
-
-        // let ludate: Number;
-        // const commentList = data['claim'.toString()].commentList;
-        // if (commentList.length > 0) {
-        //   ludate = commentList[5].updateDate;
-        // }
-
     }
 }

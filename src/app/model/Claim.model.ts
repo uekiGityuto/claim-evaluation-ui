@@ -20,7 +20,7 @@ export class Claim {
                 occurenceDate: string = '',
                 createDate: string = '',
                 updateDate: string = '',
-            commentList: Comment[] = []) {
+                commentList: Comment[] = []) {
         this.userName = userName;
         this.claimId = ClaimId;
         this.name = name;

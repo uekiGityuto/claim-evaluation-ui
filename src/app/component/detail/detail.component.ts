@@ -49,21 +49,24 @@ export class DetailComponent implements OnInit, OnDestroy {
 
   public getScoreInfo() {
     const uri = environment.restapi_url + '/scores/' + this.score.claimId;
-    const param = null;//{claimId: this.score.claimId};
+    const param = null;
     const method = 'get';
     this.score = new Score();
-    this.errMsgList = [];
 
     const observer = this.ob.rxClient(uri , method, param);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
           this.score.setRequestsData(result.data);
-         } else {
-           this.errMsgList = result.errMsgList;
-         }
-        this.setActiveEstimation(this.score.feedback.isCorrect);
-        this.setFactors(this.score.reasons);
+          if (this.score.feedback) {
+            this.setActiveEstimation(this.score.feedback.isCorrect);
+          }
+          if (this.score.reasons) {
+            this.setFactors(this.score.reasons);
+          }
+        } else {
+          this.appCmpt.result.errMsgList = result.errMsgList;
+        }
       }
     );
   }
@@ -229,7 +232,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             const feedback = new Feedback();
             feedback.setRequestData(modalModel.obj);
             feedback.comment = modalModel.memo;
-            const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedback';
+            const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedbackComment';
             const method = 'post';
             const observer = modalModel.ob.rxClient(uri , method, feedback);
             observer.subscribe(
@@ -273,7 +276,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private updateFeedback() {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedback';
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackComment';
     const method = 'post';
     this.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, this.score.feedback);
