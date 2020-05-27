@@ -84,9 +84,8 @@
                         </div>
                     </div>
                 </div>
-
             </div>
-            <div class="w100 v-m t-c mt5 mb5">
+            <div class="w100 v-m t-c mt5 mb5" *ngIf="gFactors.length > 5">
                 <button id="btnShowAllRiskList" (click)="getAllRiskList()">全てを見る</button>
             </div>
         </div>
@@ -128,7 +127,30 @@
     </div>
 
     <div class="detail-foot">
-        detail-foot
+      <div class="score-history-area">
+        <div class="title t-c flex-around">
+          <div class="w5"></div>
+          <div class="w15">スコアID</div>
+          <div class="w20">損害担当者</div>
+          <div class="w10">種類</div>
+          <div class="w20">更新日</div>
+          <div class="w15">リスクスコア</div>
+          <div class="w15">結論</div>
+        </div>
+        <div class="w100 mt3 t-c ft-large">
+          <div class='flex-row w100'*ngFor="let s of score.history; let i = index">
+            <div class='w100 flex-around h1p5em'>
+              <div class="w5"><mat-icon class="star">star</mat-icon></div>
+              <div class="w15">{{s.fraudScoreId}}</div>
+              <div class="w20">{{s.claim.userName}}</div>
+              <div class="w10">{{s.claim.kind}}</div>
+              <div class="w20">{{s.updateDate | date: 'yyyy-M-dd HH:mm'}}</div>
+              <div class="w15">{{s.score}}</div>
+              <div class="w15">{{s.isFraud}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 </div>
 

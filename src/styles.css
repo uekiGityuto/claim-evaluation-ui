@@ -349,6 +349,10 @@ a.notdeco {
     margin-left: 1em;
     margin-right: 1em;
 }
+.flex-around {
+  display: flex;
+  justify-content: space-around;
+}
 .flex-center {
     display: flex;
     justify-content: center;

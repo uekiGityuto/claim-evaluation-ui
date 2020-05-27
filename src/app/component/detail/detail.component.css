@@ -61,12 +61,14 @@
   overflow-y: hidden;
 }
 
-.detail-main div.risk-list-area {
+.detail-main div.risk-list-area,
+.detail-foot div.score-history-area {
   margin-left: var(--mxxxx);
   margin-right: var(--mxxxx);
 }
 
-.detail-main div.risk-list-area div.title {
+.detail-main div.risk-list-area div.title,
+.detail-foot div.score-history-area div.title {
   width: 100%;
   height: var(--height-title-normal);
   display: flex;
