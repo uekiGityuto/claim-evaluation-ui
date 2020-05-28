@@ -181,4 +181,5 @@
   border: var(--border-contents-gray);
   border-radius: var(--radius-large);
   background-color: var(--color-white);
+  overflow-y: auto;
 }

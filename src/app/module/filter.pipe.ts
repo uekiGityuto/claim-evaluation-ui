@@ -43,26 +43,34 @@ export class FilterPipe implements PipeTransform {
             const asc = params[1];
             let isFirst = true;
             let isDate = false;
+            let dataA = null;
+            let dataB = null;
             item.sort((a, b): any => {
+              dataA = a;
+              dataB = b;
+              for (const o of name.split('.')) {
+                dataA = dataA[o];
+                dataB = dataB[o];
+              }
               if (isFirst) {
                 isFirst = false;
-                if (Number.isNaN(Number(a[name]))) {
-                  if (String(new Date(a[name])) !== 'Invalid Date') {
+                if (Number.isNaN(Number(dataA))) {
+                  if (String(new Date(dataA)) !== 'Invalid Date') {
                     isDate = true;
                   }
                 }
               }
               if (asc === 'asc') {
                 if (isDate) {
-                  return new Date(a[name]) < new Date(b[name]) ? -1 : 1;
+                  return new Date(dataA) < new Date(dataB) ? -1 : 1;
                 } else {
-                  return a[name] < b[name] ? -1 : 1;
+                  return dataA < dataB ? -1 : 1;
                 }
               } else {
                 if (isDate) {
-                  return new Date(a[name]) > new Date(b[name]) ? -1 : 1;
+                  return new Date(dataA) > new Date(dataB) ? -1 : 1;
                 } else {
-                  return a[name] > b[name] ? -1 : 1;
+                  return dataA > dataB ? -1 : 1;
                 }
               }
             });

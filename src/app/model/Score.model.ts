@@ -12,7 +12,7 @@ export class Score {
     reasons: Reason[];
     feedback: Feedback;
     history: Score[];
-    isFraud: boolean;
+    isHighRisk: boolean;
     createDate: Date;
     updateDate: Date;
 
@@ -52,13 +52,19 @@ export class Score {
         }
         this.history = data['history'.toString()];
         this.history.forEach(s => {
-          if (s.score >= 700) {
-            s.isFraud = true;
-          } else {
-            s.isFraud = false;
-          }
+          s.isHighRisk = this.checkHighRisk(s.score);
         });
+        this.isHighRisk = this.checkHighRisk(this.score);
         this.createDate = data['createDate'.toString()];
         this.updateDate = data['updateDate'.toString()];
+    }
+
+    checkHighRisk(score) {
+      if (score >= 700) {
+        return true;
+      } else {
+        return false;
+      }
+
     }
 }

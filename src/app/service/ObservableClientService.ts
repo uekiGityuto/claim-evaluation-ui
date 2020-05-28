@@ -25,6 +25,7 @@ export class ObservableClientService {
     public rxClient(uri, method= 'get', param= {}): Observable<any> {
         this.result = new Result();
         param = this.toParamObject(param);
+        this.result.errMsgList = [];
         return new Observable(observer => {
             const rtn = this.http.request(method,
                             uri,
@@ -49,18 +50,18 @@ export class ObservableClientService {
                 // },
                 err => {
                   this.result.isSuccess = false;
-                  // if (err.status === 401) { this.result.errMsgList.push({key: '401', value: '権限がありません。'});
-                  // } else if (err.status === 403) { this.result.errMsgList.push({key: '403', value: 'サーバーから拒否されました。'});
-                  // } else if (err.status === 500) { this.result.errMsgList.push({key: '500', value: 'サービスを利用できません。暫く時間をおいてから再度接続してください。'});
-                  // } else if (err.status === 510) { this.result.errMsgList.push({key: '510', value: '外部サービスを利用できません。管理者にお問い合わせください。'});
-                  // } else if (err.status === 520) { this.result.errMsgList.push({key: '520', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 521) { this.result.errMsgList.push({key: '521', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 522) { this.result.errMsgList.push({key: '522', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 523) { this.result.errMsgList.push({key: '523', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 524) { this.result.errMsgList.push({key: '524', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 525) { this.result.errMsgList.push({key: '525', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // } else if (err.status === 526) { this.result.errMsgList.push({key: '526', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  // }
+                  if (err.status === 401) { this.result.errMsgList.push({key: '401', value: '権限がありません。'});
+                  } else if (err.status === 403) { this.result.errMsgList.push({key: '403', value: 'サーバーから拒否されました。'});
+                  } else if (err.status === 500) { this.result.errMsgList.push({key: '500', value: 'サービスを利用できません。暫く時間をおいてから再度接続してください。'});
+                  } else if (err.status === 510) { this.result.errMsgList.push({key: '510', value: '外部サービスを利用できません。管理者にお問い合わせください。'});
+                  } else if (err.status === 520) { this.result.errMsgList.push({key: '520', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 521) { this.result.errMsgList.push({key: '521', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 522) { this.result.errMsgList.push({key: '522', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 523) { this.result.errMsgList.push({key: '523', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 524) { this.result.errMsgList.push({key: '524', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 525) { this.result.errMsgList.push({key: '525', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 526) { this.result.errMsgList.push({key: '526', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  }
                   observer.next(this.result);
                   observer.complete();
                 });

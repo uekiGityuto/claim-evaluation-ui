@@ -567,21 +567,57 @@ a.notdeco {
     content: "高";
 }
 
+.icon-low {
+  display: inline-block;
+  margin: var(--ms);
+  line-height: var(--icon-hl);
+  height: var(--icon-hl);
+  width: var(--icon-wl);
+  font: status-bar;
+  text-align: center;
+  vertical-align: middle;
+  color: var(--color-darkgray);
+  background-color: var(--color-lightgray);
+  border-radius: var(--radius-normal);
+}
+.icon-low:before {
+  content: "低";
+}
+
 .icon-fiddle {
     display: inline-block;
-    margin: var(--ms);
+    margin: auto;
     line-height: var(--icon-hl);
     height: var(--icon-hl);
-    width: 3em;
+    width: 6.5em;
     font: status-bar;
+    font-size: var(--font-normal);
     text-align: center;
     vertical-align: middle;
     color: var(--color-white);
     background-color: var(--color-darkgray);
+    border: 1px solid var(--color-darkgray);
     border-radius: var(--radius-normal);
 }
 .icon-fiddle::before {
     content: "詐欺";
+}
+.icon-nofiddle {
+  display: inline-block;
+  margin: auto;
+  line-height: var(--icon-hl);
+  height: var(--icon-hl);
+  width: 6.5em;
+  font: status-bar;
+  font-size: var(--font-normal);
+  text-align: center;
+  vertical-align: middle;
+  color: var(--color-gray);
+  border: 1px solid var(--color-gray);
+  border-radius: var(--radius-normal);
+}
+.icon-nofiddle::before {
+  content: "詐欺ではない";
 }
 
 .icon-sort {

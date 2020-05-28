@@ -30,7 +30,10 @@
     <div class="detail-main flex-col-between">
         <div class="title flex-between">
             <div class="w50 flex-row flex-center-v">
-                <div class="ft-xxlarge">リスクスコア</div>&nbsp;<div class="icon-high"></div>&nbsp;<div class="ft-xxxlarge ft-lightbold">{{score.score}}</div>
+                <div class="ft-xxlarge">リスクスコア</div>&nbsp;
+                <div class="icon-high" *ngIf="score.isHighRisk"></div>
+                <div class="icon-low" *ngIf="!score.isHighRisk"></div>
+                &nbsp;<div class="ft-xxxlarge ft-lightbold">{{score.score}}</div>
             </div>
             <div class="flex-row flex-center-v">
                 <div class="ft-xlarge">評価</div>&nbsp;
@@ -85,8 +88,8 @@
                     </div>
                 </div>
             </div>
-            <div class="w100 v-m t-c mt5 mb5" *ngIf="gFactors.length > 5">
-                <button id="btnShowAllRiskList" (click)="getAllRiskList()">全てを見る</button>
+            <div class="w100 v-m t-c mt5 mb5 h2p5em">
+                <button id="btnShowAllRiskList" *ngIf="rFactorsAll.length > 5 || gFactorsAll.length > 5" (click)="getAllRiskList()">全てを見る</button>
             </div>
         </div>
     </div>
@@ -101,7 +104,7 @@
                     <span class="side-memo notdeco" id="side-memo-auto" (click)="filterSideMemoList('side-memo-auto')">自動化</span>
                 </div> -->
             </div>
-            <form #commentForm (ngSubmit)="submitMemo(commentForm)" class="w100 h100">
+            <form #commentForm (ngSubmit)="submitMemo(commentForm, $event)" class="w100 h100">
                     <div class="contents flex-col-between">
                     <textarea placeholder="" name="sideMemoTxt" id="sideMemoTxt"></textarea>
                     <button type="submit">申し出る</button>
@@ -139,14 +142,20 @@
         </div>
         <div class="w100 mt3 t-c ft-large">
           <div class='flex-row w100'*ngFor="let s of score.history; let i = index">
-            <div class='w100 flex-around h1p5em'>
+            <div class='w100 flex-around flex-center-v h1p5em mt1 mb1'>
               <div class="w5"><mat-icon class="star">star</mat-icon></div>
               <div class="w15">{{s.fraudScoreId}}</div>
               <div class="w20">{{s.claim.userName}}</div>
               <div class="w10">{{s.claim.kind}}</div>
               <div class="w20">{{s.updateDate | date: 'yyyy-M-dd HH:mm'}}</div>
-              <div class="w15">{{s.score}}</div>
-              <div class="w15">{{s.isFraud}}</div>
+              <div class="w15">{{s.score}}&nbsp;
+                <div class="icon-high" *ngIf="s.isHighRisk"></div>
+                <div class="icon-low" *ngIf="!s.isHighRisk"></div>
+              </div>
+              <div class="w15">
+                <div class="icon-fiddle" *ngIf="s.isHighRisk"></div>
+                <div class="icon-nofiddle" *ngIf="!s.isHighRisk"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -159,5 +168,6 @@
 <mat-icon class="star active">star</mat-icon>
 <div class="icon-high"></div>
 <div class="icon-fiddle"></div>
+<div class="icon-nofiddle"></div>
 <div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
 <div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> -->

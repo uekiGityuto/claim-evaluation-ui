@@ -29,9 +29,10 @@ export class DetailComponent implements OnInit, OnDestroy {
   public rFactors: {factor: string, effect: number}[];
   public gFactors: {factor: string, effect: number}[];
   public user: User;
-  private rFactorsAll: {factor: string, effect: number}[];
-  private gFactorsAll: {factor: string, effect: number}[];
+  public rFactorsAll: {factor: string, effect: number}[];
+  public gFactorsAll: {factor: string, effect: number}[];
   private fp: FilterPipe;
+  private canSubmit;
 
   constructor(private ob: ObservableClientService,
               private route: ActivatedRoute,
@@ -45,6 +46,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.rFactorsAll = [];
     this.gFactorsAll = [];
     this.user = new User();
+    this.canSubmit = true;
   }
 
   public getScoreInfo() {
@@ -120,7 +122,7 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
       let cmt = new Comment();
       let beforeComment: string;
-      for(let i=0; i<this.score.claim.commentList.length; i++) {
+      for (let i=0; i<this.score.claim.commentList.length; i++) {
         cmt.setRequestsData(this.score.claim.commentList[i]);
         if (cmt.id === id) {
           beforeComment = cmt.comment;
@@ -132,10 +134,26 @@ export class DetailComponent implements OnInit, OnDestroy {
     }
   }
 
-  public submitMemo(param: any) {
+  checkSubmit(event: Event) {
+    if (!this.canSubmit) {
+      event.stopImmediatePropagation();
+      return false;
+    }
+    return true;
+  }
+  recoveryCanSubmit() {
+    this.canSubmit = true;
+  }
+
+  public submitMemo(param: any, event: Event) {
+    if (!this.checkSubmit(event)) {
+      return false;
+    }
     const txt = param.sideMemoTxt.value;
-    const comment = new Comment(-1, this.score.claim.claimId, txt, this.user.userId, this.user.name);
-    this.submitRightSideComment(comment);
+    if (txt) {
+      const comment = new Comment(-1, this.score.claim.claimId, txt, this.user.userId, this.user.name);
+      this.submitRightSideComment(comment);
+    }
   }
 
   private castToScore(object: Score): void {
@@ -269,7 +287,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     const anotherIcon: HTMLInputElement = document.getElementById(anotherId) as HTMLInputElement;
     clickedIcon.classList.add('active');
     anotherIcon.classList.remove('active');
-    if (beforeAgreement != this.score.feedback.isCorrect) {
+    if (beforeAgreement !== this.score.feedback.isCorrect) {
       this.updateFeedback();
       // console.log(this.score.feedback.isCorrect);
     }
@@ -289,9 +307,10 @@ export class DetailComponent implements OnInit, OnDestroy {
           } else {
             this.errMsgList.push('Update Error', 'Update Fail');
           }
-         } else {
-           this.errMsgList = result.errMsgList;
-         }
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+        }
       }
     );
   }
@@ -309,12 +328,12 @@ export class DetailComponent implements OnInit, OnDestroy {
             this.score.claim.commentList.push(data);
             const textarea: HTMLInputElement = document.getElementById('sideMemoTxt') as HTMLInputElement;
             textarea.value = '';
-          } else {
-            this.errMsgList.push('Update Error', 'Update Fail');
           }
-        } else {
-          this.errMsgList = result.errMsgList;
         }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+        }
+        this.canSubmit = true;
       }
     );
   }
@@ -344,8 +363,9 @@ export class DetailComponent implements OnInit, OnDestroy {
             this.errMsgList.push('Update Error', 'Update Fail');
             textarea.value = beforeComment;
           }
-        } else {
-          this.errMsgList = result.errMsgList;
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
         }
       }
     );
