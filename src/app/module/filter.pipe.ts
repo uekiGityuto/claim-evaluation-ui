@@ -24,8 +24,8 @@ export class FilterPipe implements PipeTransform {
           }
           return item;
         case 'date':
-          let rtnDate = "";
-          if (item && item.toString() != "Invalid Date") {
+          let rtnDate = '';
+          if (item && item.toString() !== 'Invalid Date') {
             try{
               const date = new Date(item);
               const format = 'yyyy/M/d';
@@ -33,7 +33,7 @@ export class FilterPipe implements PipeTransform {
               rtnDate = rtnDate.replace(/M/g, (date.getMonth() + 1).toString());
               rtnDate = rtnDate.replace(/d/g, date.getDate().toString());
             } catch (e) {
-              rtnDate ='';
+              rtnDate = '';
             }
           }
           return rtnDate;

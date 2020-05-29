@@ -12,7 +12,7 @@
     justify-content: center;
     align-items: center;
   }
-  
+
   .modal {
     overflow: hidden;
     height: var(--height-modal-init);
@@ -33,7 +33,7 @@
   .modal-title {
     width: 100%;
   }
-  
+
   .modal-header {
     height: 5em;
     width: 100%;
@@ -41,11 +41,11 @@
     margin: var(--mx) var(--mn) var(--mn) 0;
     vertical-align: middle;
   }
-  
+
   .modal-header > #modal_title {
     display: block;
   }
-  
+
   .modal-contents {
     height: calc(100% - 7em);
     margin: var(--mxx) 0 var(--mxx) 0;
@@ -64,3 +64,9 @@
   .modal mat-icon.clear {
       font-size: large;
   }
+
+  .modal-htmlContents {
+    width: 100%;
+    height: 100%;
+  }
+

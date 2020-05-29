@@ -1,28 +1,28 @@
 <div class="detail-head">
     <div class="w75 flex-row t-c">
-        <div class="w20 flex-column ma">
+        <div class="w20 flex-col-center ma">
             <strong class="mb5">受付番号</strong>
             <span>{{score.claim.claimId}}</span>
         </div>
-        <div class="w20 flex-column ma">
+        <div class="w20 flex-col-center ma">
             <strong class="mb5">契約者名</strong>
             <span>{{score.claim.name}}</span>
         </div>
-        <div class="w20 flex-column ma">
+        <div class="w20 flex-col-center ma">
             <strong class="mb5">生年月日</strong>
             <span>{{score.claim.birthday | filter:'date'}}</span>
         </div>
-        <div class="w20 flex-column ma">
+        <div class="w20 flex-col-center ma">
             <strong class="mb5">種類</strong>
             <span>{{score.claim.kind}}</span>
         </div>
-        <div class="w20 flex-column ma">
+        <div class="w20 flex-col-center ma">
             <strong class="mb5">発生日</strong>
             <span>{{score.claim.occurenceDate | filter:'date'}}</span>
         </div>
     </div>
     <div class="w25 v-m t-c">
-        <button>調査を終了する</button>
+        <button (click)="openModalCompleteInvestigation()">調査を終了する</button>
     </div>
 </div>
 

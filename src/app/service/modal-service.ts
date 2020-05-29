@@ -26,6 +26,10 @@ export class ModalService {
     this.subject.next(JSON.stringify(this.model));
   }
 
+  public callFunction(param: string): void {
+    this.subject.next(JSON.stringify(param));
+  }
+
   public closeModal(): void {
     this.subject.next(JSON.stringify('close'));
 

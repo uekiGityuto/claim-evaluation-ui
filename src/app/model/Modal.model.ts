@@ -7,6 +7,8 @@ export class Modal {
     public header: string;
     public isMemo: boolean;
     public memo: string;
+    public htmlContents: string;
+    public isFooter: boolean;
     public btnName: string;
     public width: number;
     public height: number;
@@ -21,6 +23,8 @@ export class Modal {
         header: string = '',
         isMemo: boolean = true,
         memo: string = '',
+        htmlContents: string = '',
+        isFooter: boolean = true,
         btnName: string = '確認',
         width: number = 0,
         height: number = 0,
@@ -32,6 +36,8 @@ export class Modal {
         this.header = header;
         this.isMemo = isMemo;
         this.memo = memo;
+        this.htmlContents = htmlContents;
+        this.isFooter = isFooter;
         this.btnName = btnName;
         this.width = width;
         this.height = height;
@@ -44,6 +50,8 @@ export class Modal {
         this.header = model.header;
         this.isMemo = model.isMemo;
         this.memo = model.memo;
+        this.htmlContents = model.htmlContents;
+        this.isFooter = model.isFooter;
         this.btnName = model.btnName;
         this.width = model.width;
         this.height = model.height;

@@ -149,14 +149,44 @@ button {
     padding-bottom: var(--pn);
     padding-left: var(--pxxx);
     width: var(--btn-w-s);
-    height: --btn-h-s;
+    height: var(--btn-h-s);
     box-shadow: 3px 3px 3px var(--color-shadow-gray);
     border-radius: var(--radius-normal);
     cursor: pointer;
+    text-align: center;
+    vertical-align: middle;
 }
 button:hover {
     background: var(--color-hover);
     box-shadow: none;
+}
+
+
+div.btn-wt {
+  background: var(--color-white);
+  border: solid 1.5px var(--color-lightgray);
+  color: var(--color-active);
+  padding-top: var(--pn);
+  padding-right: var(--pxxx);
+  padding-bottom: var(--pn);
+  padding-left: var(--pxxx);
+  width: var(--btn-w-s);
+  height: var(--btn-h-s);
+  line-height: var(--btn-h-s);
+  box-shadow: none;
+  border-radius: var(--radius-normal);
+  cursor: pointer;
+  text-align: center;
+  vertical-align: middle;
+}
+div.btn-wt:hover {
+  color: var(--color-hover);
+  box-shadow: 3px 3px 3px var(--color-shadow-gray);
+}
+
+.modal div.btn {
+  width: calc(100% - 1.8em) !important;
+  height: 3em !important;
 }
 
 a.notdeco {
@@ -370,10 +400,20 @@ a.notdeco {
     flex-direction: column;
     justify-content: center;
 }
+.flex-col-start {
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
 .flex-col-between {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+.flex-col-around {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
 }
 .flex-col-center {
     display: flex;
@@ -644,5 +684,6 @@ a.notdeco {
     border-radius: var(--radius-xlarge);
     background-color: var(--color-white);
 }
+
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

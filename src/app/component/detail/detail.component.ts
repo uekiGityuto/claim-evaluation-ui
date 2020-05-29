@@ -49,6 +49,26 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.canSubmit = true;
   }
 
+  ngOnInit(): void {
+    this.fp = new FilterPipe();
+    this.route.queryParams.subscribe(params => {
+      if (params['claimId'.toString()]) {
+        this.score.claimId = params['claimId'.toString()];
+      } else if (params['claim'.toString()]) {
+        const object = JSON.parse(params['claim'.toString()]);
+        if (object) {
+          this.castToScore(object);
+        }
+      }
+    });
+    this.getScoreInfo();
+    this.getUserInfo();
+  }
+
+  ngOnDestroy(): void {
+    this.clearModalInfo();
+  }
+
   public getScoreInfo() {
     const uri = environment.restapi_url + '/scores/' + this.score.claimId;
     const param = null;
@@ -81,7 +101,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   public riskScoreFeedback(event: Event) {
-    this.openModal(this.score.fraudScoreId, this.score.feedback.comment);
+    this.openModalFeedback(this.score.fraudScoreId, this.score.feedback.comment);
     this.selectIcon(event);
   }
 
@@ -201,27 +221,105 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
   }
 
-  ngOnInit(): void {
-    this.fp = new FilterPipe();
-    this.route.queryParams.subscribe(params => {
-      if (params['claimId'.toString()]) {
-        this.score.claimId = params['claimId'.toString()];
-      } else if (params['claim'.toString()]) {
-        const object = JSON.parse(params['claim'.toString()]);
-        if (object) {
-          this.castToScore(object);
+  private selectIcon(event: Event) {
+    const id = (event.target as Element).id;
+    const beforeAgreement = this.score.feedback.isCorrect;
+    this.score.feedback.isCorrect = id === 'd-icon-done' ? true : false;
+    const anotherId = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
+    const clickedIcon: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
+    const anotherIcon: HTMLInputElement = document.getElementById(anotherId) as HTMLInputElement;
+    clickedIcon.classList.add('active');
+    anotherIcon.classList.remove('active');
+    if (beforeAgreement !== this.score.feedback.isCorrect) {
+      this.updateFeedback();
+      // console.log(this.score.feedback.isCorrect);
+    }
+  }
+
+  private updateFeedback() {
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackComment';
+    const method = 'post';
+    this.errMsgList = [];
+    const observer = this.ob.rxClient(uri , method, this.score.feedback);
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          if (result.data) {
+            this.appCmpt.ms.model.obj = result.data;
+            this.score.feedback = result.data;
+          } else {
+            this.errMsgList.push('Update Error', 'Update Fail');
+          }
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
         }
       }
-    });
-    this.getScoreInfo();
-    this.getUserInfo();
+    );
   }
 
-  ngOnDestroy(): void {
-    this.clearModalInfo();
+  private submitRightSideComment(comment: Comment) {
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
+    const method = 'post';
+    this.errMsgList = [];
+    const observer = this.ob.rxClient(uri , method, comment);
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          const data = result.data;
+          if (data) {
+            this.score.claim.commentList.push(data);
+            const textarea: HTMLInputElement = document.getElementById('sideMemoTxt') as HTMLInputElement;
+            textarea.value = '';
+            this.recoveryCanSubmit();
+          }
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+        }
+      }
+    );
   }
 
-  private openModal(id, memo) {
+  private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
+    const method = 'post';
+    this.errMsgList = [];
+    const observer = this.ob.rxClient(uri , method, comment);
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          const data = result.data;
+          if (data) {
+            const list = this.score.claim.commentList;
+            let idx = 0;
+            for (const cmt of list) {
+              if (cmt['id'] === data['id']) {
+                break;
+              }
+              idx += 1;
+            }
+            list.splice(idx, 1);
+            list.push(data);
+            this.fp.transform(list, 'sort', ['id', 'asc']);
+          } else {
+            this.errMsgList.push('Update Error', 'Update Fail');
+            textarea.value = beforeComment;
+          }
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+        }
+      }
+    );
+  }
+
+  private clearModalInfo() {
+    this.appCmpt.ms.model.id = '';
+    this.appCmpt.ms.model.memo = '';
+  }
+
+  private openModalFeedback(id, memo) {
     const modal = new Modal();
     if (this.appCmpt.ms.model.id !== id) {
       modal.memo = memo;
@@ -273,101 +371,42 @@ export class DetailComponent implements OnInit, OnDestroy {
       }
     );
   }
-  private clearModalInfo() {
-    this.appCmpt.ms.model.id = '';
-    this.appCmpt.ms.model.memo = '';
-  }
 
-  private selectIcon(event: Event) {
-    const id = (event.target as Element).id;
-    const beforeAgreement = this.score.feedback.isCorrect;
-    this.score.feedback.isCorrect = id === 'd-icon-done' ? true : false;
-    const anotherId = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
-    const clickedIcon: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
-    const anotherIcon: HTMLInputElement = document.getElementById(anotherId) as HTMLInputElement;
-    clickedIcon.classList.add('active');
-    anotherIcon.classList.remove('active');
-    if (beforeAgreement !== this.score.feedback.isCorrect) {
-      this.updateFeedback();
-      // console.log(this.score.feedback.isCorrect);
-    }
-  }
-
-  private updateFeedback() {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackComment';
-    const method = 'post';
-    this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, this.score.feedback);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          if (result.data) {
-            this.appCmpt.ms.model.obj = result.data;
-            this.score.feedback = result.data;
-          } else {
-            this.errMsgList.push('Update Error', 'Update Fail');
+  public openModalCompleteInvestigation() {
+    const modal = new Modal();
+    modal.isMemo = false;
+    modal.title = '調査を終了する';
+    modal.header = '<span>調査結果をお知らせください。</span><br><span>システムが将来よりスマートな予測を行うのに役立ちます。</span>';
+    modal.htmlContents = '<div class="flex-col-center w100 h100">' +
+                         '<div class="btn btn-wt flex-col-center" value="judgingAsFraud">詐欺</div><br/>' +
+                         '<div class="btn btn-wt flex-col-center" value="judgingAsNoFraud">詐欺ではない</div><br/>' +
+                         '<div class="btn btn-wt flex-col-center" value="judgingAsSubCritical">決定的でない</div></div>';
+    modal.width = 25;
+    modal.height = 20;
+    modal.isMemo = false;
+    modal.isHeader = true;
+    modal.isFooter = false;
+    this.appCmpt.openModal(modal);
+    this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
+      (param) => {
+        this.appCmpt.result.data = JSON.parse(param);
+        if (this.appCmpt.result.data !== 'close') {
+          switch (this.appCmpt.result.data) {
+            case 'judgingAsFraud':
+              alert('詐欺として終了');
+              break;
+            case 'judgingAsNoFraud':
+              alert('詐欺でないとして終了');
+              break;
+            case 'judgingAsSubCritical':
+              alert('決定的でないとして終了');
+              break;
           }
         }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
-        }
+        this.appCmpt.modalCmpt = null;
+        this.appCmpt.closeModal();
       }
     );
   }
 
-  private submitRightSideComment(comment: Comment) {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
-    const method = 'post';
-    this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, comment);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          const data = result.data;
-          if (data) {
-            this.score.claim.commentList.push(data);
-            const textarea: HTMLInputElement = document.getElementById('sideMemoTxt') as HTMLInputElement;
-            textarea.value = '';
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
-        }
-        this.canSubmit = true;
-      }
-    );
-  }
-
-  private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
-    const method = 'post';
-    this.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, comment);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          const data = result.data;
-          if (data) {
-            const list = this.score.claim.commentList;
-            let idx = 0;
-            for (const cmt of list) {
-              if (cmt['id'] === data['id']) {
-                break;
-              }
-              idx += 1;
-            }
-            list.splice(idx, 1);
-            list.push(data);
-            this.fp.transform(list, 'sort', ['id', 'asc']);
-          } else {
-            this.errMsgList.push('Update Error', 'Update Fail');
-            textarea.value = beforeComment;
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
-        }
-      }
-    );
-  }
 }
