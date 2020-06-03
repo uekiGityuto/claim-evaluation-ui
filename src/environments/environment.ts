@@ -4,8 +4,11 @@
 
 export const environment = {
   production: false,
-  restapi_url: "api",
-  token: "test123456789asdfghjkl"
+  restapi_url: 'api',
+  pre_token: 'fraud-detection-web_',
+  token : '57A41BA987F1BFEFD33EDE675E4AE',
+  saml_url: '/example'
+// saml_url: 'https://stb1cc.tm.millea.co.jp/fw/dfw/SAML/iwidp/sso/[SP alias name]'
 };
 
 /*

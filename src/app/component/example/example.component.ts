@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ExampleComponent implements OnInit {
 
-  title = 'Example App Hello';
+  title = 'Move to SAML Login page';
 
   constructor() { }
 

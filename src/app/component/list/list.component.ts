@@ -47,7 +47,7 @@ export class ListComponent implements OnInit {
   }
 
   public sort(name) {
-    let asc = "";
+    let asc = '';
     if (this.filterHistory.has(name)) {
       if (this.filterHistory.get(name) === "asc") {
         asc = 'desc';

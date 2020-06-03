@@ -18,7 +18,7 @@ export class ObservableClientService {
     constructor(private http: HttpClient) {
         this.headers = {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + environment.token
+            'Authorization': environment.pre_token + environment.token
         };
     }
 
@@ -60,7 +60,8 @@ export class ObservableClientService {
                   } else if (err.status === 523) { this.result.errMsgList.push({key: '523', value: 'Data処理エラー。管理者にお問い合わせください。'});
                   } else if (err.status === 524) { this.result.errMsgList.push({key: '524', value: 'Data処理エラー。管理者にお問い合わせください。'});
                   } else if (err.status === 525) { this.result.errMsgList.push({key: '525', value: 'Data処理エラー。管理者にお問い合わせください。'});
-                  } else if (err.status === 526) { this.result.errMsgList.push({key: '526', value: 'Data処理エラー。管理者にお問い合わせください。'});
+                  } else if (err.status === 526) {
+                    this.result.errMsgList.push({key: '526', value: '画面情報が古いため更新されませんでした。画面を再表示してからもう一度行ってください。'});
                   }
                   observer.next(this.result);
                   observer.complete();

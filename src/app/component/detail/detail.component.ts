@@ -123,7 +123,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     console.log('filtering: ' + id);
   }
 
-  public changeCommentStatus(id: number) {
+  public changeComment(id: number) {
     const btnUpdate = document.getElementById('btn-cmt-update-' + id) as HTMLElement;
     const textarea = document.getElementById('txtarea-cmt-' + id) as HTMLInputElement;
     if (btnUpdate.innerHTML === '修正') {
@@ -149,9 +149,23 @@ export class DetailComponent implements OnInit, OnDestroy {
           cmt.comment = textarea.value;
           break;
         }
-      };
+      }
       this.updateRightSideComment(cmt, textarea, beforeComment);
     }
+  }
+
+  removeComment(id: number) {
+    if (confirm('このコメントを削除しますか？')) {
+      const cmt = new Comment();
+      for (let i=0; i<this.score.claim.commentList.length; i++) {
+        cmt.setRequestsData(this.score.claim.commentList[i]);
+        if (cmt.id === id) {
+          break;
+        }
+      }
+      this.removeRightSideComment(cmt);
+    }
+
   }
 
   checkSubmit(event: Event) {
@@ -192,8 +206,8 @@ export class DetailComponent implements OnInit, OnDestroy {
           this.gFactorsAll.push(f);
         }
       }
-      this.fp.transform(this.rFactorsAll, 'sort', ['effect','desc']);
-      this.fp.transform(this.gFactorsAll, 'sort', ['effect','asc']);
+      this.fp.transform(this.rFactorsAll, 'sort', ['effect', 'desc']);
+      this.fp.transform(this.gFactorsAll, 'sort', ['effect', 'asc']);
     }
 
     for (let i = 0; i < this.rFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
@@ -217,8 +231,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private getUserInfo() {
-    // TODO: get User Information from Session
-    this.user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
+    this.user = JSON.parse(sessionStorage.getItem('user'));
   }
 
   private selectIcon(event: Event) {
@@ -252,7 +265,7 @@ export class DetailComponent implements OnInit, OnDestroy {
           }
         }
         if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+          this.appCmpt.result.addErrList(result.errMsgList);
         }
       }
     );
@@ -275,7 +288,7 @@ export class DetailComponent implements OnInit, OnDestroy {
           }
         }
         if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+          this.appCmpt.result.addErrList(result.errMsgList);
         }
       }
     );
@@ -308,7 +321,38 @@ export class DetailComponent implements OnInit, OnDestroy {
           }
         }
         if (result.errMsgList.length > 0) {
-          this.appCmpt.result.errMsgList.concat(result.errMsgList);
+          this.appCmpt.result.addErrList(result.errMsgList);
+        }
+      }
+    );
+  }
+
+  private removeRightSideComment(comment: Comment) {
+    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/removeComment';
+    const method = 'post';
+    this.errMsgList = [];
+    const observer = this.ob.rxClient(uri , method, comment);
+    observer.subscribe(
+      (result: Result) => {
+        if (result.isSuccess) {
+          const data = result.data;
+          if (data) {
+            const list = this.score.claim.commentList;
+            let idx = 0;
+            for (const cmt of list) {
+              if (cmt['id'] === data) {
+                break;
+              }
+              idx += 1;
+            }
+            list.splice(idx, 1);
+            this.fp.transform(list, 'sort', ['id', 'asc']);
+          } else {
+            this.errMsgList.push('Remove Error', 'Remove Fail');
+          }
+        }
+        if (result.errMsgList.length > 0) {
+          this.appCmpt.result.addErrList(result.errMsgList);
         }
       }
     );
@@ -360,7 +404,7 @@ export class DetailComponent implements OnInit, OnDestroy {
                     this.appCmpt.result.errMsgList.push({key: 'Update Error', value: 'Update Fail'});
                   }
                 } else {
-                  this.appCmpt.result.errMsgList.concat(result.errMsgList);
+                  this.appCmpt.result.addErrList(result.errMsgList);
                 }
               }
             );

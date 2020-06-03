@@ -117,7 +117,10 @@
                 <div class="comment">
                     <div class="m2 head">
                         <span>{{$item.userName}}</span>
-                        <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeCommentStatus($item.id)">修正</div>
+                        <div class="flex-row f-r">
+                          <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeComment($item.id)">修正</div>
+                          <div class="btn-remove-comment" id="btn-cmt-remove-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="removeComment($item.id)">削除</div>
+                        </div>
                     </div>
                     <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
                     <div class="m2">

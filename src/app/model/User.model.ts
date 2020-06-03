@@ -1,3 +1,5 @@
+import { stringify } from 'querystring';
+
 export class User {
     userId: string;
     name: string;
@@ -14,5 +16,12 @@ export class User {
         this.name = name;
         this.password = password;
         this.role = role;
+    }
+
+    setRequestsData(data: object) {
+      this.userId = data['userId'.toString()];
+      this.name = data['name'.toString()];
+      this.password = data['password'.toString()];
+      this.role = data['role'.toString()];
     }
 }

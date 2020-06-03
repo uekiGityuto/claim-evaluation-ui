@@ -151,12 +151,14 @@
   margin-right: var(--mxx);
 }
 
-.detail-side div.comment div.head div.btn-update-comment {
-  float: right;
+.detail-side div.comment div.head div.btn-update-comment,
+.detail-side div.comment div.head div.btn-remove-comment {
   cursor: pointer;
   font-weight: var(--font-bold);
+  margin-left: var(--mxxx);
 }
-.detail-side div.comment div.head div.btn-update-comment:hover {
+.detail-side div.comment div.head div.btn-update-comment:hover,
+.detail-side div.comment div.head div.btn-remove-comment:hover {
   color: var(--color-hover);
 }
 .detail-side div.comment div.head div.active {
