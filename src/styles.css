@@ -422,7 +422,8 @@ a.notdeco {
 }
 
 .err-msg {
-    margin: var(--mxxxx);
+    margin-top: var(--mxx);
+    margin-bottom: var(--mxx);
     width: 100vw;
     color: var(--color-red-active);
     text-align: center;

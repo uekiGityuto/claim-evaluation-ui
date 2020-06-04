@@ -13,7 +13,7 @@
   </aside>
   <article class="app-container">
     <div *ngFor="let errMsg of result.errMsgList; index as i" class="err-msg">
-      <p>{{errMsg['key']}}: {{errMsg['value']}}</p><br>
+      <span>{{errMsg['key']}}: {{errMsg['value']}}</span>
     </div>
     <router-outlet></router-outlet>
   </article>
