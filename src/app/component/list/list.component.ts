@@ -5,6 +5,7 @@ import {Router, NavigationExtras} from '@angular/router';
 import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
 import { FilterPipe } from '../../module/filter.pipe';
+import { AppComponent } from '../../app.component';
 
 /**
  * 一覧画面
@@ -17,14 +18,15 @@ import { FilterPipe } from '../../module/filter.pipe';
 })
 export class ListComponent implements OnInit {
   public list: List[];
-  public errMsgList: {key: string, value: string}[];
+  public listSize: number;
   private fp: FilterPipe;
   private filterHistory: Map<string, string>;
 
   constructor(private ob: ObservableClientService,
-              private router: Router) {
+              private router: Router,
+              private appCmpt: AppComponent) {
     this.list = [];
-    this.errMsgList = [];
+    this.listSize = null;
     this.filterHistory = new Map();
   }
 
@@ -32,15 +34,16 @@ export class ListComponent implements OnInit {
     const uri = environment.restapi_url + "/scores";
     const method = 'get';
     this.list = [];
-    this.errMsgList = [];
+    this.appCmpt.result.errMsgList = [];
 
     const observer = this.ob.rxClient(uri , method);
     observer.subscribe(
       (result: Result) => {
         if (result.isSuccess) {
           this.list = result.data;
+          this.listSize = this.list.length;
         } else {
-          this.errMsgList = result.errMsgList;
+          this.appCmpt.result.addErrList(result.errMsgList);
         }
       }
     );

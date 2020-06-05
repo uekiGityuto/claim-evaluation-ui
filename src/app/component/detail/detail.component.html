@@ -110,24 +110,26 @@
                     <button type="submit">申し出る</button>
                 </div>
             </form>
-            <div class="w100 p5 flex-row" *ngFor="let $item of (score.claim.commentList | filter:'sort':['id','asc'])">
-                <div>
-                    <mat-icon class="icon-flag m1">flag</mat-icon>
-                </div>
-                <div class="comment">
-                    <div class="m2 head">
-                        <span>{{$item.userName}}</span>
-                        <div class="flex-row f-r">
-                          <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeComment($item.id)">修正</div>
-                          <div class="btn-remove-comment" id="btn-cmt-remove-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="removeComment($item.id)">削除</div>
-                        </div>
-                    </div>
-                    <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
-                    <div class="m2">
-                        <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy-M-dd HH:mm'}}</span>
-                        <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy-M-dd HH:mm'}}</span>
-                    </div>
-                </div>
+            <div class="comment-history-area">
+              <div class="w100 p5 flex-row" *ngFor="let $item of (score.claim.commentList | filter:'sort':['id','asc'])">
+                  <div>
+                      <mat-icon class="icon-flag m1">flag</mat-icon>
+                  </div>
+                  <div class="comment">
+                      <div class="m2 head">
+                          <span>{{$item.userName}}</span>
+                          <div class="flex-row f-r">
+                            <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeComment($item.id)">修正</div>
+                            <div class="btn-remove-comment" id="btn-cmt-remove-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="removeComment($item.id)">削除</div>
+                          </div>
+                      </div>
+                      <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
+                      <div class="m2">
+                          <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy-M-dd HH:mm'}}</span>
+                          <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy-M-dd HH:mm'}}</span>
+                      </div>
+                  </div>
+              </div>
             </div>
         </div>
     </div>

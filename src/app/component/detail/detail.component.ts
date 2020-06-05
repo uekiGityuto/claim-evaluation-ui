@@ -23,7 +23,6 @@ import { User } from '../../model/User.model';
 
 export class DetailComponent implements OnInit, OnDestroy {
   public score: Score;
-  public errMsgList = [];
   public riskListLimit: number;
   public noLimit: number;
   public rFactors: {factor: string, effect: number}[];
@@ -38,7 +37,6 @@ export class DetailComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute,
               private appCmpt: AppComponent) {
     this.score = new Score();
-    this.errMsgList = [];
     this.riskListLimit = 5;
     this.noLimit = -1;
     this.rFactors = [];
@@ -252,7 +250,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private updateFeedback() {
     const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackComment';
     const method = 'post';
-    this.errMsgList = [];
+    this.appCmpt.result.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, this.score.feedback);
     observer.subscribe(
       (result: Result) => {
@@ -261,7 +259,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             this.appCmpt.ms.model.obj = result.data;
             this.score.feedback = result.data;
           } else {
-            this.errMsgList.push('Update Error', 'Update Fail');
+            this.appCmpt.result.addErrList([{key: 'Update Error', value: 'Update Fail'}]);
           }
         }
         if (result.errMsgList.length > 0) {
@@ -274,7 +272,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private submitRightSideComment(comment: Comment) {
     const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
     const method = 'post';
-    this.errMsgList = [];
+    this.appCmpt.result.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, comment);
     observer.subscribe(
       (result: Result) => {
@@ -297,7 +295,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
     const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
     const method = 'post';
-    this.errMsgList = [];
+    this.appCmpt.result.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, comment);
     observer.subscribe(
       (result: Result) => {
@@ -316,7 +314,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             list.push(data);
             this.fp.transform(list, 'sort', ['id', 'asc']);
           } else {
-            this.errMsgList.push('Update Error', 'Update Fail');
+            this.appCmpt.result.addErrList([{key: 'Update Error', value: 'Update Fail'}]);
             textarea.value = beforeComment;
           }
         }
@@ -330,7 +328,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   private removeRightSideComment(comment: Comment) {
     const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/removeComment';
     const method = 'post';
-    this.errMsgList = [];
+    this.appCmpt.result.errMsgList = [];
     const observer = this.ob.rxClient(uri , method, comment);
     observer.subscribe(
       (result: Result) => {
@@ -348,7 +346,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             list.splice(idx, 1);
             this.fp.transform(list, 'sort', ['id', 'asc']);
           } else {
-            this.errMsgList.push('Remove Error', 'Remove Fail');
+            this.appCmpt.result.addErrList([{key: 'Remove Error', value: 'Remove Fail'}]);
           }
         }
         if (result.errMsgList.length > 0) {
@@ -382,6 +380,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     modal.ob = this.ob;
     modal.obj = this.score.feedback;
     this.appCmpt.openModal(modal);
+    this.appCmpt.result.errMsgList = [];
     this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
       (param) => {
         this.appCmpt.result.data = JSON.parse(param);
@@ -394,6 +393,7 @@ export class DetailComponent implements OnInit, OnDestroy {
             feedback.comment = modalModel.memo;
             const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedbackComment';
             const method = 'post';
+            this.appCmpt.result.errMsgList = [];
             const observer = modalModel.ob.rxClient(uri , method, feedback);
             observer.subscribe(
               (result: Result) => {
@@ -431,6 +431,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     modal.isHeader = true;
     modal.isFooter = false;
     this.appCmpt.openModal(modal);
+    this.appCmpt.result.errMsgList = [];
     this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
       (param) => {
         this.appCmpt.result.data = JSON.parse(param);

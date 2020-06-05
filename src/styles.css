@@ -10,6 +10,7 @@
     --color-active-menu: #067fc1;
     --color-hover: #6cbebd;
     --color-active: #00a5a2;
+    --color-message: #019c9a;
     --color-inactive: #e4f3fa;
     --color-background-textarea: rgb(244, 251, 253);
     --color-skyblue: rgb(196, 222, 235);
@@ -684,6 +685,11 @@ a.notdeco {
     border: solid 1px var(--color-lightgray);
     border-radius: var(--radius-xlarge);
     background-color: var(--color-white);
+}
+
+.message {
+    color: var(--color-message);
+    font-size: var(--font-xlarge);
 }
 
 html, body { height: 100%; }

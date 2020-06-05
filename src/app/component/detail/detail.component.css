@@ -95,8 +95,7 @@
 .detail-side div.contents-area {
   margin: var(--mxx);
   max-height: calc(100% - 0.7em);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .detail-side div.title {
@@ -139,6 +138,12 @@
 
 .detail-side mat-icon {
   color: var(--color-inactive);
+}
+
+.detail-side .comment-history-area {
+  height: calc(100vh - 21em);
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .detail-side div.comment {
