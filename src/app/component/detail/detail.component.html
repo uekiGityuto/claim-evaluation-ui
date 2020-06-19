@@ -41,7 +41,8 @@
                 <mat-icon id="d-icon-clear" class="clear-square" (click)="riskScoreFeedback($event)">clear</mat-icon>
             </div>
         </div>
-        <div class="chart">
+        <div class="chart-area">
+          <div class="chart-step">
             Chart<br>
             Chart<br>
             Chart<br>
@@ -52,6 +53,12 @@
             Chart<br>
             Chart<br>
             Chart<br>
+          </div>
+          <div class="chart-label-right">
+            <div class="clr-top">高</div>
+            <div class="clr-middle">中</div>
+            <div class="clr-bottom">低</div>
+          </div>
         </div>
         <div class="risk-list-area">
             <div class="title">
@@ -98,11 +105,6 @@
         <div class="contents-area">
             <div class="h1em">
                 <div class="title"><strong>史</strong></div>
-                <!-- <div class="filter">
-                    <span class="side-memo notdeco" id="side-memo-all" (click)="filterSideMemoList('side-memo-all')">All</span>&nbsp;<span>|</span>&nbsp;
-                    <span class="side-memo notdeco" id="side-memo-manual" (click)="filterSideMemoList('side-memo-manual')">使い手</span>&nbsp;<span>|</span>&nbsp;
-                    <span class="side-memo notdeco" id="side-memo-auto" (click)="filterSideMemoList('side-memo-auto')">自動化</span>
-                </div> -->
             </div>
             <form #commentForm (ngSubmit)="submitMemo(commentForm, $event)" class="w100 h100">
                     <div class="contents flex-col-between">
@@ -167,12 +169,3 @@
       </div>
     </div>
 </div>
-
-<!-- icon sample code -->
-<!-- <mat-icon class="star">star</mat-icon>
-<mat-icon class="star active">star</mat-icon>
-<div class="icon-high"></div>
-<div class="icon-fiddle"></div>
-<div class="icon-nofiddle"></div>
-<div class="icon-flag"><mat-icon>outline_flag</mat-icon></div>
-<div class="icon-flag"><mat-icon class="active">outline_flag</mat-icon></div> -->

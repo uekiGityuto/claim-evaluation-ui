@@ -1,3 +1,4 @@
+import { List } from './../../model/List.model';
 import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ObservableClientService } from '../../service/ObservableClientService';
@@ -10,6 +11,7 @@ import { Score } from 'src/app/model/score.model';
 import { Feedback } from 'src/app/model/Feedback.model';
 import { Comment } from '../../model/Comment.model';
 import { User } from '../../model/User.model';
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 
 /**
  * 詳細画面
@@ -32,6 +34,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   public gFactorsAll: {factor: string, effect: number}[];
   private fp: FilterPipe;
   private canSubmit;
+  private chartData = {labels: [], series: []};
 
   constructor(private ob: ObservableClientService,
               private route: ActivatedRoute,
@@ -84,6 +87,7 @@ export class DetailComponent implements OnInit, OnDestroy {
           if (this.score.reasons) {
             this.setFactors(this.score.reasons);
           }
+          this.drawChart();
         } else {
           this.appCmpt.result.errMsgList = result.errMsgList;
         }
@@ -452,6 +456,36 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.appCmpt.closeModal();
       }
     );
+  }
+
+  private drawChart() {
+    this.generateChartData();
+    this.createDataSet();
+  }
+
+  private generateChartData() {
+    this.chartData.labels = new Array();
+    this.chartData.series = new Array();
+    this.chartData.labels.push(this.toChartDateLabel(this.score.updateDate));
+    this.chartData.series.push(this.score.score);
+    if (this.score.history != null && this.score.history.length > 0) {
+      for (const s of this.score.history) {
+        this.chartData.labels.push(this.toChartDateLabel(s.updateDate));
+        this.chartData.series.push(s.score);
+      }
+    }
+  }
+
+  private toChartDateLabel(date: Date) {
+    date = new Date(date);
+    const month = (date.getMonth() + 1).toString();
+    const day = date.getDate().toString();
+    return month + '/' + day;
+  }
+
+  private createDataSet() {
+    // TODO: draw or make dataSet
+
   }
 
 }

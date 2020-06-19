@@ -26,7 +26,7 @@ export class FilterPipe implements PipeTransform {
         case 'date':
           let rtnDate = '';
           if (item && item.toString() !== 'Invalid Date') {
-            try{
+            try {
               const date = new Date(item);
               const format = 'yyyy/M/d';
               rtnDate = format.replace(/yyyy/g, date.getFullYear().toString());
