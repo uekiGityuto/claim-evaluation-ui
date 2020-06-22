@@ -426,7 +426,7 @@ export class DetailComponent implements OnInit, OnDestroy {
     modal.isMemo = false;
     modal.title = '調査を終了する';
     modal.header = '<span>調査結果をお知らせください。</span><br><span>システムが将来よりスマートな予測を行うのに役立ちます。</span>';
-    modal.htmlContents = '<div class="flex-col-center w100 h100">' +
+    modal.htmlContents = '<div class="flex-col-round w100 h100 mt8">' +
                          '<div class="btn btn-wt flex-col-center" value="judgingAsFraud">詐欺</div><br/>' +
                          '<div class="btn btn-wt flex-col-center" value="judgingAsNoFraud">詐欺ではない</div><br/>' +
                          '<div class="btn btn-wt flex-col-center" value="judgingAsSubCritical">決定的でない</div></div>';
