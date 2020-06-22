@@ -48,25 +48,32 @@
   border: var(--border-contents-gray);
   border-radius: var(--radius-large);
   background-color: var(--color-white);
-  overflow-y: auto;
+  overflow-y: hidden;
 }
 
 .detail-main div.title {
   min-height: var(--height-title-normal);
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
 }
 
-.detail-main div.chart {
-  height: calc(100% - 17.5em);
-  min-height: var(--height-detail-chart-min);
-  border: var(--border-contents-gray);
-  margin: var(--mxx) var(--mxxxx) var(--mxxxx) var(--mxxxx);
-  overflow-y: hidden;
+.detail-main div.title div.text {
+  width: calc(100% - 1em);
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
 }
 
 .detail-main div.risk-list-area,
 .detail-foot div.score-history-area {
   margin-left: var(--mxxxx);
   margin-right: var(--mxxxx);
+}
+
+.detail-main div.risk-list-area div.risk-list-data {
+  height: 9em;
+  overflow-y: scroll;
 }
 
 .detail-main div.risk-list-area div.title,
@@ -99,15 +106,15 @@
   width: calc(100% - 3.5em);
   height: 100%;
   margin-left: 1.2em;
-  border-bottom: solid 1px var(--color-lightgray);
 }
 
 .detail-main .chart-area .chart-label-right {
   width: 1.5em;
-  height: calc(100% - 1.2em);
+  height: calc(100% - 2.6em);
   display: flex;
   flex-flow: column;
   justify-content: start;
+  margin-top: 0.5em;
 }
 
 .detail-main .chart-area .chart-label-right div{

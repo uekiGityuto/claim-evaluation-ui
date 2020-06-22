@@ -11,7 +11,6 @@ if (environment.production) {
 platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
-  // import 'web-animations-js';
 
 /**
  * IE11対応：CSS共通化(ponyfill)

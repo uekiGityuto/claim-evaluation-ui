@@ -34,15 +34,4 @@ export class ModalService {
     this.subject.next(JSON.stringify('close'));
 
   }
-
-  // public callbackModal(result: any) {
-  //   if (result != 'close') {
-  //     this.model.memo = (<Modal>result).memo;
-  //   }
-  //   if (this.model.callback) {
-  //     this.model.callback(JSON.stringify(this.model));
-  //   }
-
-  //   this.subject.next();
-  // }
 }

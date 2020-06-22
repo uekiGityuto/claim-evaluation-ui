@@ -7,7 +7,6 @@ export const environment = {
   restapi_url: 'api',
   pre_token: 'fraud-detection-web_',
   token : '57A41BA987F1BFEFD33EDE675E4AE',
-  saml_url: '/example',
   err_401: '権限がありません。',
   err_403: 'サーバーから拒否されました。',
   err_404: 'ページが見つかりません。',
@@ -20,8 +19,9 @@ export const environment = {
   err_523: 'Data処理エラー。管理者にお問い合わせください。',
   err_524: 'Data処理エラー。管理者にお問い合わせください。',
   err_525: 'Data処理エラー。管理者にお問い合わせください。',
-  err_526: '画面情報が古いため更新されませんでした。画面を再表示してからもう一度行ってください。'
-// saml_url: 'https://stb1cc.tm.millea.co.jp/fw/dfw/SAML/iwidp/sso/[SP alias name]'
+  err_526: '画面情報が古いため更新されませんでした。画面を再表示してからもう一度行ってください。',
+  score_high: 670,
+  score_low: 330
 };
 
 /*

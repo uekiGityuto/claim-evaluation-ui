@@ -40,20 +40,6 @@ export class AppComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    // SAML
-    const observer = this.ob.rxClient(environment.saml_url);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          // const json = JSON.stringify((new User()).setRequestsData(result.data));
-          const json = result.data;
-          this.samlSuccess(json);
-        } else {
-          this.samlError();
-        }
-      }
-    );
-
     // Dummy user data
     const user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
     this.samlSuccess(JSON.stringify(user));

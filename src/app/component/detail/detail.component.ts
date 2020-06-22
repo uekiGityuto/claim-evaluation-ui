@@ -11,7 +11,7 @@ import { Score } from 'src/app/model/score.model';
 import { Feedback } from 'src/app/model/Feedback.model';
 import { Comment } from '../../model/Comment.model';
 import { User } from '../../model/User.model';
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
+import { Chart } from 'chart.js';
 
 /**
  * 詳細画面
@@ -99,7 +99,8 @@ export class DetailComponent implements OnInit, OnDestroy {
     this.riskListLimit = this.noLimit;
     this.setFactors();
     const element: HTMLInputElement = document.getElementById('btnShowAllRiskList') as HTMLInputElement;
-    element.style.display = 'none';
+    element.disabled = true;
+    element.classList.add('disabled');
   }
 
   public riskScoreFeedback(event: Event) {
@@ -142,7 +143,7 @@ export class DetailComponent implements OnInit, OnDestroy {
         btnUpdate.classList.remove('active');
         textarea.classList.remove('active');
       }
-      let cmt = new Comment();
+      const cmt = new Comment();
       let beforeComment: string;
       for (let i=0; i<this.score.claim.commentList.length; i++) {
         cmt.setRequestsData(this.score.claim.commentList[i]);
@@ -466,13 +467,18 @@ export class DetailComponent implements OnInit, OnDestroy {
   private generateChartData() {
     this.chartData.labels = new Array();
     this.chartData.series = new Array();
-    this.chartData.labels.push(this.toChartDateLabel(this.score.updateDate));
-    this.chartData.series.push(this.score.score);
     if (this.score.history != null && this.score.history.length > 0) {
-      for (const s of this.score.history) {
+      for (let i = this.score.history.length - 1; i >= 0; i--) {
+        const s = this.score.history[i];
         this.chartData.labels.push(this.toChartDateLabel(s.updateDate));
         this.chartData.series.push(s.score);
       }
+      const lastLabe = this.toChartDateLabel(this.score.updateDate);
+      const lastSeries = this.score.score;
+      this.chartData.labels.push(lastLabe);
+      this.chartData.labels.push(lastLabe);
+      this.chartData.series.push(lastSeries);
+      this.chartData.series.push(lastSeries);
     }
   }
 
@@ -484,8 +490,36 @@ export class DetailComponent implements OnInit, OnDestroy {
   }
 
   private createDataSet() {
-    // TODO: draw or make dataSet
-
+    const ctx = document.createElement('canvas');
+    document.getElementById('chartjs-step').appendChild(ctx);
+    const chart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: this.chartData.labels,
+        datasets: [{
+          data: this.chartData.series,
+          backgroundColor: 'transparent',
+          borderColor: 'red',
+          steppedLine: true
+        }]
+      },
+      options: {
+        legend: {
+          display: false
+        },
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                min: 0,
+                max: 1000
+              }
+            }
+          ]
+        }
+      }
+    });
   }
 
 }
