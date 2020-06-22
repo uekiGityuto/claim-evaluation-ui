@@ -241,5 +241,10 @@
   border: var(--border-contents-gray);
   border-radius: var(--radius-large);
   background-color: var(--color-white);
-  overflow-y: auto;
+  overflow-y: hidden;
+}
+
+.detail-foot div.score-history-area div.score-history-data {
+  height: 6.5em;
+  overflow-y: scroll;
 }
