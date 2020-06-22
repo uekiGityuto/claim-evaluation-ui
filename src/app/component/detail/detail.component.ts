@@ -473,10 +473,10 @@ export class DetailComponent implements OnInit, OnDestroy {
         this.chartData.labels.push(this.toChartDateLabel(s.updateDate));
         this.chartData.series.push(s.score);
       }
-      const lastLabe = this.toChartDateLabel(this.score.updateDate);
+      const lastLabel = this.toChartDateLabel(this.score.updateDate);
       const lastSeries = this.score.score;
-      this.chartData.labels.push(lastLabe);
-      this.chartData.labels.push(lastLabe);
+      this.chartData.labels.push(lastLabel);
+      this.chartData.labels.push('');
       this.chartData.series.push(lastSeries);
       this.chartData.series.push(lastSeries);
     }
