@@ -1,167 +1,84 @@
-<div class="detail-head">
-    <div class="w75 flex-row t-c">
-        <div class="w20 flex-col-center ma">
-            <strong class="mb5">受付番号</strong>
-            <span>{{score.claim.claimId}}</span>
-        </div>
-        <div class="w20 flex-col-center ma">
-            <strong class="mb5">契約者名</strong>
-            <span>{{score.claim.name}}</span>
-        </div>
-        <div class="w20 flex-col-center ma">
-            <strong class="mb5">生年月日</strong>
-            <span>{{score.claim.birthday | filter:'date'}}</span>
-        </div>
-        <div class="w20 flex-col-center ma">
-            <strong class="mb5">種類</strong>
-            <span>{{score.claim.kind}}</span>
-        </div>
-        <div class="w20 flex-col-center ma">
-            <strong class="mb5">発生日</strong>
-            <span>{{score.claim.occurenceDate | filter:'date'}}</span>
-        </div>
+<header>
+  <button mat-icon-button (click)="displayList()">
+    <mat-icon>view_list</mat-icon>
+  </button>
+  <span>AAA123456</span>
+</header>
+<article>
+  <div id="detail-header">
+    <div class="detail-header-item">
+      <span>事案番号：{{ this.claimNumber }}</span>
     </div>
-    <div class="w25 v-m t-c">
-        <button (click)="openModalCompleteInvestigation()">調査を終了する</button>
+    <div class="detail-header-item">
+      <span>被保険者名：{{ this.insuredName }}</span>
     </div>
-</div>
+    <div class="detail-header-item">
+      <span>契約者名：</span>
+      <span>{{ this.contractorName }}</span>
+    </div>
+    <div class="detail-header-item">
+      <span>保険種類：{{ this.insurancetype }}</span>
+    </div>
+    <div class="detail-header-item">
+      <span>事故日：{{ this.accidentDate }}</span>
+    </div>
+    <div class="detail-header-item">
+      <span>更新日：{{ this.updateDate }}</span>
+    </div>
+  </div>
 
-<div class="detail-container">
-    <div class="detail-main flex-col-between">
-        <div class="title flex-between">
-            <div class="w50 flex-row flex-center-v">
-                <div class="ft-xxlarge">リスクスコア</div>&nbsp;
-                <div class="icon-high" *ngIf="score.riskLevel == score.RISK_LEVEL_3"></div>
-                <div class="icon-middle" *ngIf="score.riskLevel == score.RISK_LEVEL_2"></div>
-                <div class="icon-low" *ngIf="score.riskLevel == score.RISK_LEVEL_1"></div>
-                &nbsp;<div class="ft-xxxlarge ft-lightbold">{{score.score}}</div>
-            </div>
-            <div class="flex-row flex-center-v">
-                <div class="ft-xlarge">評価</div>&nbsp;
-                <mat-icon id="d-icon-done" class="done-square" (click)="riskScoreFeedback($event)">done</mat-icon>
-                <mat-icon id="d-icon-clear" class="clear-square" (click)="riskScoreFeedback($event)">clear</mat-icon>
-            </div>
-        </div>
-        <div class="chart-area">
-          <div class="chart-step w100 h100" id='chartjs-step'></div>
-          <div class="chart-label-right">
-            <div class="clr-top">高</div>
-            <div class="clr-middle">中</div>
-            <div class="clr-bottom">低</div>
+  <mat-card id="claim-category-card">
+    <div id="claim-category-card-header">
+      <span>事案カテゴリ：</span>
+      <span class="claim-category-high">{{ diplayFraudScore?.claimCategory }}</span>
+    </div>
+    <div id="claim-category-time-series">
+      <canvas #claimCategoryChart width="600px" height="212px" (click)="changeDate($event)"></canvas>
+    </div>
+  </mat-card>
+
+  <div class="model">
+    <div *ngFor="let scoreDetail of diplayFraudScore?.scoreDetails; index as i">
+      <mat-card class="model-card">
+        <div class="model-header">
+          <div class="model-header-item">
+            <span>{{ scoreDetail.modelType }}：</span>
+          </div>
+          <div class="model-header-item">
+            <span class="claim-category-high">{{ scoreDetail.rank }}</span>
+          </div>
+          <div class="model-header-item model-header-item-end">
+            <span>スコア：{{ scoreDetail.score }}</span>
           </div>
         </div>
-        <div class="risk-list-area">
-            <div class="title">
-              <div class="text">
-                <div class="w50 flex-row">
-                    <div class="w4em">影響</div>
-                    <div>↑ リスクスコアを高める要因</div>
-                </div>
-                <div class="w50 flex-row">
-                    <div class="w4em">影響</div>
-                    <div>↓ リスクスコアを低下させる要因</div>
-                </div>
-              </div>
-              <div class="w1em"></div>
+        <div class="factor">
+          <div class="raise-factor">
+            <div class="raise-factor-header">
+              <p>上昇要因</p>
             </div>
-            <div class="risk-list-data flex-row w100 mt3">
-              <div class="w50">
-                  <div class='flex'*ngFor="let f of rFactors; let i = index">
-                      <div class='w4em pt2'>
-                          <div class='crop-square-red active' *ngFor="let j of [].constructor(f.effect | filter:'abs')"></div>
-                          <div class='crop-square-red' *ngFor="let j of [].constructor(3 - (f.effect | filter:'abs'))"></div>
-                      </div>
-                      <div class='factor ml5 pt4 w100'>
-                          <span>{{f.factor}}</span>
-                      </div>
-                  </div>
-              </div>
-              <div class="w50">
-                  <div class='flex'*ngFor="let f of gFactors; let i = index">
-                      <div class='w4em pt2'>
-                          <div class='crop-square-green active' *ngFor="let j of [].constructor(f.effect | filter:'abs')"></div>
-                          <div class='crop-square-green' *ngFor="let j of [].constructor(3 - (f.effect | filter:'abs'))"></div>
-                      </div>
-                      <div class='factor ml5 pt4 w100'>
-                          <span>{{f.factor}}</span>
-                      </div>
-                  </div>
+            <div *ngFor="let reason of reasons[i].gReason">
+              <p>スコア：{{ reason.reason }}</p>
+              <div class="feature">
+                <p class="description">{{ reason.featureName }}</p>
+                <p class="featureDescription">{{ reason.featureDescription }}</p>
               </div>
             </div>
-            <div class="w100 v-m t-c mt5 mb5 h2p5em">
-                <button id="btnShowAllRiskList" *ngIf="rFactorsAll.length > 5 || gFactorsAll.length > 5" (click)="getAllRiskList()">全てを見る</button>
+          </div>
+          <div class="lower-factor">
+            <div class="lower-factor-header">
+              <p>減少要因</p>
             </div>
-        </div>
-    </div>
-
-    <div class="detail-side">
-        <div class="contents-area">
-            <div class="h1em">
-                <div class="title"><strong>史</strong></div>
-            </div>
-            <form #commentForm (ngSubmit)="submitMemo(commentForm, $event)" class="w100 h100">
-                    <div class="contents flex-col-between">
-                    <textarea placeholder="" name="sideMemoTxt" id="sideMemoTxt"></textarea>
-                    <button type="submit">申し出る</button>
-                </div>
-            </form>
-            <div class="comment-history-area">
-              <div class="w100 p5 flex-row" *ngFor="let $item of (score.claim.commentList | filter:'sort':['id','asc'])">
-                  <div>
-                      <mat-icon class="icon-flag m1">flag</mat-icon>
-                  </div>
-                  <div class="comment">
-                      <div class="m2 head">
-                          <span>{{$item.userName}}</span>
-                          <div class="flex-row f-r">
-                            <div class="btn-update-comment" id="btn-cmt-update-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="changeComment($item.id)">修正</div>
-                            <div class="btn-remove-comment" id="btn-cmt-remove-{{$item.id}}" *ngIf="$item.userId == user.userId" (click)="removeComment($item.id)">削除</div>
-                          </div>
-                      </div>
-                      <textarea class="txt" id="txtarea-cmt-{{$item.id}}" readonly>{{$item.comment}}</textarea>
-                      <div class="m2">
-                          <span class="f-r" *ngIf="$item.updateDate == null">{{$item.createDate | date:'yyyy-M-dd HH:mm'}}</span>
-                          <span class="f-r" *ngIf="$item.updateDate != null">{{$item.updateDate | date:'yyyy-M-dd HH:mm'}}</span>
-                      </div>
-                  </div>
-              </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="detail-foot">
-      <div class="score-history-area">
-        <div class="title t-c flex-around">
-          <div class="w5"></div>
-          <div class="w15">スコアID</div>
-          <div class="w20">損害担当者</div>
-          <div class="w10">種類</div>
-          <div class="w20">更新日</div>
-          <div class="w15">リスクスコア</div>
-          <div class="w15">結論</div>
-          <div class="w1em"></div>
-        </div>
-        <div class="score-history-data w100 mt3 t-c ft-large">
-          <div class='flex-row w100'*ngFor="let s of score.history; let i = index">
-            <div class='w100 flex-around flex-center-v h1p5em mt1 mb1'>
-              <div class="w5"><mat-icon class="star">star</mat-icon></div>
-              <div class="w15">{{s.fraudScoreId}}</div>
-              <div class="w20">{{s.claim.userName}}</div>
-              <div class="w10">{{s.claim.kind}}</div>
-              <div class="w20">{{s.updateDate | date: 'yyyy-M-dd HH:mm'}}</div>
-              <div class="w15">{{s.score}}&nbsp;
-                <div class="icon-high" *ngIf="s.riskLevel == s.RISK_LEVEL_3"></div>
-                <div class="icon-middle" *ngIf="s.riskLevel == s.RISK_LEVEL_2"></div>
-                <div class="icon-low" *ngIf="s.riskLevel == s.RISK_LEVEL_1"></div>
-              </div>
-              <div class="w15">
-                <div class="icon-fiddle" *ngIf="s.riskLevel == s.RISK_LEVEL_3"></div>
-                <div class="icon-nocrucial" *ngIf="s.riskLevel == s.RISK_LEVEL_2"></div>
-                <div class="icon-nofiddle" *ngIf="s.riskLevel == s.RISK_LEVEL_1"></div>
+            <div *ngFor="let reason of reasons[i].rReason">
+              <p>スコア：{{ reason.reason }}</p>
+              <div class="feature">
+                <p class="description">{{ reason.featureName }}</p>
+                <p class="featureDescription">{{ reason.featureDescription }}</p>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </mat-card>
     </div>
-</div>
+  </div>
+
+</article>

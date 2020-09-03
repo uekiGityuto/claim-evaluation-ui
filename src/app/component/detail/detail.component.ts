@@ -1,523 +1,257 @@
-import { List } from './../../model/List.model';
-import { Component, OnInit, ɵSWITCH_TEMPLATE_REF_FACTORY__POST_R3__, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ObservableClientService } from '../../service/ObservableClientService';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { Chart, ChartData, ChartOptions } from 'chart.js';
+
+// import { Claim } from '../../model/Claim.model';
+// import { FraudScore } from '../../model/FraudScore.model';
+// import { ScoreDetail } from '../../model/ScoreDetail.model';
+// import { Reason } from '../../model/Reason.model';
 import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
-import { AppComponent } from '../../app.component';
-import { Modal } from 'src/app/model/Modal.model';
-import { FilterPipe } from '../../module/filter.pipe';
-import { Score } from 'src/app/model/score.model';
-import { Feedback } from 'src/app/model/Feedback.model';
-import { Comment } from '../../model/Comment.model';
-import { User } from '../../model/User.model';
-import { Chart } from 'chart.js';
+import { ObservableClientService } from '../../service/ObservableClientService';
 
-/**
- * 詳細画面
- * @author SKK231099 李
- */
+interface Claim {
+  claimNumber: string;
+  insuredNameKanji: string;
+  insuredNameKana: string;
+  contractorNameKanji: string;
+  contractorNameKana: string;
+  insuranceKind: string;
+  lossDate: Date;
+  updateDate: Date;
+  fraudScoreHistory: FraudScore[];
+}
+
+interface FraudScore {
+  scoringDate: Date;
+  claimCategory: string;
+  scoreDetails: ScoreDetail[];
+}
+
+interface ScoreDetail {
+  modelType: string;
+  rank: string;
+  score: string;
+  reasons: Reason[];
+}
+
+interface Reason {
+  reason: number;
+  featureName: string;
+  featureDescription: string;
+}
+
 @Component({
   selector: 'app-detail',
   templateUrl: './detail.component.html',
-  styleUrls: ['./detail.component.css']
+  styleUrls: ['./detail.component.css'],
 })
+export class DetailComponent implements OnInit {
 
-export class DetailComponent implements OnInit, OnDestroy {
-  public score: Score;
-  public riskListLimit: number;
-  public noLimit: number;
-  public rFactors: {factor: string, effect: number}[];
-  public gFactors: {factor: string, effect: number}[];
-  public user: User;
-  public rFactorsAll: {factor: string, effect: number}[];
-  public gFactorsAll: {factor: string, effect: number}[];
-  private fp: FilterPipe;
-  private canSubmit;
-  private chartData = {labels: [], series: []};
+  // 認可処理用
+  param: string;
+  userId: string;
 
-  constructor(private ob: ObservableClientService,
-              private route: ActivatedRoute,
-              private appCmpt: AppComponent) {
-    this.score = new Score();
-    this.riskListLimit = 5;
-    this.noLimit = -1;
-    this.rFactors = [];
-    this.gFactors = [];
-    this.rFactorsAll = [];
-    this.gFactorsAll = [];
-    this.user = new User();
-    this.canSubmit = true;
-  }
+  // 推論結果取得用
+  claimNumber: string;
+  uri = environment.restapi_url;
+  claim: Claim;
+
+  // ビュー表示用
+  insuredName: string;
+  contractorName: string;
+  insurancetype: string;
+  accidentDate: string;
+  updateDate: string;
+  claimCategory: string;
+  diplayFraudScore: FraudScore;
+  reasons: { rReason: Reason[], gReason: Reason[]; }[];
+
+  // chart用
+  @ViewChild('claimCategoryChart')
+  elementRef: ElementRef;
+  chartData = { labels: [], series1: [], series2: [] };
+  chartOptions: ChartOptions;
+  context: CanvasRenderingContext2D;
+  chart: Chart;
+
+  constructor(private route: ActivatedRoute, private httpClient: HttpClient,
+    private router: Router, private clientService: ObservableClientService) { }
 
   ngOnInit(): void {
-    this.fp = new FilterPipe();
-    this.route.queryParams.subscribe(params => {
-      if (params['claimId'.toString()]) {
-        this.score.claimId = params['claimId'.toString()];
-      } else if (params['claim'.toString()]) {
-        const object = JSON.parse(params['claim'.toString()]);
-        if (object) {
-          this.castToScore(object);
-        }
-      }
-    });
+    // 暗号化パラメータ(param)が存在すれば、認可処理を実施
+    this.param = this.route.snapshot.queryParamMap.get('param');
+    if (this.param != null && this.param.length > 0) {
+      this.auth(this.param);
+    }
+
+    // 事案情報取得
     this.getScoreInfo();
-    this.getUserInfo();
   }
 
-  ngOnDestroy(): void {
-    this.clearModalInfo();
+  ngAfterViewInit(): void {
+    // // console.log('message');
+    // // canvasの取得
+    // this.context = this.elementRef.nativeElement.getContext('2d');
+    // // チャートの作成
+    // console.log('this.chartData.series1', this.chartData.series1);
+    // this.chart = new Chart(this.context, {
+    //   type: 'line',
+    //   data: {
+    //     labels: this.chartData.labels,
+    //     datasets: [{
+    //       label: '特殊事案モデル',
+    //       data: this.chartData.series1,
+    //       backgroundColor: ['rgba(0, 0, 255, 0)'],
+    //       borderColor: ['rgba(20, 0, 255, 100)'],
+    //       steppedLine: true,
+    //       borderWidth: 4,
+    //     }, {
+    //       label: 'NC/PDモデル',
+    //       data: this.chartData.series2,
+    //       backgroundColor: ['rgba(135, 206, 250, 0)'],
+    //       borderColor: ['rgba(135, 206, 250, 100)'],
+    //       steppedLine: true,
+    //       borderWidth: 2,
+    //     }],
+    //   },
+    //   options: this.chartOptions,
+    // });
+    // console.log('this.chartData.series1', this.chartData.series1);
   }
 
-  public getScoreInfo() {
-    const uri = environment.restapi_url + '/scores/' + this.score.claimId;
-    const param = null;
-    const method = 'get';
-    this.score = new Score();
+  // 表示対象の日付変更
+  changeDate(event): void {
+    console.log('event:', event);
+    console.log('getElement:', this.chart.getElementAtEvent(event)[0]);
+    console.log('getElements:', this.chart.getElementsAtEvent);
+  }
 
-    const observer = this.ob.rxClient(uri , method, param);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          this.score.setRequestsData(result.data);
-          if (this.score.feedback) {
-            this.setActiveEstimation(this.score.feedback.isCorrect);
+  // 事案一覧ページに遷移
+  displayList(): void {
+    console.log('事案一覧ページへ遷移');
+    this.router.navigate(['list']);
+  }
+
+  // 認可処理
+  auth(param: string): void {
+    // 認可処理用のuri作成
+    this.userId = this.route.snapshot.queryParamMap.get('userId');
+    const authUri = this.uri + 'authorization?param=' + this.param + '&userId=' + this.userId;
+
+    // 認可処理を実施
+    const observer = this.clientService.rxClient(authUri, 'get', null);
+    observer.subscribe((result: Result) => {
+      if (!result.isSuccess) {
+        // Todo: errorページに遷移
+      }
+      console.log('認可OK');
+    });
+  }
+
+  // 事案情報取得
+  getScoreInfo(): void {
+    // 事案情報取得用のuri作成
+    this.claimNumber = this.route.snapshot.queryParamMap.get('claimNumber');
+    const scoreUri = this.uri + 'scores?claimNumber=' + this.claimNumber;
+
+    // 事案情報を取得
+    const observer = this.clientService.rxClient(scoreUri, 'get', null);
+    observer.subscribe((result: Result) => {
+      if (result.isSuccess) {
+        // console.log('result:', result.data);
+        this.claim = result.data['claim'.toString()];// ディープコピーすべきかもしれない(要検討)
+        // console.log('claim:', this.claim);
+
+        // ビュー表示情報取得
+        this.claimNumber = this.claim.claimNumber;
+        this.insuredName = this.claim.insuredNameKana;
+        this.contractorName = this.claim.contractorNameKana;
+        this.insurancetype = this.claim.insuranceKind;
+
+        // 日付フォーマット変換
+        const accidentDate = new Date(this.claim.lossDate);
+        this.accidentDate = `${accidentDate.getFullYear()}/${accidentDate.getMonth()}/${accidentDate.getDate()}`;
+        const updateDate = new Date(this.claim.updateDate);
+        this.updateDate = `${updateDate.getFullYear()}/${updateDate.getMonth()}/${updateDate.getDate()}`;
+
+        // 最新の推論結果を取得
+        const end = this.claim.fraudScoreHistory.length - 1;
+        this.diplayFraudScore = this.claim.fraudScoreHistory[end];
+
+        // 推論結果の詳細を表示
+        // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
+        this.reasons = [];
+        this.diplayFraudScore.scoreDetails.forEach((scoreDetail, i) => {
+          const reasons = scoreDetail.reasons.slice();
+          const descReason = reasons.sort((a, b) => {
+            return (a.reason > b.reason ? -1 : 1);
+          });
+          const gReason = descReason.filter(val => val.reason >= 0);
+          const rReason = descReason.reverse().filter(val => val.reason < 0);
+          this.reasons[i] = { gReason, rReason };
+        });
+        console.log('this.reasons', this.reasons);
+
+        // チャートデータのセット
+        this.chartData.labels = [];
+        this.chartData.series1 = [];
+        this.chartData.series2 = [];
+
+        this.claim.fraudScoreHistory.forEach((fraudScore, i) => {
+          const scoringDate = new Date(fraudScore.scoringDate);
+          this.chartData.labels[i] =
+            `${scoringDate.getFullYear()}/${scoringDate.getMonth()}/${scoringDate.getDate()}`;
+          this.chartData.series1[i] = fraudScore.scoreDetails[0].score;
+          this.chartData.series2[i] = fraudScore.scoreDetails[1].score;
+          // console.log('this.chartData.series1', this.chartData.series1);
+        });
+
+        // チャートオプションのセット
+        this.chartOptions = {
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  min: 0,
+                  max: 100,
+                },
+              }],
+          },
+          events: ['click'],
+          onClick: (event, elements) => {
+            console.log('onClick event:', event);
+            console.log('onClick elements :', elements);
           }
-          if (this.score.reasons) {
-            this.setFactors(this.score.reasons);
-          }
-          this.drawChart();
-        } else {
-          this.appCmpt.result.errMsgList = result.errMsgList;
-        }
-      }
-    );
-  }
+        };
 
-  public getAllRiskList() {
-    this.riskListLimit = this.noLimit;
-    this.setFactors();
-    const element: HTMLInputElement = document.getElementById('btnShowAllRiskList') as HTMLInputElement;
-    element.disabled = true;
-    element.classList.add('disabled');
-  }
-
-  public riskScoreFeedback(event: Event) {
-    this.openModalFeedback(this.score.fraudScoreId, this.score.feedback.comment);
-    this.selectIcon(event);
-  }
-
-  public filterSideMemoList(id: string) {
-    const elements = Array.from(document.getElementsByClassName('side-memo'));
-    for (let i=0; i<elements.length; i++) {
-      const em = elements[i] as HTMLInputElement;
-      if (em.id === id) {
-        if (!em.classList.contains('active')) {
-          em.classList.add('active');
-        }
-      } else {
-        em.classList.remove('active');
-      }
-    }
-
-    // Need filtering side comment list?
-    // then please add filtering funtion to todolist
-    console.log('filtering: ' + id);
-  }
-
-  public changeComment(id: number) {
-    const btnUpdate = document.getElementById('btn-cmt-update-' + id) as HTMLElement;
-    const textarea = document.getElementById('txtarea-cmt-' + id) as HTMLInputElement;
-    if (btnUpdate.innerHTML === '修正') {
-      btnUpdate.innerHTML = '保存';
-      textarea.readOnly = false;
-      if (!textarea.classList.contains('active')) {
-        btnUpdate.classList.add('active');
-        textarea.classList.add('active');
-      }
-    } else {
-      btnUpdate.innerHTML = '修正';
-      textarea.readOnly = true;
-      if (textarea.classList.contains('active')) {
-        btnUpdate.classList.remove('active');
-        textarea.classList.remove('active');
-      }
-      const cmt = new Comment();
-      let beforeComment: string;
-      for (let i=0; i<this.score.claim.commentList.length; i++) {
-        cmt.setRequestsData(this.score.claim.commentList[i]);
-        if (cmt.id === id) {
-          beforeComment = cmt.comment;
-          cmt.comment = textarea.value;
-          break;
-        }
-      }
-      this.updateRightSideComment(cmt, textarea, beforeComment);
-    }
-  }
-
-  removeComment(id: number) {
-    if (confirm('このコメントを削除しますか？')) {
-      const cmt = new Comment();
-      for (let i=0; i<this.score.claim.commentList.length; i++) {
-        cmt.setRequestsData(this.score.claim.commentList[i]);
-        if (cmt.id === id) {
-          break;
-        }
-      }
-      this.removeRightSideComment(cmt);
-    }
-
-  }
-
-  checkSubmit(event: Event) {
-    if (!this.canSubmit) {
-      event.stopImmediatePropagation();
-      return false;
-    }
-    return true;
-  }
-  recoveryCanSubmit() {
-    this.canSubmit = true;
-  }
-
-  public submitMemo(param: any, event: Event) {
-    if (!this.checkSubmit(event)) {
-      return false;
-    }
-    const txt = param.sideMemoTxt.value;
-    if (txt) {
-      const comment = new Comment(-1, this.score.claim.claimId, txt, this.user.userId, this.user.name);
-      this.submitRightSideComment(comment);
-    }
-  }
-
-  private castToScore(object: Score): void {
-    this.score = object;
-  }
-
-  private setFactors(factors: {factor: string, effect: number}[] = []) {
-    this.rFactors = [];
-    this.gFactors = [];
-
-    if (factors.length > 0) {
-      for (const f of factors) {
-        if (f.effect > 0) {
-          this.rFactorsAll.push(f);
-        } else if (f.effect < 0) {
-          this.gFactorsAll.push(f);
-        }
-      }
-      this.fp.transform(this.rFactorsAll, 'sort', ['effect', 'desc']);
-      this.fp.transform(this.gFactorsAll, 'sort', ['effect', 'asc']);
-    }
-
-    for (let i = 0; i < this.rFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
-      const f = this.rFactorsAll[i];
-      this.rFactors.push(f);
-    }
-    for (let i = 0; i < this.gFactorsAll.length && (i < this.riskListLimit || this.riskListLimit === this.noLimit); i++) {
-      const f = this.gFactorsAll[i];
-      this.gFactors.push(f);
-    }
-  }
-
-  private setActiveEstimation(estimationAgreement: boolean) {
-    if (estimationAgreement === true) {
-      const iconDone: HTMLInputElement = document.getElementById('d-icon-done') as HTMLInputElement;
-      iconDone.classList.add('active');
-    } else if (estimationAgreement === false) {
-      const iconClear: HTMLInputElement = document.getElementById('d-icon-clear') as HTMLInputElement;
-      iconClear.classList.add('active');
-    }
-  }
-
-  private getUserInfo() {
-    this.user = JSON.parse(sessionStorage.getItem('user'));
-  }
-
-  private selectIcon(event: Event) {
-    const id = (event.target as Element).id;
-    const beforeAgreement = this.score.feedback.isCorrect;
-    this.score.feedback.isCorrect = id === 'd-icon-done' ? true : false;
-    const anotherId = this.score.feedback.isCorrect ? 'd-icon-clear' : 'd-icon-done';
-    const clickedIcon: HTMLInputElement = document.getElementById(id) as HTMLInputElement;
-    const anotherIcon: HTMLInputElement = document.getElementById(anotherId) as HTMLInputElement;
-    clickedIcon.classList.add('active');
-    anotherIcon.classList.remove('active');
-    if (beforeAgreement !== this.score.feedback.isCorrect) {
-      this.updateFeedback();
-      // console.log(this.score.feedback.isCorrect);
-    }
-  }
-
-  private updateFeedback() {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateFeedbackComment';
-    const method = 'post';
-    this.appCmpt.result.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, this.score.feedback);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          if (result.data) {
-            this.appCmpt.ms.model.obj = result.data;
-            this.score.feedback = result.data;
-          } else {
-            this.appCmpt.result.addErrList([{key: 'Update Error', value: 'Update Fail'}]);
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.addErrList(result.errMsgList);
-        }
-      }
-    );
-  }
-
-  private submitRightSideComment(comment: Comment) {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
-    const method = 'post';
-    this.appCmpt.result.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, comment);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          const data = result.data;
-          if (data) {
-            this.score.claim.commentList.push(data);
-            const textarea: HTMLInputElement = document.getElementById('sideMemoTxt') as HTMLInputElement;
-            textarea.value = '';
-            this.recoveryCanSubmit();
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.addErrList(result.errMsgList);
-        }
-      }
-    );
-  }
-
-  private updateRightSideComment(comment: Comment, textarea: HTMLInputElement, beforeComment: string) {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/updateComment';
-    const method = 'post';
-    this.appCmpt.result.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, comment);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          const data = result.data;
-          if (data) {
-            const list = this.score.claim.commentList;
-            let idx = 0;
-            for (const cmt of list) {
-              if (cmt['id'] === data['id']) {
-                break;
-              }
-              idx += 1;
-            }
-            list.splice(idx, 1);
-            list.push(data);
-            this.fp.transform(list, 'sort', ['id', 'asc']);
-          } else {
-            this.appCmpt.result.addErrList([{key: 'Update Error', value: 'Update Fail'}]);
-            textarea.value = beforeComment;
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.addErrList(result.errMsgList);
-        }
-      }
-    );
-  }
-
-  private removeRightSideComment(comment: Comment) {
-    const uri = environment.restapi_url + '/scores/' + this.score.claim.claimId + '/removeComment';
-    const method = 'post';
-    this.appCmpt.result.errMsgList = [];
-    const observer = this.ob.rxClient(uri , method, comment);
-    observer.subscribe(
-      (result: Result) => {
-        if (result.isSuccess) {
-          const data = result.data;
-          if (data) {
-            const list = this.score.claim.commentList;
-            let idx = 0;
-            for (const cmt of list) {
-              if (cmt['id'] === data) {
-                break;
-              }
-              idx += 1;
-            }
-            list.splice(idx, 1);
-            this.fp.transform(list, 'sort', ['id', 'asc']);
-          } else {
-            this.appCmpt.result.addErrList([{key: 'Remove Error', value: 'Remove Fail'}]);
-          }
-        }
-        if (result.errMsgList.length > 0) {
-          this.appCmpt.result.addErrList(result.errMsgList);
-        }
-      }
-    );
-  }
-
-  private clearModalInfo() {
-    this.appCmpt.ms.model.id = '';
-    this.appCmpt.ms.model.memo = '';
-  }
-
-  private openModalFeedback(id, memo) {
-    const modal = new Modal();
-    if (this.appCmpt.ms.model.id !== id) {
-      modal.memo = memo;
-    } else {
-      modal.memo = this.appCmpt.ms.model.memo;
-    }
-    modal.id = id;
-    modal.isMemo = true;
-    modal.title = 'リスクスコアフィードバック';
-    modal.header = '<span>リスクスコアに同意する理由を詳しく説明して、</span><br><span>チームメイトが状況を把握できるようにしてください。</span>';
-    modal.btnName = '申し出る';
-    modal.width = 25;
-    modal.height = 20;
-    modal.isMemo = true;
-    modal.isHeader = true;
-    modal.ob = this.ob;
-    modal.obj = this.score.feedback;
-    this.appCmpt.openModal(modal);
-    this.appCmpt.result.errMsgList = [];
-    this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
-      (param) => {
-        this.appCmpt.result.data = JSON.parse(param);
-        if (this.appCmpt.result.data !== 'close') {
-          const modalModel = this.appCmpt.ms.model;
-          if (modalModel != null) {
-            modalModel.memo = (this.appCmpt.result.data as Modal).memo;
-            const feedback = new Feedback();
-            feedback.setRequestData(modalModel.obj);
-            feedback.comment = modalModel.memo;
-            const uri = environment.restapi_url + '/scores/' + feedback.claimId + '/updateFeedbackComment';
-            const method = 'post';
-            this.appCmpt.result.errMsgList = [];
-            const observer = modalModel.ob.rxClient(uri , method, feedback);
-            observer.subscribe(
-              (result: Result) => {
-                if (result.isSuccess) {
-                  if (result.data) {
-                    this.score.feedback = result.data;
-                  } else {
-                    this.appCmpt.result.errMsgList.push({key: 'Update Error', value: 'Update Fail'});
-                  }
-                } else {
-                  this.appCmpt.result.addErrList(result.errMsgList);
-                }
-              }
-            );
-          }
-        }
-        this.appCmpt.modalCmpt = null;
-        this.appCmpt.closeModal();
-      }
-    );
-  }
-
-  public openModalCompleteInvestigation() {
-    const modal = new Modal();
-    modal.isMemo = false;
-    modal.title = '調査を終了する';
-    modal.header = '<span>調査結果をお知らせください。</span><br><span>システムが将来よりスマートな予測を行うのに役立ちます。</span>';
-    modal.htmlContents = '<div class="flex-col-round w100 h100 mt8">' +
-                         '<div class="btn btn-wt flex-col-center" value="judgingAsFraud">詐欺</div><br/>' +
-                         '<div class="btn btn-wt flex-col-center" value="judgingAsNoFraud">詐欺ではない</div><br/>' +
-                         '<div class="btn btn-wt flex-col-center" value="judgingAsSubCritical">決定的でない</div></div>';
-    modal.width = 25;
-    modal.height = 20;
-    modal.isMemo = false;
-    modal.isHeader = true;
-    modal.isFooter = false;
-    this.appCmpt.openModal(modal);
-    this.appCmpt.result.errMsgList = [];
-    this.appCmpt.subscription = this.appCmpt.ms.ob.subscribe(
-      (param) => {
-        this.appCmpt.result.data = JSON.parse(param);
-        if (this.appCmpt.result.data !== 'close') {
-          switch (this.appCmpt.result.data) {
-            case 'judgingAsFraud':
-              alert('詐欺として終了');
-              break;
-            case 'judgingAsNoFraud':
-              alert('詐欺でないとして終了');
-              break;
-            case 'judgingAsSubCritical':
-              alert('決定的でないとして終了');
-              break;
-          }
-        }
-        this.appCmpt.modalCmpt = null;
-        this.appCmpt.closeModal();
-      }
-    );
-  }
-
-  private drawChart() {
-    this.generateChartData();
-    this.createDataSet();
-  }
-
-  private generateChartData() {
-    this.chartData.labels = new Array();
-    this.chartData.series = new Array();
-    if (this.score.history != null && this.score.history.length > 0) {
-      for (let i = this.score.history.length - 1; i >= 0; i--) {
-        const s = this.score.history[i];
-        this.chartData.labels.push(this.toChartDateLabel(s.updateDate));
-        this.chartData.series.push(s.score);
-      }
-      const lastLabel = this.toChartDateLabel(this.score.updateDate);
-      const lastSeries = this.score.score;
-      this.chartData.labels.push(lastLabel);
-      this.chartData.labels.push('');
-      this.chartData.series.push(lastSeries);
-      this.chartData.series.push(lastSeries);
-    }
-  }
-
-  private toChartDateLabel(date: Date) {
-    date = new Date(date);
-    const month = (date.getMonth() + 1).toString();
-    const day = date.getDate().toString();
-    return month + '/' + day;
-  }
-
-  private createDataSet() {
-    const ctx = document.createElement('canvas');
-    document.getElementById('chartjs-step').appendChild(ctx);
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: this.chartData.labels,
-        datasets: [{
-          data: this.chartData.series,
-          backgroundColor: 'transparent',
-          borderColor: 'red',
-          steppedLine: true
-        }]
-      },
-      options: {
-        legend: {
-          display: false
-        },
-        maintainAspectRatio: false,
-        scales: {
-          yAxes: [
-            {
-              ticks: {
-                min: 0,
-                max: 1000
-              }
-            }
-          ]
-        }
+        // canvasの取得
+        this.context = this.elementRef.nativeElement.getContext('2d');
+        // チャートの作成
+        console.log('this.chartData.series1', this.chartData.series1);
+        this.chart = new Chart(this.context, {
+          type: 'line',
+          data: {
+            labels: this.chartData.labels,
+            datasets: [{
+              label: '特殊事案モデル',
+              data: this.chartData.series1,
+              backgroundColor: ['rgba(0, 0, 255, 0)'],
+              borderColor: ['rgba(20, 0, 255, 100)'],
+              steppedLine: true,
+              borderWidth: 4,
+            }, {
+              label: 'NC/PDモデル',
+              data: this.chartData.series2,
+              backgroundColor: ['rgba(135, 206, 250, 0)'],
+              borderColor: ['rgba(135, 206, 250, 100)'],
+              steppedLine: true,
+              borderWidth: 2,
+            }],
+          },
+          options: this.chartOptions,
+        });
       }
     });
   }

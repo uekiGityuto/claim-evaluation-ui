@@ -1,3 +1,25 @@
 {
-    "editor.mouseWheelZoom": true
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "emmet.showSuggestionsAsSnippets": true,
+  "emmet.variables": {
+    "lang": "ja"
+  },
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
+  "[markdown]": {
+    "files.trimTrailingWhitespace": false
+  },
+  "html.format.contentUnformatted": "pre, code, textarea, title, h1, h2, h3, h4, h5, h6, p",
+  "html.format.extraLiners": "head, body, html",
+  "html.format.unformatted": null,
+  "javascript.format.semicolons": "insert",
+  "javascript.preferences.quoteStyle": "single",
+  "javascript.format.insertSpaceAfterCommaDelimiter": true,
+  "typescript.format.semicolons": "insert",
+  "typescript.preferences.quoteStyle": "single",
+  "typescript.format.insertSpaceAfterCommaDelimiter": true,
+  "html.format.endWithNewline": true
 }

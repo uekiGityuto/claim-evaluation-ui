@@ -1,60 +1,19 @@
-/* autoprefixer grid: on */
-
-/* list */
-:host {
-  width: 100%;
-  height: 100%;
+#list-header {
+  height: 96px;
+  background-color: #ffffff;
 }
 
-.main {
-  width: inherit;
-  height: inherit;
+#list-header button {
+  height: 39.06;
+}
+
+#list-header form {
   display: flex;
+  justify-content: space-between;
   flex-wrap: wrap;
-  align-items: flex-start;
 }
 
-.header_area {
-  width: inherit;
-  height: var(--height-title-small);
-}
-
-.scroll_area {
-  width: inherit;
-  height: calc(100vh - 5.7em);
-  overflow-y: scroll;
-  margin-top: var(--mx);
-  margin-left: 0;
-  margin-right: 0;
-  margin-bottom: 0;
-  padding: 0;
-}
-
-.head_table,
-.list_table {
-  text-align: center;
-  border-collapse: collapse;
-}
-
-.head_table {
-  width: calc(100% - var(--mxxxx));
-  height: inherit;
-}
-
-.list_table {
-  margin-top: var(--mn);
-  width: inherit;
-}
-
-.head_table > thead > tr > th {
-  border-bottom: var(--border-underline-title);
-  height: var(--height-title-normal);
-}
-
-.list_table > tbody > tr {
-  height: var(--height-data-large);
-}
-
-.list_table > tbody > tr > td {
-  border-bottom: var(--border-underline-data);
+.upper-lower-center {
+  display: flex;
+  align-items: center;
 }
