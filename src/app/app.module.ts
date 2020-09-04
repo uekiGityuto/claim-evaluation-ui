@@ -19,18 +19,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DetailComponent } from './component/detail/detail.component';
 import { ListComponent } from './component/list/list.component';
-import { ObservableClientService } from './service/ObservableClientService';
-import { FilterPipe } from '../app/module/filter.pipe';
-import { ModalComponent } from './component/modal/modal.component';
-
 
 @NgModule({
   declarations: [
     AppComponent,
     DetailComponent,
-    ListComponent,
-    FilterPipe,
-    ModalComponent
+    ListComponent
   ],
   imports: [
     BrowserModule,

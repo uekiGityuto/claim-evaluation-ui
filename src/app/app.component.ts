@@ -2,7 +2,6 @@ import { Component, Type, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Result } from './model/Result.model';
-// import { AuthResult } from './model/AuthResult.model';
 import { ObservableClientService } from './service/ObservableClientService';
 import { UserInfoContainerService } from './service/user-info-container.service';
 import { environment } from '../environments/environment';

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-// import { SearchForm } from '../../model/SearchForm.model';
 import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/ObservableClientService';
