@@ -1,5 +1,5 @@
 <header>
-  <span>AAA123456</span>
+  <span>{{ userId }}</span>
 </header>
 <article>
   <div id="list-header">
@@ -59,30 +59,48 @@
       <button mat-raised-button color="primary" (click)="search()">検索</button>
     </form>
   </div>
-  <mat-card id=list *ngIf="claims.length != 0">
-    <table matSort (matSortChange)="listSort($event)">
-      <tr>
-        <th mat-sort-header="claimNumber">受付番号</th>
-        <th mat-sort-header="insuredName">被保険者名</th>
-        <th mat-sort-header="contractorName">契約者名</th>
-        <th mat-sort-header="department">担当部</th>
-        <th mat-sort-header="base">担当拠点</th>
-        <th mat-sort-header="insuranceKind">保険種類</th>
-        <th mat-sort-header="lastUpdateDate">最終更新日</th>
-        <th mat-sort-header="lossDate">事故日</th>
-        <th mat-sort-header="claimCategory">事案カテゴリ</th>
-      </tr>
-      <tr *ngFor="let claim of claims">
-        <td><a routerLink="">{{ claim.claimNumber }}</a></td>
-        <td>{{ claim.insuredName }}</td>
-        <td>{{ claim.contractorName }}</td>
-        <td>{{ claim.department }}</td>
-        <td>{{ claim.base }}</td>
-        <td>{{ claim.insuranceKind }}</td>
-        <td>{{ claim.lastUpdateDate }}</td>
-        <td>{{ claim.lossDate }}</td>
-        <td><span class="claim-category-high">{{ claim.claimCategory }}</span></td>
-      </tr>
-    </table>
-  </mat-card>
+
+  <div *ngIf="claims.length != 0">
+    <mat-card id=list>
+      <table matSort (matSortChange)="listSort($event)">
+        <tr>
+          <th mat-sort-header="claimNumber">受付番号</th>
+          <th mat-sort-header="insuredName">被保険者名</th>
+          <th mat-sort-header="contractorName">契約者名</th>
+          <th mat-sort-header="department">担当部</th>
+          <th mat-sort-header="base">担当拠点</th>
+          <th mat-sort-header="insuranceKind">保険種類</th>
+          <th mat-sort-header="lastUpdateDate">最終更新日</th>
+          <th mat-sort-header="lossDate">事故日</th>
+          <th mat-sort-header="claimCategory">事案カテゴリ</th>
+        </tr>
+        <tr *ngFor="let claim of claims">
+          <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+          <td>{{ claim.insuredName }}</td>
+          <td>{{ claim.contractorName }}</td>
+          <td>{{ claim.department }}</td>
+          <td>{{ claim.base }}</td>
+          <td>{{ claim.insuranceKind }}</td>
+          <td>{{ claim.lastUpdateDate }}</td>
+          <td>{{ claim.lossDate }}</td>
+          <td><span class="claim-category-high">{{ claim.claimCategory }}</span></td>
+        </tr>
+      </table>
+    </mat-card>
+    <div class="pager">
+      <button mat-icon-button (click)="previous()">
+        <mat-icon>arrow_back_ios</mat-icon>
+      </button>
+      <mat-form-field appearance="outline" style="width: 32px">
+        <input matInput [value]="fromPages">
+      </mat-form-field>
+      ～　{{ toPages }}　/　{{ totalNumber }}
+      <button mat-icon-button>
+        <mat-icon>arrow_forward_ios</mat-icon>
+      </button>
+      <button mat-icon-button (click)="update()">
+        <mat-icon>refresh</mat-icon>
+      </button>
+    </div>
+  </div>
 </article>

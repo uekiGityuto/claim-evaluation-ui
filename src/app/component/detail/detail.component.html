@@ -1,11 +1,11 @@
 <header>
-  <button mat-icon-button (click)="displayList()">
+  <button *ngIf="authFlag" mat-icon-button (click)="displayList()">
     <mat-icon>view_list</mat-icon>
   </button>
-  <span>AAA123456</span>
+  <span>{{ userId }}</span>
 </header>
 <article>
-  <div id="detail-header">
+  <div class="detail-header">
     <div class="detail-header-item">
       <span>事案番号：{{ this.claimNumber }}</span>
     </div>
@@ -27,14 +27,43 @@
     </div>
   </div>
 
-  <mat-card id="claim-category-card">
-    <div id="claim-category-card-header">
+  <mat-card class="claim-category-card">
+    <div class="claim-category-card-header">
       <span>事案カテゴリ：</span>
       <span class="claim-category-high">{{ diplayFraudScore?.claimCategory }}</span>
     </div>
-    <div id="claim-category-time-series">
-      <canvas #claimCategoryChart width="600px" height="212px" (click)="changeDate($event)"></canvas>
+    <div class="claim-category-flex">
+      <div class="claim-category-time-series">
+        <canvas #claimCategoryChart width="600px" height="212px" (click)="changeDate($event)"></canvas>
+      </div>
+      <table class="claim-category-matrix">
+        <tr>
+          <th></th>
+          <th>High</th>
+          <th>Middle</th>
+          <th>Low</th>
+        </tr>
+        <tr>
+          <th>High</th>
+          <td>高</td>
+          <td>高</td>
+          <td>高</td>
+        </tr>
+        <tr>
+          <th>Middle</th>
+          <td>中</td>
+          <td>中</td>
+          <td>中</td>
+        </tr>
+        <tr>
+          <th>Low</th>
+          <td>中</td>
+          <td>低</td>
+          <td>低</td>
+        </tr>
+      </table>
     </div>
+
   </mat-card>
 
   <div class="model">

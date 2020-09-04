@@ -1,4 +1,4 @@
-#detail-header {
+.detail-header {
   height: 80px;
   background-color: #ffffff;
   display: flex;
@@ -15,7 +15,7 @@
   justify-content: center;
 }
 
-#claim-category-card {
+.claim-category-card {
   height: 288px;
   width: 96%;
   background-color: #ffffff;
@@ -23,7 +23,7 @@
   margin: 2%;
 }
 
-#claim-category-card-header {
+.claim-category-card-header {
   height: 40px;
   width: 100%;
   background-color: #d9d9d9;
@@ -31,15 +31,24 @@
   color: #000000;
 }
 
-#claim-category-card-header span {
+.claim-category-card-header span {
   margin-left: 8px;
   margin-left: 8px;
   line-height: 40px;
 }
 
-#claim-category-time-series {
+.claim-category-time-series {
   width: 600px;
   height: 212px;
+}
+
+.claim-category-flex {
+  display: flex;
+}
+
+.claim-category-matrix {
+  width: 392px;
+  height: 216px;
 }
 
 .model {

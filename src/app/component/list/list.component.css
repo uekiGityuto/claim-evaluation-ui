@@ -17,3 +17,10 @@
   display: flex;
   align-items: center;
 }
+
+.pager {
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

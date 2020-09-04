@@ -8,8 +8,10 @@ import { Sort } from '@angular/material/sort';
 import { Result } from '../../model/Result.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/ObservableClientService';
+import { UserInfoContainerService } from '../../service/user-info-container.service';
 
 interface SearchForm {
+  userId: string;
   claimNumber: string;
   claimCategory: string[];
   insuranceKindInfo: string[];
@@ -46,6 +48,10 @@ interface Claim {
   claimCategory: string;
 }
 
+/**
+ * List Component
+ * @author SKK231527 植木
+ */
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
@@ -58,6 +64,7 @@ export class ListComponent implements OnInit {
   uri = environment.restapi_url;
 
   // ビュー表示用
+  userId: string;
   claims: Claim[];
   order: string;
   fromPages: number;
@@ -67,10 +74,15 @@ export class ListComponent implements OnInit {
   // 検索用
   param: SearchForm;
 
-  constructor(private route: ActivatedRoute, private httpClient: HttpClient,
-    private clientService: ObservableClientService) { }
+  constructor(private route: ActivatedRoute,
+    private clientService: ObservableClientService,
+    private userInfo: UserInfoContainerService
+  ) { }
 
   ngOnInit(): void {
+    // ユーザ情報取得
+    this.userId = this.userInfo.userId;
+
     // 認可処理を実施
     this.auth();
 
@@ -91,12 +103,32 @@ export class ListComponent implements OnInit {
     this.claims = [];
   }
 
+  // 認可処理
+  auth(): void {
+    // 認可処理用のuri作成
+    const authUri = this.uri + 'claimList';
+
+    // 認可処理を実施
+    const observer = this.clientService.rxClient(authUri, 'get', null);
+    observer.subscribe((result: Result) => {
+      if (!result.isSuccess) {
+        // Todo: errorページに遷移
+        console.log('認可NG');
+      }
+      console.log('認可OK');
+    });
+  }
+
   // 検索処理
   search(): void {
-    // POSTボディ部作成
+    // POSTボディ部に検索フォームの内容をディープコピー
     console.log(this.searchControl.value);
     const { departmentOrBaseRadio, departmentOrBase, ...rest } = this.searchControl.value;
-    this.param = { ...rest };
+    // this.param = { ...rest };
+    this.param = JSON.parse(JSON.stringify(rest));
+
+    // POSTボディ部の残り（検索フォーム以外の内容）をセット
+    this.param.userId = this.userId;
     if (departmentOrBaseRadio === 'department') {
       this.param.department = departmentOrBase;
       this.param.base = '';
@@ -107,18 +139,50 @@ export class ListComponent implements OnInit {
       this.param.department = '';
       this.param.base = '';
     }
-
     this.param.labelType = environment.lossDate;
     this.param.order = environment.desc;
     this.param.displayFrom = '1';
-    console.log('POSTボディ部', this.param);
     console.log('POSTボディ部', JSON.stringify(this.param));
 
     // 事案一覧取得
-    this.searchList(this.param);
+    this.searchList(JSON.stringify(this.param));
   }
 
-  searchList(param: SearchForm): void {
+  // ソート処理
+  listSort(sort: Sort) {
+    // console.log(this.param);
+    this.param.labelType = environment[sort.active];
+    this.param.order = environment[sort.direction];
+    // console.log(this.param);
+    // 事案一覧取得
+    this.searchList(JSON.stringify(this.param));
+  }
+
+  // 1ページ戻る処理
+  previous(): void {
+    if (this.fromPages - 10 > 0) {
+      this.param.displayFrom = String(this.fromPages - 10);
+    } else {
+      this.param.displayFrom = '1';
+    }
+    // 事案一覧取得
+    this.searchList(JSON.stringify(this.param));
+  }
+
+  // 1ページ進む処理
+  next(): void {
+    this.param.displayFrom = String(this.toPages + 1);
+    // 事案一覧取得
+    this.searchList(JSON.stringify(this.param));
+  }
+
+  // 開始位置指定して検索処理
+  update(): void {
+    this.param.displayFrom = String(this.fromPages);
+  }
+
+  // 事案一覧取得処理
+  searchList(param: string): void {
     const claimUri = this.uri + 'claims';
 
     // 事案一覧を取得
@@ -132,33 +196,12 @@ export class ListComponent implements OnInit {
         this.fromPages = result.data['fromPages'.toString()];
         this.toPages = result.data['toPages'.toString()];
         this.totalNumber = result.data['totalNumber'.toString()];
-      }
-    });
-  }
-
-  // ソート処理
-  listSort(sort: Sort) {
-    // console.log(this.param);
-    this.param.labelType = environment[sort.active];
-    this.param.order = environment[sort.direction];
-    // console.log(this.param);
-    // 事案一覧取得
-    this.searchList(this.param);
-  }
-
-  // 認可処理
-  auth(): void {
-    // 認可処理用のuri作成
-    const authUri = this.uri + 'claimList';
-
-    // 認可処理を実施
-    const observer = this.clientService.rxClient(authUri, 'get', null);
-    observer.subscribe((result: Result) => {
-      if (!result.isSuccess) {
+      } else {
         // Todo: errorページに遷移
+        console.log('errorページに遷移');
       }
-      console.log('認可OK');
     });
   }
+
 
 }

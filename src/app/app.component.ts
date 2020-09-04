@@ -1,59 +1,74 @@
 import { Component, Type, OnInit } from '@angular/core';
-import { ModalComponent } from './component/modal/modal.component';
+import { ActivatedRoute, Router } from '@angular/router';
+
 import { Result } from './model/Result.model';
-import { Subscription } from 'rxjs';
-import { ModalService } from './service/modal-service';
-import { Modal } from './model/Modal.model';
-import { Plugins } from 'protractor/built/plugins';
+// import { AuthResult } from './model/AuthResult.model';
 import { ObservableClientService } from './service/ObservableClientService';
-import { User } from './model/User.model';
+import { UserInfoContainerService } from './service/user-info-container.service';
 import { environment } from '../environments/environment';
-import { Session } from 'protractor';
 
 /**
  * Main App Component
- * @author SKK231099 李
+ * @author SKK231527 植木
  */
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['../assets/css/flexbox.css', './app.component.css']
+  styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public result: Result;
-  public modalCmpt: any;
-  public subscription: Subscription;
 
-  constructor(public ms: ModalService,
-              private ob: ObservableClientService) {
-    this.result = new Result();
-    this.modalCmpt = null;
-  }
+  // authResult = new AuthResult();
+  uri = environment.restapi_url;
 
-  public openModal(model: Modal) {
-    this.modalCmpt = ModalComponent;
-    this.ms.model = model;
-  }
-
-  public closeModal() {
-    this.subscription.unsubscribe();
-  }
+  constructor(private route: ActivatedRoute,
+    private router: Router,
+    private clientService: ObservableClientService,
+    private userInfo: UserInfoContainerService
+  ) { }
 
   public ngOnInit(): void {
-    // Dummy user data
-    const user = new User('GNO0971', 'Yamamoto naoko', '1234', 4);
-    this.samlSuccess(JSON.stringify(user));
+    // 認可処理用
+    let param = '';
+    let userId = '';
+
+    // 暗号化パラメータ(param)が存在すれば、認可処理を実施
+    param = this.route.snapshot.queryParamMap.get('param');
+    userId = this.route.snapshot.queryParamMap.get('userId');
+    if (param != null && param.length > 0) {
+      this.auth(param, userId);
+    } else {
+      console.log('クエリパラメータにparamをセットして下さい');
+      this.auth(param, userId);
+    }
   }
 
-  private samlSuccess(data: string) {
-    sessionStorage.setItem('user', data);
+  // 認可処理
+  auth(param: string, userId: string): void {
+    // 認可処理用のuri作成
+    const authUri = this.uri + 'authorization?param=' + param + '&userId=' + userId;
+
+    // 認可処理を実施
+    const observer = this.clientService.rxClient(authUri, 'get', null);
+    observer.subscribe((result: Result) => {
+      if (result.isSuccess) {
+        console.log('認可OK');
+        this.userInfo.authFlag = result.data['authFlag'.toString()];
+        this.userInfo.userId = result.data['userId'.toString()];
+        // スコア詳細画面を表示
+        // Todo: ngOnInit()で実施するように修正
+        this.displayDetail(result.data['claimNumber'.toString()]);
+      } else {
+        // Todo: errorページに遷移
+        console.log('認可NG');
+      }
+    });
   }
 
-  private samlError() {
-    // setTimeout(() => window.location.replace(process.env.saml_url), 3000);
+  // スコア詳細画面を表示
+  displayDetail(claimNumber: string): void {
+    console.log('スコア詳細画面を表示');
+    this.router.navigate(['/detail', claimNumber]);
   }
 
-  private logout() {
-    sessionStorage.clear();
-  }
 }

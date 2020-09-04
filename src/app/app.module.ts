@@ -49,7 +49,7 @@ import { ModalComponent } from './component/modal/modal.component';
     MatSortModule,
     MatRadioModule
   ],
-  providers: [ObservableClientService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
