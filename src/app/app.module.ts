@@ -1,8 +1,9 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { NgModule, APP_INITIALIZER, LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DatePipe } from '@angular/common';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -19,12 +20,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DetailComponent } from './component/detail/detail.component';
 import { ListComponent } from './component/list/list.component';
+import { ErrorComponent } from './component/error/error.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DetailComponent,
-    ListComponent
+    ListComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +46,7 @@ import { ListComponent } from './component/list/list.component';
     MatSortModule,
     MatRadioModule
   ],
-  providers: [],
+  providers: [DatePipe],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   // restapi_url: 'api',
   restapi_url: 'http://localhost:3000/',
+  help_url: 'https://angular.jp/docs',
   pre_token: 'fraud-detection-web_',
   token: '57A41BA987F1BFEFD33EDE675E4AE',
   err_401: '権限がありません。',

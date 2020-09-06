@@ -30,7 +30,17 @@ header span {
   margin-right: 16px;
 }
 
-.claim-category-high {
+._high {
   background-color: #f0554e;
+  color: #ffffff;
+}
+
+._middle {
+  background-color: #f3ca3e;
+  color: #ffffff;
+}
+
+._low {
+  background-color: #2ac940;
   color: #ffffff;
 }

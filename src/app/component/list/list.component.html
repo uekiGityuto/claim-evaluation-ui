@@ -56,7 +56,8 @@
           <input type="text" matInput matType="text" formControlName="departmentOrBase" placeholder="担当部・担当拠点">
         </mat-form-field>
       </div>
-      <button mat-raised-button color="primary" (click)="search()">検索</button>
+      <!-- <button [disabled]="searchControl.invalid" mat-raised-button color="primary" (click)="search()">検索</button> -->
+      <button [disabled]="searchControl.invalid" mat-raised-button color="primary" (click)="search()">検索</button>
     </form>
   </div>
 
@@ -81,21 +82,22 @@
           <td>{{ claim.department }}</td>
           <td>{{ claim.base }}</td>
           <td>{{ claim.insuranceKind }}</td>
-          <td>{{ claim.lastUpdateDate }}</td>
-          <td>{{ claim.lossDate }}</td>
-          <td><span class="claim-category-high">{{ claim.claimCategory }}</span></td>
+          <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+          <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+          <td><span [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
         </tr>
       </table>
     </mat-card>
+
     <div class="pager">
-      <button mat-icon-button (click)="previous()">
+      <button *ngIf="param.displayFrom !== '1'" mat-icon-button (click)="previous()">
         <mat-icon>arrow_back_ios</mat-icon>
       </button>
       <mat-form-field appearance="outline" style="width: 32px">
         <input matInput [value]="fromPages">
       </mat-form-field>
       ～　{{ toPages }}　/　{{ totalNumber }}
-      <button mat-icon-button>
+      <button *ngIf="toPages < totalNumber" mat-icon-button>
         <mat-icon>arrow_forward_ios</mat-icon>
       </button>
       <button mat-icon-button (click)="update()">

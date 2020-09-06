@@ -17,7 +17,6 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  // authResult = new AuthResult();
   uri = environment.restapi_url;
 
   constructor(private route: ActivatedRoute,
@@ -27,13 +26,13 @@ export class AppComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-    // 認可処理用
-    let param = '';
-    let userId = '';
+    // クエリパラメータをセット
+    // const param = this.route.snapshot.queryParamMap.get('param');
+    // const userId = this.route.snapshot.queryParamMap.get('userId');
+    // Todo: 良い方法があれば修正（<router-outlet>の外ではActivatedRouteが使えない）
+    const param = this.getQueryVariable('param');
+    const userId = this.getQueryVariable('userId');
 
-    // 暗号化パラメータ(param)が存在すれば、認可処理を実施
-    param = this.route.snapshot.queryParamMap.get('param');
-    userId = this.route.snapshot.queryParamMap.get('userId');
     if (param != null && param.length > 0) {
       this.auth(param, userId);
     } else {
@@ -58,8 +57,9 @@ export class AppComponent implements OnInit {
         // Todo: ngOnInit()で実施するように修正
         this.displayDetail(result.data['claimNumber'.toString()]);
       } else {
-        // Todo: errorページに遷移
+        // Todo: errorページへの遷移を修正
         console.log('認可NG');
+        this.router.navigate(['/detail/error']);
       }
     });
   }
@@ -68,6 +68,22 @@ export class AppComponent implements OnInit {
   displayDetail(claimNumber: string): void {
     console.log('スコア詳細画面を表示');
     this.router.navigate(['/detail', claimNumber]);
+  }
+
+  getQueryVariable(key): string {
+    // 文頭?を除外
+    const queryAll = window.location.search.slice(1);
+    let variable = '';
+
+    // クエリ文字列を & で分割して処理
+    queryAll.split('&').forEach(query => {
+      // = で分割してkeyが引数と一致すれば対応する値を返す
+      const queryPair = query.split('=');
+      if (queryPair[0] === key) {
+        variable = queryPair[1];
+      }
+    });
+    return variable;
   }
 
 }

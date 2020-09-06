@@ -20,21 +20,27 @@
       <span>保険種類：{{ this.insurancetype }}</span>
     </div>
     <div class="detail-header-item">
-      <span>事故日：{{ this.accidentDate }}</span>
+      <span>事故日：{{ this.accidentDate | date : 'yyyy/M/d' }}</span>
     </div>
     <div class="detail-header-item">
-      <span>更新日：{{ this.updateDate }}</span>
+      <span>更新日：{{ this.updateDate | date : 'yyyy/M/d' }}</span>
     </div>
   </div>
 
   <mat-card class="claim-category-card">
     <div class="claim-category-card-header">
-      <span>事案カテゴリ：</span>
-      <span class="claim-category-high">{{ diplayFraudScore?.claimCategory }}</span>
+      <div>
+        <span>事案カテゴリ：</span>
+        <span [ngClass]="claimCategoryClass">{{ claimCategory }}</span>
+      </div>
+      <div>
+        <span>スコアリング日：</span>
+        <span>{{ scoringDate | date : 'yyyy/M/d' }}</span>
+      </div>
     </div>
     <div class="claim-category-flex">
       <div class="claim-category-time-series">
-        <canvas #claimCategoryChart width="600px" height="212px" (click)="changeDate($event)"></canvas>
+        <canvas #claimCategoryChart width="600px" height="212px"></canvas>
       </div>
       <table class="claim-category-matrix">
         <tr>
@@ -67,14 +73,20 @@
   </mat-card>
 
   <div class="model">
-    <div *ngFor="let scoreDetail of diplayFraudScore?.scoreDetails; index as i">
+    <div *ngFor="let scoreDetail of scoreDetails; index as i">
       <mat-card class="model-card">
         <div class="model-header">
           <div class="model-header-item">
-            <span>{{ scoreDetail.modelType }}：</span>
+            <span>{{ scoreDetail.modelType }}</span>
           </div>
           <div class="model-header-item">
-            <span class="claim-category-high">{{ scoreDetail.rank }}</span>
+            <button mat-icon-button (click)="displayHelp()">
+              <mat-icon>help</mat-icon>
+            </button>
+            <span>:</span>
+          </div>
+          <div class="model-header-item">
+            <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
           </div>
           <div class="model-header-item model-header-item-end">
             <span>スコア：{{ scoreDetail.score }}</span>

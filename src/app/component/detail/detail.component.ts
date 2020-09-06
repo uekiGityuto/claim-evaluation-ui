@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 
@@ -8,9 +9,13 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 // import { ScoreDetail } from '../../model/ScoreDetail.model';
 // import { Reason } from '../../model/Reason.model';
 import { Result } from '../../model/Result.model';
+import { CategoryClass } from '../../model/category-class.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
+import { ClassService } from '../../service/class.service';
+
+// Todo: interfaceをmodelとして切り離すか要検討
 
 interface Claim {
   claimNumber: string;
@@ -37,6 +42,11 @@ interface ScoreDetail {
   reasons: Reason[];
 }
 
+interface ScoreDetailForDisplay extends ScoreDetail {
+  // ngClass用
+  categoryClass: CategoryClass;
+}
+
 interface Reason {
   reason: number;
   featureName: string;
@@ -59,17 +69,22 @@ export class DetailComponent implements OnInit {
   uri = environment.restapi_url;
   claim: Claim;
 
-  // ビュー表示用
+  // ビュー表示用（共通部分）
   userId: string;
   authFlag: boolean;
   insuredName: string;
   contractorName: string;
   insurancetype: string;
-  accidentDate: string;
-  updateDate: string;
+  accidentDate: Date;
+  updateDate: Date;
+
+  // ビュー表示用（任意のスコアリング日に応じて変化する部分）
   claimCategory: string;
-  diplayFraudScore: FraudScore;
+  scoringDate: Date;
+  scoreDetails: ScoreDetailForDisplay[];
   reasons: { rReason: Reason[], gReason: Reason[]; }[];
+  // ngClass用
+  claimCategoryClass: CategoryClass;
 
   // chart用
   @ViewChild('claimCategoryChart')
@@ -82,7 +97,9 @@ export class DetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private clientService: ObservableClientService,
-    private userInfo: UserInfoContainerService
+    private userInfo: UserInfoContainerService,
+    private datepipe: DatePipe,
+    private classService: ClassService
   ) { }
 
   ngOnInit(): void {
@@ -91,7 +108,7 @@ export class DetailComponent implements OnInit {
     this.userId = this.userInfo.userId;
 
     // 事案情報取得
-    this.getScoreInfo();
+    this.getLatestClaimInfo();
   }
 
   ngAfterViewInit(): void {
@@ -125,8 +142,8 @@ export class DetailComponent implements OnInit {
     // console.log('this.chartData.series1', this.chartData.series1);
   }
 
-  // 事案情報取得
-  getScoreInfo(): void {
+  // 最新の事案情報取得
+  getLatestClaimInfo(): void {
     // 事案情報取得用のuri作成
     const scoreUri = this.uri + 'scores';
     const param = { userId: this.userId, claimNumber: this.claimNumber };
@@ -140,40 +157,36 @@ export class DetailComponent implements OnInit {
         this.claim = { ...result.data['claim'.toString()] };
         // console.log('claim:', this.claim);
 
-        // ビュー表示情報取得
+        // 共通部分のビュー要素を取得
         this.claimNumber = this.claim.claimNumber;
         this.insuredName = this.claim.insuredNameKana;
         this.contractorName = this.claim.contractorNameKana;
         this.insurancetype = this.claim.insuranceKind;
+        this.accidentDate = this.claim.lossDate;
+        this.updateDate = this.claim.updateDate;
 
-        // 日付フォーマット変換
-        const accidentDate = new Date(this.claim.lossDate);
-        this.accidentDate = `${accidentDate.getFullYear()}/${accidentDate.getMonth()}/${accidentDate.getDate()}`;
-        const updateDate = new Date(this.claim.updateDate);
-        this.updateDate = `${updateDate.getFullYear()}/${updateDate.getMonth()}/${updateDate.getDate()}`;
-
-        // 最新の推論結果を取得
+        // 最新の推論結果を元にビュー要素を取得
         const end = this.claim.fraudScoreHistory.length - 1;
-        this.diplayFraudScore = this.claim.fraudScoreHistory[end];
-
-        // 推論結果の要因をソート
-        this.reasonSort();
+        const diplayFraudScore = this.claim.fraudScoreHistory[end];
+        this.getScoreInfo(diplayFraudScore);
 
         // チャート作成
         this.chartCreate();
+
       } else {
-        // Todo: errorページに遷移
+        // Todo: errorページへの遷移を修正
         console.log('errorページに遷移');
+        this.router.navigate(['/detail/error']);
       }
     });
   }
 
   // 推論結果の要因をソート
-  reasonSort(): void {
+  reasonSort(scoreDetails: ScoreDetail[]): void {
     // 推論結果の詳細を表示
     // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
     this.reasons = [];
-    this.diplayFraudScore.scoreDetails.forEach((scoreDetail, i) => {
+    scoreDetails.forEach((scoreDetail, i) => {
       const reasons = scoreDetail.reasons.slice();
       const descReason = reasons.sort((a, b) => {
         return (a.reason > b.reason ? -1 : 1);
@@ -194,8 +207,9 @@ export class DetailComponent implements OnInit {
 
     this.claim.fraudScoreHistory.forEach((fraudScore, i) => {
       const scoringDate = new Date(fraudScore.scoringDate);
+      // ラベルを日付と事案カテゴリの配列にする（日付\n事案カテゴリと表示される）
       this.chartData.labels[i] =
-        `${scoringDate.getFullYear()}/${scoringDate.getMonth()}/${scoringDate.getDate()}`;
+        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.claimCategory];
       this.chartData.series1[i] = fraudScore.scoreDetails[0].score;
       this.chartData.series2[i] = fraudScore.scoreDetails[1].score;
       // console.log('this.chartData.series1', this.chartData.series1);
@@ -208,21 +222,30 @@ export class DetailComponent implements OnInit {
           {
             ticks: {
               min: 0,
-              max: 100,
+              max: 100
+            },
+          }],
+        xAxes: [
+          {
+            ticks: {
+              fontSize: 16,
+              // fontColor: ['#f0554e', '#f3ca3e'],
+              // callback: (tickValue, index, ticks) => {
+              // return tickValue;
+              // }
             },
           }],
       },
       events: ['click'],
       onClick: (event, elements) => {
-        console.log('onClick event:', event);
-        console.log('onClick elements :', elements);
+        this.changeDate(elements);
       }
     };
 
     // canvasの取得
     this.context = this.elementRef.nativeElement.getContext('2d');
     // チャートの作成
-    console.log('this.chartData.series1', this.chartData.series1);
+    // console.log('this.chartData.series1', this.chartData.series1);
     this.chart = new Chart(this.context, {
       type: 'line',
       data: {
@@ -248,17 +271,43 @@ export class DetailComponent implements OnInit {
   }
 
   // 表示対象の日付変更
-  // Todo: 作成する
-  changeDate(event): void {
-    console.log('event:', event);
-    console.log('getElement:', this.chart.getElementAtEvent(event)[0]);
-    console.log('getElements:', this.chart.getElementsAtEvent);
+  changeDate(elements) {
+    if (!elements || elements.length === 0) {
+      console.log('要素が選択出来ていません');
+    } else {
+      const element = elements[0];
+      console.log('onClick._index:', element['_index'.toString()]);
+      const diplayFraudScore = this.claim.fraudScoreHistory[element['_index'.toString()]];
+      this.getScoreInfo(diplayFraudScore);
+    }
   }
 
   // 事案一覧ページに遷移
   displayList(): void {
     console.log('事案一覧ページへ遷移');
     this.router.navigate(['list']);
+  }
+
+  // 特定算出日の推論結果を元にビュー要素を取得
+  getScoreInfo(diplayFraudScore: FraudScore) {
+    this.claimCategory = diplayFraudScore.claimCategory;
+    this.claimCategoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
+    console.log('this.claimCategoryClass', this.claimCategoryClass);
+    this.scoringDate = diplayFraudScore.scoringDate;
+    this.scoreDetails = [];
+    diplayFraudScore.scoreDetails.forEach((scoreDetail, i) => {
+      const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.rank);
+      this.scoreDetails[i] = { ...scoreDetail, categoryClass };
+      console.log('categoryClass', this.scoreDetails[i].categoryClass);
+    });
+
+    // 推論結果の要因をソート
+    this.reasonSort(this.scoreDetails);
+  }
+
+  // ヘルプ表示
+  displayHelp() {
+    window.open(environment.help_url);
   }
 
 }
