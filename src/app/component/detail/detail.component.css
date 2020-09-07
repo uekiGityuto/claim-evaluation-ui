@@ -53,6 +53,12 @@
   height: 216px;
 }
 
+/* ngClass用 */
+
+.now {
+  background-color: #f0554e;
+}
+
 .model {
   width: 98%;
   padding: 0;

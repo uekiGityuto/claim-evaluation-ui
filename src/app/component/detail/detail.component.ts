@@ -53,6 +53,11 @@ interface Reason {
   featureDescription: string;
 }
 
+// // ngClass用
+// interface ClaimCategoryMatrixClass {
+//   now: boolean;
+// }
+
 /**
  * Detail Component
  * @author SKK231527 植木
@@ -84,7 +89,15 @@ export class DetailComponent implements OnInit {
   scoreDetails: ScoreDetailForDisplay[];
   reasons: { rReason: Reason[], gReason: Reason[]; }[];
   // ngClass用
-  claimCategoryClass: CategoryClass;
+  categoryClass: CategoryClass;
+  // categoryMatrixClass: {
+  specialCaseHigh = { now: false };
+  specialCaseLow = { now: false };
+  specialCaseMiddle = { now: false };
+  ncpdHigh = { now: false };
+  ncpdMiddle = { now: false };
+  ncpdLow = { now: false };
+  // };
 
   // chart用
   @ViewChild('claimCategoryChart')
@@ -179,6 +192,54 @@ export class DetailComponent implements OnInit {
         this.router.navigate(['/detail/error']);
       }
     });
+  }
+
+  // 特定算出日の推論結果を元にビュー要素を取得
+  getScoreInfo(diplayFraudScore: FraudScore) {
+    this.claimCategory = diplayFraudScore.claimCategory;
+    this.categoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
+    // console.log('this.claimCategoryClass', this.categoryClass);
+    this.scoringDate = diplayFraudScore.scoringDate;
+    // スコア詳細のセット
+    this.scoreDetails = [];
+    diplayFraudScore.scoreDetails.forEach((scoreDetail, i) => {
+      const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.rank);
+      this.scoreDetails[i] = { ...scoreDetail, categoryClass };
+      // console.log('categoryClass', this.scoreDetails[i].categoryClass);
+    });
+    // 事案カテゴリマトリクスの赤網掛け
+    this.coverRed(this.scoreDetails);
+    // 推論結果の要因をソート
+    this.reasonSort(this.scoreDetails);
+  }
+
+  // 事案カテゴリマトリックスの赤網掛け
+  coverRed(scoreDetails: ScoreDetail[]) {
+    // 初期化
+    this.specialCaseHigh.now = false;
+    this.specialCaseMiddle.now = false;
+    this.specialCaseLow.now = false;
+    this.ncpdHigh.now = false;
+    this.ncpdMiddle.now = false;
+    this.ncpdLow.now = false;
+
+    // 赤網掛けする場所を特定
+    // Todo: 保守性が低いので修正
+    if (scoreDetails[0].rank === 'high') {
+      this.specialCaseHigh.now = true;
+    } else if (scoreDetails[0].rank === 'middle') {
+      this.specialCaseMiddle.now = true;
+    } else if (scoreDetails[0].rank === 'low') {
+      this.specialCaseLow.now = true;
+    }
+
+    if (scoreDetails[1].rank === 'high') {
+      this.ncpdHigh.now = true;
+    } else if (scoreDetails[1].rank === 'middle') {
+      this.ncpdMiddle.now = true;
+    } else if (scoreDetails[1].rank === 'low') {
+      this.ncpdLow.now = true;
+    }
   }
 
   // 推論結果の要因をソート
@@ -286,23 +347,6 @@ export class DetailComponent implements OnInit {
   displayList(): void {
     console.log('事案一覧ページへ遷移');
     this.router.navigate(['list']);
-  }
-
-  // 特定算出日の推論結果を元にビュー要素を取得
-  getScoreInfo(diplayFraudScore: FraudScore) {
-    this.claimCategory = diplayFraudScore.claimCategory;
-    this.claimCategoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
-    console.log('this.claimCategoryClass', this.claimCategoryClass);
-    this.scoringDate = diplayFraudScore.scoringDate;
-    this.scoreDetails = [];
-    diplayFraudScore.scoreDetails.forEach((scoreDetail, i) => {
-      const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.rank);
-      this.scoreDetails[i] = { ...scoreDetail, categoryClass };
-      console.log('categoryClass', this.scoreDetails[i].categoryClass);
-    });
-
-    // 推論結果の要因をソート
-    this.reasonSort(this.scoreDetails);
   }
 
   // ヘルプ表示

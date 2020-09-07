@@ -31,7 +31,7 @@
     <div class="claim-category-card-header">
       <div>
         <span>事案カテゴリ：</span>
-        <span [ngClass]="claimCategoryClass">{{ claimCategory }}</span>
+        <span [ngClass]="categoryClass">{{ claimCategory }}</span>
       </div>
       <div>
         <span>スコアリング日：</span>
@@ -44,25 +44,32 @@
       </div>
       <table class="claim-category-matrix">
         <tr>
+          <th>NC/PD推定モデル</th>
+        </tr>
+        <tr>
           <th></th>
-          <th>High</th>
-          <th>Middle</th>
-          <th>Low</th>
+          <th></th>
+          <th [ngClass]="specialCaseHigh">High</th>
+          <th [ngClass]="specialCaseMiddle">Middle</th>
+          <th [ngClass]="specialCaseLow">Low</th>
         </tr>
         <tr>
-          <th>High</th>
+          <th>特殊事案推定モデル</th>
+          <th [ngClass]="ncpdHigh">High</th>
           <td>高</td>
           <td>高</td>
           <td>高</td>
         </tr>
         <tr>
-          <th>Middle</th>
+          <th></th>
+          <th [ngClass]="ncpdMiddle">Middle</th>
           <td>中</td>
           <td>中</td>
           <td>中</td>
         </tr>
         <tr>
-          <th>Low</th>
+          <th></th>
+          <th [ngClass]="ncpdLow">Low</th>
           <td>中</td>
           <td>低</td>
           <td>低</td>

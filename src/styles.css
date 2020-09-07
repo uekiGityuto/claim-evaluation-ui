@@ -30,15 +30,21 @@ header span {
   margin-right: 16px;
 }
 
+/* ngClass用 */
+
 ._high {
   background-color: #f0554e;
   color: #ffffff;
 }
 
+/* ngClass用 */
+
 ._middle {
   background-color: #f3ca3e;
   color: #ffffff;
 }
+
+/* ngClass用 */
 
 ._low {
   background-color: #2ac940;
