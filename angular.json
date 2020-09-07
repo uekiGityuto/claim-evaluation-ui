@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "sample-app": {
+    "claim-evaluation": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/sample-app",
+            "outputPath": "dist/claim-evaluation",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -63,18 +63,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "sample-app:build"
+            "browserTarget": "claim-evaluation:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "sample-app:build:production"
+              "browserTarget": "claim-evaluation:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "sample-app:build"
+            "browserTarget": "claim-evaluation:build"
           }
         },
         "test": {
@@ -112,18 +112,18 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "sample-app:serve"
+            "devServerTarget": "claim-evaluation:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "sample-app:serve:production"
+              "devServerTarget": "claim-evaluation:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "sample-app",
+  "defaultProject": "claim-evaluation",
   "cli": {
     "analytics": false
   }
