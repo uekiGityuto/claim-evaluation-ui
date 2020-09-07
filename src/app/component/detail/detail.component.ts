@@ -8,11 +8,11 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 // import { FraudScore } from '../../model/FraudScore.model';
 // import { ScoreDetail } from '../../model/ScoreDetail.model';
 // import { Reason } from '../../model/Reason.model';
-import { Result } from '../../model/Result.model';
+import { Result } from '../../model/result.model';
 import { CategoryClass } from '../../model/category-class.model';
 import { CategoryMatrixClass } from '../../model/category-matrix-class.model';
 import { environment } from '../../../environments/environment';
-import { ObservableClientService } from '../../service/ObservableClientService';
+import { ObservableClientService } from '../../service/observable-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
 

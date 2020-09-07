@@ -2,7 +2,7 @@ import { Component, Type, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Result } from './model/Result.model';
-import { ObservableClientService } from './service/ObservableClientService';
+import { ObservableClientService } from './service/observable-client.service';
 import { UserInfoContainerService } from './service/user-info-container.service';
 import { environment } from '../environments/environment';
 

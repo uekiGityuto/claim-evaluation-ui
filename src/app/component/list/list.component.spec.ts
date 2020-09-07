@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ListComponent } from './list.component';
-import { HttpHandler, HttpClient} from '@angular/common/http';
-import { ObservableClientService } from '../../service/ObservableClientService';
+import { HttpHandler, HttpClient } from '@angular/common/http';
+import { ObservableClientService } from '../../service/observable-client.service';
 import { ActivatedRoute } from '@angular/router';
 
 describe('ListComponent', () => {
@@ -18,16 +18,16 @@ describe('ListComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ListComponent ],
-      providers: [ { provide: ActivatedRoute, useClass: fakeActivatedRoute }, HttpClient ],
+      declarations: [ListComponent],
+      providers: [{ provide: ActivatedRoute, useClass: fakeActivatedRoute }, HttpClient],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     component = new ListComponent(ob, router);
-  })
-  
+  });
+
   it('一覧画面用データ取得テスト', () => {
     spyOn(component, 'getList');
     expect(component.errMsgList.length).toBe(0);

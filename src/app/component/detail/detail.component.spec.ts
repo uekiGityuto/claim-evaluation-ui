@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
 import { DetailComponent } from './detail.component';
-import { HttpHandler, HttpClient} from '@angular/common/http';
-import { ObservableClientService } from '../../service/ObservableClientService';
+import { HttpHandler, HttpClient } from '@angular/common/http';
+import { ObservableClientService } from '../../service/observable-client.service';
 import { ActivatedRoute } from '@angular/router';
 
 describe('DetailComponent', () => {
@@ -18,15 +18,15 @@ describe('DetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DetailComponent ],
-      providers: [ { provide: ActivatedRoute, useClass: fakeActivatedRoute }, HttpClient ],
+      declarations: [DetailComponent],
+      providers: [{ provide: ActivatedRoute, useClass: fakeActivatedRoute }, HttpClient],
     })
-    .compileComponents();
+      .compileComponents();
   }));
 
   beforeEach(() => {
     // component = new DetailComponent(ob, router)
-  })
+  });
 
   it('詳細画面用データ取得テスト', () => {
     component.claim.claimId = '00000865432';

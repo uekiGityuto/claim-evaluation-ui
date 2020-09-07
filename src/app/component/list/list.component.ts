@@ -3,10 +3,10 @@ import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-import { Result } from '../../model/Result.model';
+import { Result } from '../../model/result.model';
 import { CategoryClass } from '../../model/category-class.model';
 import { environment } from '../../../environments/environment';
-import { ObservableClientService } from '../../service/ObservableClientService';
+import { ObservableClientService } from '../../service/observable-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
 
