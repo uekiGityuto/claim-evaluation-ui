@@ -115,6 +115,9 @@ export class DetailComponent implements OnInit {
     this.authFlag = this.userInfo.authFlag;
     this.userId = this.userInfo.userId;
 
+    // 受付番号取得
+    this.claimNumber = this.route.snapshot.paramMap.get('claimNumber');
+
     // 事案情報取得
     this.getLatestClaimInfo();
   }
@@ -155,10 +158,11 @@ export class DetailComponent implements OnInit {
     // 事案情報取得用のuri作成
     const scoreUri = this.uri + 'scores';
     const param = { userId: this.userId, claimNumber: this.claimNumber };
+    console.log('this.claimNumber', this.claimNumber);
 
     // 事案情報を取得
     // const observer = this.clientService.rxClient(claimUri, 'post', param);// 本番用
-    const observer = this.clientService.rxClient(scoreUri, 'get', null);// モック用
+    const observer = this.clientService.rxClient(scoreUri + '?claimNumber=' + this.claimNumber, 'get', null);// モック用
     observer.subscribe((result: Result) => {
       if (result.isSuccess) {
         // 取得結果をシャーローコピー
