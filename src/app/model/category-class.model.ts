@@ -4,7 +4,7 @@ export class CategoryClass {
   private _middle: boolean;
   private _high: boolean;
 
-  constructor(low, middle, high) {
+  constructor(low = false, middle = false, high = false) {
     this._low = low;
     this._middle = middle;
     this._high = high;

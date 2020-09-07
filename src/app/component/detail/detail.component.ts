@@ -10,6 +10,7 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 // import { Reason } from '../../model/Reason.model';
 import { Result } from '../../model/Result.model';
 import { CategoryClass } from '../../model/category-class.model';
+import { CategoryMatrixClass } from '../../model/category-matrix-class.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/ObservableClientService';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
@@ -53,11 +54,6 @@ interface Reason {
   featureDescription: string;
 }
 
-// // ngClass用
-// interface ClaimCategoryMatrixClass {
-//   now: boolean;
-// }
-
 /**
  * Detail Component
  * @author SKK231527 植木
@@ -88,16 +84,15 @@ export class DetailComponent implements OnInit {
   scoringDate: Date;
   scoreDetails: ScoreDetailForDisplay[];
   reasons: { rReason: Reason[], gReason: Reason[]; }[];
+
   // ngClass用
   categoryClass: CategoryClass;
-  // categoryMatrixClass: {
-  specialCaseHigh = { now: false };
-  specialCaseLow = { now: false };
-  specialCaseMiddle = { now: false };
-  ncpdHigh = { now: false };
-  ncpdMiddle = { now: false };
-  ncpdLow = { now: false };
-  // };
+  specialCaseHigh = new CategoryMatrixClass();
+  specialCaseLow = new CategoryMatrixClass();
+  specialCaseMiddle = new CategoryMatrixClass();
+  ncpdHigh = new CategoryMatrixClass();
+  ncpdMiddle = new CategoryMatrixClass();
+  ncpdLow = new CategoryMatrixClass();
 
   // chart用
   @ViewChild('claimCategoryChart')
@@ -232,7 +227,6 @@ export class DetailComponent implements OnInit {
     } else if (scoreDetails[0].rank === 'low') {
       this.specialCaseLow.now = true;
     }
-
     if (scoreDetails[1].rank === 'high') {
       this.ncpdHigh.now = true;
     } else if (scoreDetails[1].rank === 'middle') {
