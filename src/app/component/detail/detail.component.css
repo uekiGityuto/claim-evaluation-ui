@@ -94,10 +94,6 @@
   writing-mode: vertical-rl;
 }
 
-.matrix-header {
-  font-size: var(--medium-font-size);
-}
-
 .ncpd-high {
   grid-area: ncpd-high;
   border-left: solid 1px;
@@ -115,6 +111,16 @@
 
 .special-high {
   grid-area: special-high;
+  border-top: solid 1px;
+}
+
+.special-middle {
+  grid-area: special-middle;
+  border-top: solid 1px;
+}
+
+.special-low {
+  grid-area: special-low;
   border-top: solid 1px;
 }
 
@@ -140,11 +146,6 @@
   border-left: solid 1px;
 }
 
-.special-middle {
-  grid-area: special-middle;
-  border-top: solid 1px;
-}
-
 .middle-high {
   grid-area: middle-high;
   border-top: solid 1px;
@@ -161,11 +162,6 @@
   grid-area: middle-low;
   border-top: solid 1px;
   border-left: solid 1px;
-}
-
-.special-low {
-  grid-area: special-low;
-  border-top: solid 1px;
 }
 
 .low-high {

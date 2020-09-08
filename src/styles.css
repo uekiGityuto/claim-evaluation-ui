@@ -17,7 +17,7 @@
   --claim-middle-color: #f3ca3e;
   --claim-low-color: #2ac940;
   --shadow-color: #808080;
-  --header-height: 48px;
+  --main-header-height: 48px;
   --card-header-height: 40px;
   --factor-header-height: 32px;
   --left-write-common-padding: 12px;
@@ -37,8 +37,8 @@ body {
   background-color: var(--base-bg-color);
 }
 
-header {
-  height: var(--header-height);
+.main-header {
+  height: var(--main-header-height);
   margin: 0;
   font-size: var(--large-font-size);
   color: var(--main-font-color);
@@ -47,8 +47,8 @@ header {
   justify-content: flex-end;
 }
 
-header span {
-  line-height: var(--header-height);
+.main-header span {
+  line-height: var(--main-header-height);
   margin-right: 16px;
 }
 
@@ -56,6 +56,19 @@ header span {
   box-shadow: 0 0 4px var(--shadow-color);
   /* border-radius: 10px; */
 }
+
+.high-font-color {
+  color: var(--claim-high-color);
+}
+
+.middle-font-color {
+  color: var(--claim-middle-color);
+}
+
+.low-font-color {
+  color: var(--claim-low-color);
+}
+
 
 .child-centering {
   display: flex;
