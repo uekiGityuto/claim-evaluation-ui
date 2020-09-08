@@ -1,3 +1,4 @@
+/* CSS Grid対応のため記述 */
 /* autoprefixer grid: on */
 
 .container {
@@ -65,13 +66,21 @@
   width: 392px;
   height: 216px;
   display: grid;
-  grid-template: "...           ...            ...          ...           ...        " 12px "...           ncpd-label     ncpd-label   ncpd-label    ncpd-label " auto "special-label ...            ncpd-high    ncpd-middle   ncpd-low   " 1fr "special-label special-high   high-high    high-middle   high-low   " 1fr "special-label special-middle middle-high  middle-middle middle-low " 1fr "special-label special-low    low-high     low-middle    low-low    " 1fr "...           ...            ...          ...           ...        " 12px / auto 1fr 1fr 1fr 1fr;
+      grid-template:
+        "...           ... ...            ...          ...           ...        " 12px
+        "...           ... ncpd-label     ncpd-label   ncpd-label    ncpd-label " auto
+        "...           ... ...            ...          ...           ...        " 8px
+        "special-label ... ...            ncpd-high    ncpd-middle   ncpd-low   " 1fr
+        "special-label ... special-high   high-high    high-middle   high-low   " 1fr
+        "special-label ... special-middle middle-high  middle-middle middle-low " 1fr
+        "special-label ... special-low    low-high     low-middle    low-low    " 1fr
+        "...           ... ...            ...          ...           ...        " 12px
+        / auto         8px 1fr            1fr          1fr           1fr;
 }
 
 .matrix-label {
   font-size: var(--medium-font-size);
   text-align: center;
-  vertical-align: middle;
 }
 
 .ncpd-label {
@@ -87,8 +96,6 @@
 
 .matrix-header {
   font-size: var(--medium-font-size);
-  text-align: center;
-  vertical-align: middle;
 }
 
 .ncpd-high {
@@ -113,8 +120,6 @@
 
 .matrix-category {
   font-size: var(--large-font-size);
-  text-align: center;
-  vertical-align: middle;
 }
 
 .high-high {
@@ -242,9 +247,6 @@
 .factor-header {
   height: var(--factor-header-height);
   font-size: var(--medium-font-size);
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .factor-header p {

@@ -37,21 +37,21 @@
       <div class="claim-category-matrix">
         <div class="ncpd-label matrix-label">NC/PD推定モデル</div>
         <div class="special-label matrix-label">特殊事案モデル</div>
-        <div [ngClass]="ncpdHigh" class="ncpd-high matrix-header">High</div>
-        <div [ngClass]="ncpdMiddle" class="ncpd-middle matrix-header">Middle</div>
-        <div [ngClass]="ncpdLow" class="ncpd-low matrix-header">Low</div>
-        <div [ngClass]="specialCaseHigh" class="special-high matrix-header">High</div>
-        <div class="high-high matrix-category">高</div>
-        <div class="high-middle matrix-category">高</div>
-        <div class="high-low matrix-category">高</div>
-        <div [ngClass]="specialCaseMiddle" class="special-middle matrix-header">Middle</div>
-        <div class="middle-high matrix-category">中</div>
-        <div class="middle-middle matrix-category">中</div>
-        <div class="middle-low matrix-category">中</div>
-        <div [ngClass]="specialCaseLow" class="special-low matrix-header">Low</div>
-        <div class="low-high matrix-category">中</div>
-        <div class="low-middle matrix-category">低</div>
-        <div class="low-low matrix-category">低</div>
+        <div [ngClass]="ncpdHigh" class="ncpd-high matrix-header child-centering">High</div>
+        <div [ngClass]="ncpdMiddle" class="ncpd-middle matrix-header child-centering">Middle</div>
+        <div [ngClass]="ncpdLow" class="ncpd-low matrix-header child-centering">Low</div>
+        <div [ngClass]="specialCaseHigh" class="special-high matrix-header child-centering">High</div>
+        <div class="high-high matrix-category child-centering">高</div>
+        <div class="high-middle matrix-category child-centering">高</div>
+        <div class="high-low matrix-category child-centering">高</div>
+        <div [ngClass]="specialCaseMiddle" class="special-middle matrix-header child-centering">Middle</div>
+        <div class="middle-high matrix-category child-centering">中</div>
+        <div class="middle-middle matrix-category child-centering">中</div>
+        <div class="middle-low matrix-category child-centering">中</div>
+        <div [ngClass]="specialCaseLow" class="special-low matrix-header child-centering">Low</div>
+        <div class="low-high matrix-category child-centering">中</div>
+        <div class="low-middle matrix-category child-centering">低</div>
+        <div class="low-low matrix-category child-centering">低</div>
       </div>
     </div>
   </div>
@@ -75,7 +75,7 @@
         </div>
         <div class="model-card-contents">
           <div class="factor">
-            <div class="factor-header raize">
+            <div class="factor-header raize child-centering">
               <p>スコア上昇要因↑</p>
             </div>
             <div class="model-card-box" *ngFor="let reason of reasons[i].gReason">

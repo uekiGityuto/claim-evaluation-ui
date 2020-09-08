@@ -1,3 +1,4 @@
+/* CSS Grid対応のため記述 */
 /* autoprefixer grid: autoplace */
 
 :root {
@@ -54,6 +55,12 @@ header span {
 .card {
   box-shadow: 0 0 4px var(--shadow-color);
   /* border-radius: 10px; */
+}
+
+.child-centering {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 /* 以下ngClass用 */
