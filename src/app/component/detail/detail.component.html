@@ -1,13 +1,12 @@
 <div class="container">
 
+  <!-- ヘッダエリア -->
   <header>
     <button class="list-icon-button" *ngIf="authFlag" mat-icon-button (click)="displayList()">
       <mat-icon inline="true">view_list</mat-icon>
     </button>
     <span>{{ userId }}</span>
   </header>
-
-  <!-- <article> -->
 
   <div class="detail-header card">
     <span class="detail-header-content">事案番号：{{ this.claimNumber }}</span>
@@ -19,6 +18,7 @@
     <span class="detail-header-content">更新日：{{ this.updateDate | date : 'yyyy/M/d' }}</span>
   </div>
 
+  <!-- 事案カテゴリエリア -->
   <div class="claim-category-card card">
     <div class="claim-category-card-header">
       <div>
@@ -56,6 +56,7 @@
     </div>
   </div>
 
+  <!-- モデルエリア -->
   <div class="model">
     <ng-container *ngFor="let scoreDetail of scoreDetails; index as i">
       <div class="model-card card">
@@ -98,5 +99,4 @@
     </ng-container>
   </div>
 
-  <!-- </article> -->
 </div>
