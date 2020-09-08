@@ -1,33 +1,25 @@
-<header>
-  <button *ngIf="authFlag" mat-icon-button (click)="displayList()">
-    <mat-icon>view_list</mat-icon>
-  </button>
-  <span>{{ userId }}</span>
-</header>
-<article>
-  <div class="detail-header">
-    <div class="detail-header-item">
-      <span>事案番号：{{ this.claimNumber }}</span>
-    </div>
-    <div class="detail-header-item">
-      <span>被保険者名：{{ this.insuredName }}</span>
-    </div>
-    <div class="detail-header-item">
-      <span>契約者名：</span>
-      <span>{{ this.contractorName }}</span>
-    </div>
-    <div class="detail-header-item">
-      <span>保険種類：{{ this.insurancetype }}</span>
-    </div>
-    <div class="detail-header-item">
-      <span>事故日：{{ this.accidentDate | date : 'yyyy/M/d' }}</span>
-    </div>
-    <div class="detail-header-item">
-      <span>更新日：{{ this.updateDate | date : 'yyyy/M/d' }}</span>
-    </div>
+<div class="container">
+
+  <header>
+    <button class="list-icon-button" *ngIf="authFlag" mat-icon-button (click)="displayList()">
+      <mat-icon inline="true">view_list</mat-icon>
+    </button>
+    <span>{{ userId }}</span>
+  </header>
+
+  <!-- <article> -->
+
+  <div class="detail-header card">
+    <span class="detail-header-content">事案番号：{{ this.claimNumber }}</span>
+    <span class="detail-header-content">被保険者名：{{ this.insuredName }}</span>
+    <span class="detail-header-content">契約者名：</span>
+    <span class="detail-header-content">{{ this.contractorName }}</span>
+    <span class="detail-header-content">保険種類：{{ this.insurancetype }}</span>
+    <span class="detail-header-content">事故日：{{ this.accidentDate | date : 'yyyy/M/d' }}</span>
+    <span class="detail-header-content">更新日：{{ this.updateDate | date : 'yyyy/M/d' }}</span>
   </div>
 
-  <mat-card class="claim-category-card">
+  <div class="claim-category-card card">
     <div class="claim-category-card-header">
       <div>
         <span>事案カテゴリ：</span>
@@ -38,95 +30,73 @@
         <span>{{ scoringDate | date : 'yyyy/M/d' }}</span>
       </div>
     </div>
-    <div class="claim-category-flex">
-      <div class="claim-category-time-series">
-        <canvas #claimCategoryChart width="600px" height="212px"></canvas>
+    <div class="claim-category">
+      <div class="claim-category-chart">
+        <canvas #claimCategoryChart width="744px" height="212px"></canvas>
       </div>
-      <table class="claim-category-matrix">
-        <tr>
-          <th>NC/PD推定モデル</th>
-        </tr>
-        <tr>
-          <th></th>
-          <th></th>
-          <th [ngClass]="specialCaseHigh">High</th>
-          <th [ngClass]="specialCaseMiddle">Middle</th>
-          <th [ngClass]="specialCaseLow">Low</th>
-        </tr>
-        <tr>
-          <th>特殊事案推定モデル</th>
-          <th [ngClass]="ncpdHigh">High</th>
-          <td>高</td>
-          <td>高</td>
-          <td>高</td>
-        </tr>
-        <tr>
-          <th></th>
-          <th [ngClass]="ncpdMiddle">Middle</th>
-          <td>中</td>
-          <td>中</td>
-          <td>中</td>
-        </tr>
-        <tr>
-          <th></th>
-          <th [ngClass]="ncpdLow">Low</th>
-          <td>中</td>
-          <td>低</td>
-          <td>低</td>
-        </tr>
-      </table>
-    </div>
-
-  </mat-card>
-
-  <div class="model">
-    <div *ngFor="let scoreDetail of scoreDetails; index as i">
-      <mat-card class="model-card">
-        <div class="model-header">
-          <div class="model-header-item">
-            <span>{{ scoreDetail.modelType }}</span>
-          </div>
-          <div class="model-header-item">
-            <button mat-icon-button (click)="displayHelp()">
-              <mat-icon>help</mat-icon>
-            </button>
-            <span>:</span>
-          </div>
-          <div class="model-header-item">
-            <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
-          </div>
-          <div class="model-header-item model-header-item-end">
-            <span>スコア：{{ scoreDetail.score }}</span>
-          </div>
-        </div>
-        <div class="factor">
-          <div class="raise-factor">
-            <div class="raise-factor-header">
-              <p>上昇要因</p>
-            </div>
-            <div *ngFor="let reason of reasons[i].gReason">
-              <p>スコア：{{ reason.reason }}</p>
-              <div class="feature">
-                <p class="description">{{ reason.featureName }}</p>
-                <p class="featureDescription">{{ reason.featureDescription }}</p>
-              </div>
-            </div>
-          </div>
-          <div class="lower-factor">
-            <div class="lower-factor-header">
-              <p>減少要因</p>
-            </div>
-            <div *ngFor="let reason of reasons[i].rReason">
-              <p>スコア：{{ reason.reason }}</p>
-              <div class="feature">
-                <p class="description">{{ reason.featureName }}</p>
-                <p class="featureDescription">{{ reason.featureDescription }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </mat-card>
+      <div class="claim-category-matrix">
+        <div class="ncpd-label matrix-label">NC/PD推定モデル</div>
+        <div class="special-label matrix-label">特殊事案モデル</div>
+        <div [ngClass]="ncpdHigh" class="ncpd-high matrix-header">High</div>
+        <div [ngClass]="ncpdMiddle" class="ncpd-middle matrix-header">Middle</div>
+        <div [ngClass]="ncpdLow" class="ncpd-low matrix-header">Low</div>
+        <div [ngClass]="specialCaseHigh" class="special-high matrix-header">High</div>
+        <div class="high-high matrix-category">高</div>
+        <div class="high-middle matrix-category">高</div>
+        <div class="high-low matrix-category">高</div>
+        <div [ngClass]="specialCaseMiddle" class="special-middle matrix-header">Middle</div>
+        <div class="middle-high matrix-category">中</div>
+        <div class="middle-middle matrix-category">中</div>
+        <div class="middle-low matrix-category">中</div>
+        <div [ngClass]="specialCaseLow" class="special-low matrix-header">Low</div>
+        <div class="low-high matrix-category">中</div>
+        <div class="low-middle matrix-category">低</div>
+        <div class="low-low matrix-category">低</div>
+      </div>
     </div>
   </div>
 
-</article>
+  <div class="model">
+    <ng-container *ngFor="let scoreDetail of scoreDetails; index as i">
+      <div class="model-card card">
+        <div class="model-card-header">
+          <div>
+            <span>{{ scoreDetail.modelType }}</span>
+            <button class="help-icon-button" mat-icon-button (click)="displayHelp()">
+              <mat-icon inline="true">help</mat-icon>
+            </button>
+            <span>： </span>
+            <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
+          </div>
+          <div>
+            <span>スコア：{{ scoreDetail.score }}</span>
+          </div>
+        </div>
+        <div class="model-card-contents">
+          <div class="factor">
+            <div class="factor-header raize">
+              <p>スコア上昇要因↑</p>
+            </div>
+            <div class="model-card-box" *ngFor="let reason of reasons[i].gReason">
+              <p class="factor-score">スコア：{{ reason.reason }}</p>
+              <p class="feature-value">{{ reason.featureName }}</p>
+              <p class="feature-value-description">{{ reason.featureDescription }}</p>
+            </div>
+          </div>
+          <div class="factor">
+            <div class="factor-header lower">
+              <p>スコア減少要因↓</p>
+            </div>
+            <div class="model-card-box" *ngFor="let reason of reasons[i].rReason">
+              <p class="factor-score">スコア：{{ reason.reason }}</p>
+              <p class="feature-value">{{ reason.featureName }}</p>
+              <p class="feature-value-description">{{ reason.featureDescription }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- </article> -->
+</div>

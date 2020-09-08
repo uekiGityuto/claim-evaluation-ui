@@ -1,52 +1,78 @@
-/* You can add global styles to this file, and also import other style files */
+/* autoprefixer grid: autoplace */
+
+:root {
+  --extra-extra-large-font-size: 38px;
+  --extra-large-font-size: 28px;
+  --large-font-size: 21px;
+  --medium-font-size: 16px;
+  --small-font-size: 12px;
+  --main-bg-color: #22459c;
+  --base-bg-color: #f0f0f0;
+  --card-bg-color: #ffffff;
+  --card-header-bg-color: #d9d9d9;
+  --feature-description-bg-color: #d9d9d9;
+  --main-font-color: #ffffff;
+  --claim-high-color: #f0554e;
+  --claim-middle-color: #f3ca3e;
+  --claim-low-color: #2ac940;
+  --shadow-color: #808080;
+  --header-height: 48px;
+  --card-header-height: 40px;
+  --factor-header-height: 32px;
+  --left-write-common-padding: 12px;
+}
 
 html {
-  margin: 0;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
 }
 
 body {
   margin: 0;
   font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic";
-  background-color: #F0F0F0;
+  background-color: var(--base-bg-color);
 }
 
 header {
-  height: 48px;
-  width: 100%;
-  background-color: #22459c;
-  font-size: 21px;
-  color: #ffffff;
+  height: var(--header-height);
+  margin: 0;
+  font-size: var(--large-font-size);
+  color: var(--main-font-color);
+  background-color: var(--main-bg-color);
   display: flex;
-  /* justify-content: space-between; */
   justify-content: flex-end;
 }
 
-header button {
-  height: 48px;
-}
-
 header span {
-  line-height: 48px;
+  line-height: var(--header-height);
   margin-right: 16px;
 }
 
-/* ngClass用 */
+.card {
+  box-shadow: 0 0 4px var(--shadow-color);
+  /* border-radius: 10px; */
+}
+
+/* 以下ngClass用 */
 
 ._high {
-  background-color: #f0554e;
-  color: #ffffff;
+  background-color: var(--claim-high-color);
+  color: var(--main-font-color);
 }
-
-/* ngClass用 */
 
 ._middle {
-  background-color: #f3ca3e;
-  color: #ffffff;
+  background-color: var(--claim-middle-color);
+  color: var(--main-font-color);
 }
 
-/* ngClass用 */
-
 ._low {
-  background-color: #2ac940;
-  color: #ffffff;
+  background-color: var(--claim-low-color);
+  color: var(--main-font-color);
+}
+
+._now {
+  background-color: #f0554e;
 }

@@ -1,8 +1,10 @@
 <header>
   <span>{{ userId }}</span>
 </header>
+
 <article>
-  <div class="list-header">
+
+  <div class="list-header card">
     <form [(formGroup)]="searchControl">
       <mat-form-field>
         <input type="text" matInput matType="text" formControlName="claimNumber" placeholder="受付番号">
@@ -61,10 +63,10 @@
     </form>
   </div>
 
-  <div *ngIf="claims.length != 0">
-    <mat-card id=list>
+  <ng-container *ngIf="claims.length != 0">
+    <div class="claim-list card">
       <table matSort (matSortChange)="listSort($event)">
-        <tr>
+        <tr class="claim-list-header">
           <th mat-sort-header="claimNumber">受付番号</th>
           <th mat-sort-header="insuredName">被保険者名</th>
           <th mat-sort-header="contractorName">契約者名</th>
@@ -75,7 +77,7 @@
           <th mat-sort-header="lossDate">事故日</th>
           <th mat-sort-header="claimCategory">事案カテゴリ</th>
         </tr>
-        <tr *ngFor="let claim of claims">
+        <tr class="claim-list-data" *ngFor="let claim of claims">
           <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
           <td>{{ claim.insuredName }}</td>
           <td>{{ claim.contractorName }}</td>
@@ -87,7 +89,7 @@
           <td><span [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
         </tr>
       </table>
-    </mat-card>
+    </div>
 
     <div class="pager">
       <button *ngIf="param.displayFrom !== '1'" mat-icon-button (click)="previous()">
@@ -104,5 +106,6 @@
         <mat-icon>refresh</mat-icon>
       </button>
     </div>
-  </div>
+  </ng-container>
+
 </article>

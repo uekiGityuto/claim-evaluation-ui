@@ -1,134 +1,282 @@
-.detail-header {
-  height: 80px;
-  background-color: #ffffff;
+/* autoprefixer grid: on */
+
+.container {
+  width: 1280px;
+  height: 1080px;
+  margin: 0 auto;
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;
 }
 
-.detail-header-item {
-  font-size: 21px;
-  color: #000000;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ヘッダエリア */
+
+.list-icon-button {
+  display: inline-block;
+  width: var(--header-height);
+  height: var(--header-height);
 }
+
+.list-icon-button mat-icon {
+  font-size: var(--extra-extra-large-font-size);
+}
+
+.detail-header {
+  font-size: var(--large-font-size);
+  background-color: var(--card-bg-color);
+  padding-top: 8px;
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
+  padding-bottom: 8px;
+}
+
+.detail-header-content {
+  margin-right: 12px;
+}
+
+/* 事案カテゴリエリア */
 
 .claim-category-card {
-  height: 288px;
-  width: 96%;
-  background-color: #ffffff;
-  padding: 0;
-  margin: 2%;
+  height: 280px;
+  background-color: var(--card-bg-color);
+  margin-top: 12px;
 }
 
 .claim-category-card-header {
-  height: 40px;
-  width: 100%;
-  background-color: #d9d9d9;
-  font-size: 21px;
-  color: #000000;
+  height: var(--card-header-height);
+  font-size: var(--large-font-size);
+  background-color: var(--card-header-bg-color);
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
 }
 
-.claim-category-card-header span {
-  margin-left: 8px;
-  margin-left: 8px;
-  line-height: 40px;
-}
-
-.claim-category-time-series {
-  width: 600px;
-  height: 212px;
-}
-
-.claim-category-flex {
+.claim-category {
+  height: 240px;
   display: flex;
+  justify-content: space-around;
+  align-items: center;
 }
+
+.claim-category-chart {}
 
 .claim-category-matrix {
   width: 392px;
   height: 216px;
+  display: grid;
+  grid-template: "...           ...            ...          ...           ...        " 12px "...           ncpd-label     ncpd-label   ncpd-label    ncpd-label " auto "special-label ...            ncpd-high    ncpd-middle   ncpd-low   " 1fr "special-label special-high   high-high    high-middle   high-low   " 1fr "special-label special-middle middle-high  middle-middle middle-low " 1fr "special-label special-low    low-high     low-middle    low-low    " 1fr "...           ...            ...          ...           ...        " 12px / auto 1fr 1fr 1fr 1fr;
 }
 
-/* ngClass用 */
-
-._now {
-  background-color: #f0554e;
+.matrix-label {
+  font-size: var(--medium-font-size);
+  text-align: center;
+  vertical-align: middle;
 }
+
+.ncpd-label {
+  grid-area: ncpd-label;
+}
+
+.special-label {
+  grid-area: special-label;
+  -webkit-writing-mode: vertical-rl;
+  -ms-writing-mode: tb-rl;
+  writing-mode: vertical-rl;
+}
+
+.matrix-header {
+  font-size: var(--medium-font-size);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.ncpd-high {
+  grid-area: ncpd-high;
+  border-left: solid 1px;
+}
+
+.ncpd-middle {
+  grid-area: ncpd-middle;
+  border-left: solid 1px;
+}
+
+.ncpd-low {
+  grid-area: ncpd-low;
+  border-left: solid 1px;
+}
+
+.special-high {
+  grid-area: special-high;
+  border-top: solid 1px;
+}
+
+.matrix-category {
+  font-size: var(--large-font-size);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.high-high {
+  grid-area: high-high;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.high-middle {
+  grid-area: high-middle;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.high-low {
+  grid-area: high-low;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.special-middle {
+  grid-area: special-middle;
+  border-top: solid 1px;
+}
+
+.middle-high {
+  grid-area: middle-high;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.middle-middle {
+  grid-area: middle-middle;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.middle-low {
+  grid-area: middle-low;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.special-low {
+  grid-area: special-low;
+  border-top: solid 1px;
+}
+
+.low-high {
+  grid-area: low-high;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.low-middle {
+  grid-area: low-middle;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+.low-low {
+  grid-area: low-low;
+  border-top: solid 1px;
+  border-left: solid 1px;
+}
+
+/* モデルカードエリア */
 
 .model {
-  width: 98%;
-  padding: 0;
-  margin: 0;
+  flex: 1;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  /* 表示モデルが増えたとき用(overflow: hidden;なので表示されないが） */
   flex-wrap: wrap;
+  overflow: hidden;
+  margin-top: 12px;
 }
 
 .model-card {
-  height: 604px;
-  width: 604px;
-  background-color: #ffffff;
-  padding: 0;
-  margin: 2%;
+  width: 620px;
+  height: 100%;
 }
 
-.model-header {
-  height: 40px;
-  width: 100%;
-  background-color: #d9d9d9;
-  font-size: 21px;
-  color: #000000;
+.model-card-header {
+  height: var(--card-header-height);
+  font-size: var(--large-font-size);
+  background-color: var(--card-header-bg-color);
   display: flex;
+  justify-content: space-between;
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
 }
 
-.model-header-item {
-  font-size: 21px;
-  color: #000000;
-  margin-left: 8px;
-  margin-right: 8px;
+.model-card-header span {
+  line-height: var(--card-header-height);
 }
 
-.model-header-item-end {
-  margin-left: auto;
+.help-icon-button {
+  display: inline-block;
+  width: var(--card-header-height);
+  height: var(--card-header-height);
+  position: relative;
+  top: -3px;
 }
 
-.model-header span {
-  line-height: 40px;
+.help-icon-button mat-icon {
+  font-size: var(--extra-large-font-size);
+}
+
+.model-card-contents {
+  /* height=「親要素のheight」-「兄弟要素のheight」 */
+  height: calc(100% - 40px);
+  font-size: var(--medium-font-size);
+  background-color: var(--card-bg-color);
+  display: flex;
+  overflow-y: auto;
 }
 
 .factor {
-  width: 100%;
-  padding: 0;
+  height: 100%;
+  flex: 1;
+}
+
+.factor-header {
+  height: var(--factor-header-height);
+  font-size: var(--medium-font-size);
   display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.raise-factor {
-  width: 50%;
-  flex-direction: row;
+.factor-header p {
+  margin: 0;
 }
 
-.raise-factor-header {
-  width: 100%;
-  padding: 0;
-  background-color: #f0554e;
+.raize {
+  background-color: var(--claim-high-color);
 }
 
-.lower-factor {
-  width: 50%;
-  flex-direction: row;
+.lower {
+  background-color: var(--claim-low-color);
 }
 
-.lower-factor-header {
-  width: 100%;
-  padding: 0;
-  background-color: #B8E1BE;
+.model-card-box {
+  margin: 8px;
 }
 
-.featureDescription {
-  background-color: #d9d9d9;
+.factor-score {
+  margin: 0;
+  font-size: var(--medium-font-size);
+}
+
+.feature-value {
+  margin: 0;
+  font-size: var(--medium-font-size);
+}
+
+.feature-value-description {
+  height: 48px;
+  margin: 0;
+  font-size: var(--small-font-size);
+  background-color: var(--feature-description-bg-color);
+  overflow-y: auto;
 }
