@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
@@ -66,7 +66,6 @@ interface ClaimForDisplay extends Claim {
 })
 export class ListComponent implements OnInit {
   searchControl: FormGroup;
-  myControl: FormGroup;
   message: string;
   uri = environment.restapi_url;
 
@@ -80,6 +79,10 @@ export class ListComponent implements OnInit {
 
   // 検索用
   param: SearchForm;
+
+  // // ツールチップ付与用
+  // @ViewChild('tableDatas')
+  // elementRef: ElementRef;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -95,7 +98,7 @@ export class ListComponent implements OnInit {
     // 認可処理を実施
     this.auth();
 
-    // FormControlインスタンス作成
+    // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
       claimNumber: new FormControl(''),
       claimCategory: new FormControl(''),
@@ -113,8 +116,26 @@ export class ListComponent implements OnInit {
       // Todo: 全てのFormControlについて一回ずつ実施してしまうので他に良い方法がないか検討
       validators: [this.isInputMoreThanOne, this.isDepartmentOrBaseRadio]
     });
+
     this.claims = [];
   }
+
+  // ngAfterViewChecked(): void {
+  //   if (this.claims !== null && this.claims.length !== 0) {
+  //     console.log(this.elementRef.nativeElement);
+  //     const elementChildren = this.elementRef.nativeElement.children;
+  //     console.log('elementChildren', elementChildren);
+  //     for (let i = 0; i < elementChildren.length; i++) {
+  //       console.log('tagName', elementChildren[i].tagName);
+  //       console.log('offsetWidth', elementChildren[i].offsetWidth);
+  //       console.log('scrollWidth', elementChildren[i].scrollWidth);
+  //       if (elementChildren[i].offsetWidth < elementChildren[i].scrollWidth) {
+  //         elementChildren[i].setAttribute('title', 'tooltip');
+  //       }
+  //     }
+  //     // this.elementRef.nativeElement.setAttribute('title', 'tooltip');
+  //   }
+  // }
 
   // getter
   get insuredNameKana() { return this.searchControl.value.insuredNameKana; };
@@ -237,7 +258,7 @@ export class ListComponent implements OnInit {
   isInputMoreThanOne(control: AbstractControl) {
     // Todo: 何か良い方法を検討
     // （for文で回す等したいがdepartmentOrBaseRadioを除外したいのでこの方法を使用）
-    console.log('message');
+    // console.log('message');
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
@@ -268,7 +289,7 @@ export class ListComponent implements OnInit {
 
   // departmentOrBaseを入力する時にdepartmentOrBaseRadioも選択されているか検証
   isDepartmentOrBaseRadio(control: AbstractControl) {
-    console.log('message2');
+    // console.log('message2');
     if (control.value && control.value.departmentOrBase && !control.value.departmentOrBaseRadio) {
       return { isDepartmentOrBaseRadio: { valid: false } };
     } else {

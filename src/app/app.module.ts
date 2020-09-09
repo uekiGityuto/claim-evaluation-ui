@@ -14,6 +14,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSortModule } from '@angular/material/sort';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -21,13 +22,15 @@ import { AppComponent } from './app.component';
 import { DetailComponent } from './component/detail/detail.component';
 import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
+import { TooltipDirective } from './directive/tooltip.directive';
 
 @NgModule({
   declarations: [
     AppComponent,
     DetailComponent,
     ListComponent,
-    ErrorComponent
+    ErrorComponent,
+    TooltipDirective
   ],
   imports: [
     BrowserModule,
@@ -44,7 +47,8 @@ import { ErrorComponent } from './component/error/error.component';
     MatNativeDateModule,
     MatDatepickerModule,
     MatSortModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule
   ],
   providers: [DatePipe],
   bootstrap: [AppComponent]

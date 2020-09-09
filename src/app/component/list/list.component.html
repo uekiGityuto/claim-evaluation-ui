@@ -90,10 +90,10 @@
         <th mat-sort-header="lossDate">事故日</th>
         <th mat-sort-header="claimCategory">事案カテゴリ</th>
       </tr>
-      <tr class="claim-list-data" *ngFor="let claim of claims" align="center" valign="middle">
+      <tr class="claim-list-data" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
         <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-        <td>{{ claim.insuredName }}</td>
-        <td>{{ claim.contractorName }}</td>
+        <td [appTooltip]="claim.insuredName" maxSize="9" style="width: 160px">{{ claim.insuredName }}</td>
+        <td [appTooltip]="claim.contractorName" maxSize="9" style="width: 160px">{{ claim.contractorName }}</td>
         <td>{{ claim.department }}</td>
         <td>{{ claim.base }}</td>
         <td>{{ claim.insuranceKind }}</td>
@@ -109,7 +109,7 @@
       </button>
       <span class="cp_iptxt2">
         <label class="ef2">
-          <input [value]="fromPages">
+          <input type="number" [value]="fromPages" min="1" [max]="totalNumber">
         </label>
       </span>
       ～　{{ toPages }}　/　{{ totalNumber }}
