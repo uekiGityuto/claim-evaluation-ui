@@ -80,6 +80,10 @@ body {
   align-items: center;
 }
 
+.font-size-xl {
+  font-size: var(--extra-large-font-size);
+}
+
 /* 以下ngClass用 */
 
 ._high {

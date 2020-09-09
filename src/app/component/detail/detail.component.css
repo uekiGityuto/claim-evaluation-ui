@@ -53,6 +53,11 @@
   padding-left: var(--left-write-common-padding);
 }
 
+.claim-category-card-header div >* {
+  vertical-align: middle;
+  line-height: var(--card-header-height);
+}
+
 .claim-category {
   height: 240px;
   display: flex;
@@ -208,11 +213,13 @@
   background-color: var(--card-header-bg-color);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
 }
 
-.model-card-header span {
+.model-card-header div >* {
+  vertical-align: middle;
   line-height: var(--card-header-height);
 }
 
@@ -220,8 +227,8 @@
   display: inline-block;
   width: var(--card-header-height);
   height: var(--card-header-height);
-  position: relative;
-  top: -3px;
+  /* position: relative;
+  top: -3px; */
 }
 
 .help-icon-button mat-icon {
