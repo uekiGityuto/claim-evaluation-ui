@@ -2,6 +2,7 @@
 /* autoprefixer grid: autoplace */
 
 :root {
+  --window-height: 1080px;
   --extra-extra-large-font-size: 38px;
   --extra-large-font-size: 28px;
   --large-font-size: 21px;
@@ -21,6 +22,7 @@
   --card-header-height: 40px;
   --factor-header-height: 32px;
   --left-write-common-padding: 12px;
+  --left-write-common-margin: 8px;
 }
 
 html {
@@ -32,7 +34,9 @@ html {
 }
 
 body {
-  margin: 0;
+  width: 1280px;
+  height: var(--window-height);
+  margin: 0 auto;
   font-family: "Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic";
   background-color: var(--base-bg-color);
 }

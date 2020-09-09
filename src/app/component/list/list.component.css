@@ -23,22 +23,95 @@
 }
 
 .claim-list {
-  margin: 8px;
+  width: 1264px;
+  height: 780px;
+  margin-top: 56px;
+  background-color: var(--card-bg-color);
 }
 
 .claim-list-header {
   height: 80px;
   font-size: var(--large-font-size);
   background-color: var(--card-header-bg-color);
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
 }
 
 .claim-list-data {
   font-size: var(--medium-font-size);
+  background-color: var(--card-bg-color);
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
+}
+
+.claim-category {
+  font-size: var(--large-font-size);
+  padding-right: 8px;
+  padding-left: 8px;
 }
 
 .pager {
-  font-size: 12px;
+  font-size: var(--large-font-size);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+/* input text */
+
+.cp_iptxt {
+  position: relative;
+  /* width: 80%; */
+  /* margin: 40px 3%; */
+  flex: 1;
+}
+
+.cp_iptxt input[type='text'], select {
+  /* font: 15px/24px sans-serif; */
+  box-sizing: border-box;
+  /* width: 100%; */
+  padding: 0.3em;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  color: #aaaaaa;
+  border: 1px solid #1b2538;
+  border-radius: 4px;
+}
+
+.ef input[type='text']:focus, select:focus {
+  border: 1px solid #da3c41;
+  outline: none;
+  box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
+}
+
+
+
+.cp_iptxt2 {
+  position: relative;
+  /* width: 80%; */
+  width: 64px;
+  /* margin: 40px 3%; */
+  /* flex: 1; */
+}
+
+.cp_iptxt2 input[type='text'] {
+  /* font: 15px/24px sans-serif; */
+  box-sizing: border-box;
+  /* width: 100%; */
+  padding: 0.3em;
+  transition: 0.3s;
+  letter-spacing: 1px;
+  color: #aaaaaa;
+  border: 1px solid #1b2538;
+  border-radius: 4px;
+}
+
+.ef2 {
+  width: 64px;
+}
+
+.ef2 input[type='text']:focus {
+  border: 1px solid #da3c41;
+  outline: none;
+  box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
 }

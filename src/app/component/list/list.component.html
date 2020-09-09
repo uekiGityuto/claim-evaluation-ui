@@ -1,103 +1,117 @@
-<header class="main-header">
-  <span>{{ userId }}</span>
-</header>
+<header>
 
-<article>
+  <div class="main-header">
+    <span>{{ userId }}</span>
+  </div>
 
   <div class="list-header card">
     <form [(formGroup)]="searchControl">
-      <mat-form-field>
-        <input type="text" matInput matType="text" formControlName="claimNumber" placeholder="受付番号">
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select formControlName="claimCategory" placeholder="事案カテゴリ" multiple>
-          <!-- <mat-option value=""></mat-option> -->
-          <mat-option value="高">高</mat-option>
-          <mat-option value="中">中</mat-option>
-          <mat-option value="低">低</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <mat-select formControlName="insuranceKindInfo" placeholder="保険種類" multiple>
-          <!-- <mat-option value=""></mat-option> -->
-          <mat-option value="自動車">自動車</mat-option>
-          <mat-option value="火災">火災</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
-        <mat-datepicker #pickerFrom></mat-datepicker>
-      </mat-form-field>
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" formControlName="claimNumber" placeholder="受付番号">
+        </label>
+      </div>
+      <div class="cp_iptxt">
+        <label class="ef">
+          <select formControlName="claimCategory" placeholder="事案カテゴリ">
+            <option value=""></option>
+            <option value="高">高</option>
+            <option value="中">中</option>
+            <option value="低">低</option>
+          </select>
+        </label>
+      </div>
+      <div>
+        <div class="cp_iptxt">
+          <label class="ef">
+            <select formControlName="insuranceKindInfo" placeholder="保険種類">
+              <option value=""></option>
+              <option value="自動車">自動車</option>
+              <option value="火災">火災</option>
+            </select>
+          </label>
+        </div>
+      </div>
+      <!-- <input type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+      <mat-datepicker #pickerFrom></mat-datepicker>
       <div class="upper-lower-center">
         <span>～</span>
       </div>
-      <mat-form-field>
-        <input matInput [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="toLossDate">
-        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
-        <mat-datepicker #pickerTo></mat-datepicker>
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput matType="text" formControlName="insuredNameKana" placeholder="被保険者名（カナ）">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput matType="text" formControlName="insuredNameKanji" placeholder="被保険者名（漢字）">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput matType="text" formControlName="contractorNameKana" placeholder="契約者名（カナ）">
-      </mat-form-field>
-      <mat-form-field>
-        <input type="text" matInput matType="text" formControlName="contractorNameKanji" placeholder="契約者名（漢字）">
-      </mat-form-field>
-      <div>
-        <mat-radio-group formControlName="departmentOrBaseRadio">
-          <mat-radio-button value="department">担当部</mat-radio-button>
-          <mat-radio-button value="base">担当拠点</mat-radio-button>
-        </mat-radio-group>
-        <mat-form-field>
-          <input type="text" matInput matType="text" formControlName="departmentOrBase" placeholder="担当部・担当拠点">
-        </mat-form-field>
+      <input type=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="toLossDate">
+      <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+      <mat-datepicker #pickerTo></mat-datepicker> -->
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" type="text" formControlName="insuredNameKana" placeholder="被保険者名（カナ）">
+        </label>
+      </div>
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" type="text" formControlName="insuredNameKanji" placeholder="被保険者名（漢字）">
+        </label>
+      </div>
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" type="text" formControlName="contractorNameKana" placeholder="契約者名（カナ）">
+        </label>
+      </div>
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" type="text" formControlName="contractorNameKanji" placeholder="契約者名（漢字）">
+        </label>
+      </div>
+      <!-- <input type="radio" formControlName="departmentOrBaseRadio" value="department">担当部
+    <input type="radio" formControlName="departmentOrBaseRadio" value="base">担当拠点 -->
+      <div class="cp_iptxt">
+        <label class="ef">
+          <input type="text" type="text" formControlName="departmentOrBase" placeholder="担当部・担当拠点">
+        </label>
       </div>
       <!-- <button [disabled]="searchControl.invalid" mat-raised-button color="primary" (click)="search()">検索</button> -->
-      <button [disabled]="searchControl.invalid" mat-raised-button color="primary" (click)="search()">検索</button>
+      <button [disabled]="searchControl.invalid" (click)="search()">検索</button>
     </form>
   </div>
 
-  <ng-container *ngIf="claims.length != 0">
-    <div class="claim-list card">
-      <table matSort (matSortChange)="listSort($event)">
-        <tr class="claim-list-header">
-          <th mat-sort-header="claimNumber">受付番号</th>
-          <th mat-sort-header="insuredName">被保険者名</th>
-          <th mat-sort-header="contractorName">契約者名</th>
-          <th mat-sort-header="department">担当部</th>
-          <th mat-sort-header="base">担当拠点</th>
-          <th mat-sort-header="insuranceKind">保険種類</th>
-          <th mat-sort-header="lastUpdateDate">最終更新日</th>
-          <th mat-sort-header="lossDate">事故日</th>
-          <th mat-sort-header="claimCategory">事案カテゴリ</th>
-        </tr>
-        <tr class="claim-list-data" *ngFor="let claim of claims">
-          <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-          <td>{{ claim.insuredName }}</td>
-          <td>{{ claim.contractorName }}</td>
-          <td>{{ claim.department }}</td>
-          <td>{{ claim.base }}</td>
-          <td>{{ claim.insuranceKind }}</td>
-          <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-          <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-          <td><span [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
-        </tr>
-      </table>
-    </div>
+</header>
 
-    <div class="pager">
+<main>
+
+  <ng-container *ngIf="claims.length != 0">
+    <table class="claim-list card" matSort (matSortChange)="listSort($event)">
+      <tr class="claim-list-header">
+        <th mat-sort-header="claimNumber">受付番号</th>
+        <th mat-sort-header="insuredName">被保険者名</th>
+        <th mat-sort-header="contractorName">契約者名</th>
+        <th mat-sort-header="department">担当部</th>
+        <th mat-sort-header="base">担当拠点</th>
+        <th mat-sort-header="insuranceKind">保険種類</th>
+        <th mat-sort-header="lastUpdateDate">最終更新日</th>
+        <th mat-sort-header="lossDate">事故日</th>
+        <th mat-sort-header="claimCategory">事案カテゴリ</th>
+      </tr>
+      <tr class="claim-list-data" *ngFor="let claim of claims" align="center" valign="middle">
+        <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+        <td>{{ claim.insuredName }}</td>
+        <td>{{ claim.contractorName }}</td>
+        <td>{{ claim.department }}</td>
+        <td>{{ claim.base }}</td>
+        <td>{{ claim.insuranceKind }}</td>
+        <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+        <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+        <td><span class="claim-category" [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
+      </tr>
+    </table>
+
+    <div class="pager child-centering">
       <button *ngIf="param.displayFrom !== '1'" mat-icon-button (click)="previous()">
         <mat-icon>arrow_back_ios</mat-icon>
       </button>
-      <mat-form-field appearance="outline" style="width: 32px">
-        <input matInput [value]="fromPages">
-      </mat-form-field>
+      <span class="cp_iptxt2">
+        <label class="ef2">
+          <input [value]="fromPages">
+        </label>
+      </span>
       ～　{{ toPages }}　/　{{ totalNumber }}
       <button *ngIf="toPages < totalNumber" mat-icon-button>
         <mat-icon>arrow_forward_ios</mat-icon>
@@ -108,4 +122,4 @@
     </div>
   </ng-container>
 
-</article>
+</main>

@@ -2,19 +2,17 @@
 /* autoprefixer grid: on */
 
 .container {
-  width: 1280px;
-  height: 1080px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
+  height: var(--window-height);
 }
 
 /* ヘッダエリア */
 
 .list-icon-button {
   display: inline-block;
-  width: var(--header-height);
-  height: var(--header-height);
+  width: var(--main-header-height);
+  height: var(--main-header-height);
 }
 
 .list-icon-button mat-icon {
@@ -40,6 +38,8 @@
   height: 280px;
   background-color: var(--card-bg-color);
   margin-top: 12px;
+  margin-right: var(--left-write-common-margin);
+  margin-left: var(--left-write-common-margin);
 }
 
 .claim-category-card-header {
@@ -193,6 +193,8 @@
   flex-wrap: wrap;
   overflow: hidden;
   margin-top: 12px;
+  margin-right: var(--left-write-common-margin);
+  margin-left: var(--left-write-common-margin);
 }
 
 .model-card {
