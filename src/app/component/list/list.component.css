@@ -30,6 +30,7 @@
   margin-right: auto;
   margin-left: auto;
   background-color: var(--card-bg-color);
+  border-collapse: collapse;
 }
 
 .claim-list-header {
@@ -52,6 +53,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 0;
+  border-bottom: 1px solid #cacaca;
 }
 
 .claim-category {
@@ -122,46 +124,4 @@
   border: 1px solid #da3c41;
   outline: none;
   box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
-}
-
-/* ツールチップ */
-
-.tooltip {
-  position: relative;
-  cursor: pointer;
-  display: inline-block;
-}
-
-.tooltip td {
-  margin: 0;
-  padding: 0;
-}
-
-.tooltip-description {
-  display: none;
-  position: absolute;
-  padding: 10px;
-  font-size: 12px;
-  line-height: 1.6em;
-  color: #fff;
-  border-radius: 5px;
-  background: #000;
-  width: 100px;
-}
-
-.tooltip-description:before {
-  content: "";
-  position: absolute;
-  top: 0%;
-  right: 95%;
-  border: 15px solid transparent;
-  border-top: 15px solid #000;
-  margin-left: -15px;
-  transform: rotateZ(90deg);
-}
-
-.tooltip:hover .tooltip-description {
-  display: inline-block;
-  top: 0px;
-  left: 80px;
 }

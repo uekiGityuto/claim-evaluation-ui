@@ -24,6 +24,10 @@ export class TooltipDirective implements OnInit {
     // console.log('max-size:', this.maxSize);
     if (this.data.length > this.maxSize) {
       element.setAttribute('title', this.data);
+      // Todo: css側と省略の単位を統一する
+      // 「element.offsetWidth < element.scrollWidth」が本当に出来なければ、
+      // element.textContentにthis.data + '...'セットする等の処理を追加し、
+      // css側の制御(text-overflow: ellipsis等)を消す
     }
   }
 
