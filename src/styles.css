@@ -73,7 +73,6 @@ body {
   color: var(--claim-low-color);
 }
 
-
 .child-centering {
   display: flex;
   justify-content: center;

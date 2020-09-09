@@ -1,27 +1,67 @@
 /* CSS Grid対応のため記述 */
-
 /* autoprefixer grid: on */
+
+/* ヘッダエリア */
 
 .list-header {
   height: 96px;
-  font-size: var(--large-font-size);
   background-color: var(--card-bg-color);
+  padding-right: var(--left-write-common-padding);
+  padding-left: var(--left-write-common-padding);
 }
 
-.list-header button {
-  height: 39.06;
+.list-header * {
+  font-size: var(--large-font-size);
 }
 
 .list-header form {
+  height: 100%;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
 }
 
-.upper-lower-center {
-  display: flex;
-  align-items: center;
+.list-header input[type="text"], .list-header select {
+  width: 200px;
+  height: 40px;
 }
+
+.list-header input[type="date"] {
+  width: 200px;
+  height: 40px;
+}
+
+.from-lossdate-form {
+  position: relative;
+}
+
+.to-lossdate-form {
+  position: relative;
+}
+
+.datepicker {
+  position: absolute;
+  right: 0;
+}
+
+.radio-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.list-header button {
+  height: 40px;
+  appearance: none;
+  border: 0;
+  border-radius: 5px;
+  background: #4676D7;
+  color: #fff;
+  padding: 8px 16px;
+}
+
+/* 事案一覧テーブルエリア */
 
 .claim-list {
   width: 1264px;
@@ -62,12 +102,16 @@
   padding-left: 8px;
 }
 
+/* ページャーエリア */
+
 .pager {
   font-size: var(--large-font-size);
   display: flex;
   justify-content: center;
   align-items: center;
 }
+
+/* お試しスタイルエリア */
 
 /* input text */
 
@@ -78,7 +122,7 @@
   flex: 1;
 }
 
-.cp_iptxt input[type='text'], select {
+.cp_iptxt input[type='text'], .cp_iptxt select {
   /* font: 15px/24px sans-serif; */
   box-sizing: border-box;
   /* width: 100%; */
@@ -90,7 +134,7 @@
   border-radius: 4px;
 }
 
-.ef input[type='text']:focus, select:focus {
+.ef input[type='text']:focus, .ef select:focus {
   border: 1px solid #da3c41;
   outline: none;
   box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
