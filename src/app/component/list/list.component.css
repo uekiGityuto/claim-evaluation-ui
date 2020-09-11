@@ -109,10 +109,18 @@
 /* ページャーエリア */
 
 .pager {
-  font-size: var(--large-font-size);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.pager * {
+  font-size: var(--large-font-size);
+}
+
+.pager input {
+  width: 64px;
+  height: 28px;
 }
 
 /* お試しスタイルエリア */
