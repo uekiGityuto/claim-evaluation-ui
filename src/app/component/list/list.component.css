@@ -93,17 +93,25 @@
 }
 
 .claim-list-data td {
-  white-space: nowrap;
+  border-bottom: 1px solid #cacaca;
+  /* white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 0;
-  border-bottom: 1px solid #cacaca;
+  max-width: 0; */
 }
 
 .claim-category {
   font-size: var(--large-font-size);
   padding-right: 8px;
   padding-left: 8px;
+}
+
+/* tooltip.directive.tsで使用 */
+.claim-list-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 0;
 }
 
 /* ページャーエリア */

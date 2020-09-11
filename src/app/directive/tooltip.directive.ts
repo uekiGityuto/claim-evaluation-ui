@@ -1,7 +1,7 @@
 import { OnInit, Directive, ElementRef, Input } from '@angular/core';
 
 /**
- * Add ToolTip Directive
+ * Add ToolTip Directive and claim-list-ellipsis CSSclass
  * @author SKK231527 植木
  */
 @Directive({
@@ -9,26 +9,55 @@ import { OnInit, Directive, ElementRef, Input } from '@angular/core';
 })
 export class TooltipDirective implements OnInit {
   @Input('appTooltip') data = '';
-  @Input() maxSize = 0;
 
   constructor(private elementRef: ElementRef) {
   }
 
   ngOnInit(): void {
     const element = this.elementRef.nativeElement;
-    // 本当は「element.offsetWidth < element.scrollWidth」で判定したかったが、
-    // なぜか同じ大きさになってしまうので、文字数で判定するようにした。
     // if (element.offsetWidth < element.scrollWidth) {
     //   element.setAttribute('title', this.data);
     // }
-    // console.log('max-size:', this.maxSize);
-    if (this.data.length > this.maxSize) {
+
+    const style = window.getComputedStyle(element);
+    const dataLength = this.calcDataSize(this.data, style);
+    // 要素のレイアウト幅とdataのレングスを比較
+    if (element.clientWidth < dataLength) {
+      element.classList.add('claim-list-ellipsis');
       element.setAttribute('title', this.data);
-      // Todo: css側と省略の単位を統一する
-      // 「element.offsetWidth < element.scrollWidth」が本当に出来なければ、
-      // element.textContentにthis.data + '...'セットする等の処理を追加し、
-      // css側の制御(text-overflow: ellipsis等)を消す
     }
+  }
+
+  // dataのレングス（レイアウト幅）を計算
+  calcDataSize(data: string, style: CSSStyleDeclaration): number {
+    // spanを生成
+    const span = document.createElement('span');
+
+    // 現在の表示要素に影響しないように、画面外に飛ばしておく
+    span.style.position = 'absolute';
+    span.style.top = '-1000px';
+    span.style.left = '-1000px';
+
+    // 折り返しはさせない
+    span.style.whiteSpace = 'nowrap';
+
+    // 計測したい文字を設定する
+    span.innerHTML = data;
+
+    // スタイルを適用する
+    span.style.fontSize = style.getPropertyValue('font-size');
+    span.style.padding = style.getPropertyValue('padding');
+
+    // DOMに追加する（追加することで、ブラウザで領域が計算される）
+    document.body.appendChild(span);
+
+    // 横幅を取得する
+    const dataLength = span.clientWidth;
+
+    // 終わったらDOMから削除する
+    span.parentElement.removeChild(span);
+
+    return dataLength;
   }
 
 }
