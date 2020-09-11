@@ -97,16 +97,16 @@
     </table>
 
     <div class="pager child-centering">
-      <form #pageForm="ngForm">
-        <button *ngIf="param.displayFrom !== '1'" mat-icon-button (click)="previous()">
+      <form>
+        <button *ngIf="displayFromPages > 1" mat-icon-button (click)="previous()">
           <mat-icon>arrow_back_ios</mat-icon>
         </button>
-        <input name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber" #page="ngModel">
+        <input name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
         <span>～　{{ toPages }}　/　{{ totalNumber }}</span>
-        <button *ngIf="toPages < totalNumber" mat-icon-button>
+        <button *ngIf="toPages < totalNumber" mat-icon-button (click)="next()">
           <mat-icon>arrow_forward_ios</mat-icon>
         </button>
-        <button [disabled]="pageForm.invalid" mat-icon-button (click)="update()">
+        <button  mat-icon-button (click)="update()">
           <mat-icon>refresh</mat-icon>
         </button>
       </form>

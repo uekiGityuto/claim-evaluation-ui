@@ -1,6 +1,13 @@
 /* CSS Grid対応のため記述 */
 /* autoprefixer grid: on */
 
+/* 共通 */
+form input:invalid {
+  border: solid 1px red;
+}
+
+
+
 /* ヘッダエリア */
 
 .list-header {
@@ -17,9 +24,18 @@
 .list-header form {
   height: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.list-header form>div {
+  padding-right: 8px;
+}
+
+.list-header form>div:last-child {
+  margin-left: auto;
+  padding-right: 0;
 }
 
 .list-header input[type="text"], .list-header select {
@@ -27,10 +43,10 @@
   height: 40px;
 }
 
-.list-header input[type="date"] {
+/* .list-header input[type="date"] {
   width: 200px;
   height: 40px;
-}
+} */
 
 .from-lossdate-form {
   position: relative;

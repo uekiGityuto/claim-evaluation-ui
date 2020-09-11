@@ -73,7 +73,8 @@ export class ListComponent implements OnInit {
   userId: string;
   claims: ClaimForDisplay[];
   order: string;
-  fromPages: number;
+  fromPages: number; // 入力フォームと同期しているfromPagesの値
+  displayFromPages: number; // apiから受け取ったfromPagesの値
   toPages: number;
   totalNumber: number;
 
@@ -103,8 +104,8 @@ export class ListComponent implements OnInit {
       claimNumber: new FormControl(''),
       claimCategory: new FormControl(''),
       insuranceKindInfo: new FormControl(''),
-      fromLossDate: new FormControl(''),
-      toLossDate: new FormControl(''),
+      fromLossDate: new FormControl(),
+      toLossDate: new FormControl(),
       insuredNameKana: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
       insuredNameKanji: new FormControl(''),
       contractorNameKana: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
@@ -117,25 +118,10 @@ export class ListComponent implements OnInit {
       validators: [this.isInputMoreThanOne, this.isDepartmentOrBaseRadio]
     });
 
+    // this.fromPages = new FormControl(1, [Validators.required, Validators.min(1), Validators.max(this.totalNumber)]);
+
     this.claims = [];
   }
-
-  // ngAfterViewChecked(): void {
-  //   if (this.claims !== null && this.claims.length !== 0) {
-  //     console.log(this.elementRef.nativeElement);
-  //     const elementChildren = this.elementRef.nativeElement.children;
-  //     console.log('elementChildren', elementChildren);
-  //     for (let i = 0; i < elementChildren.length; i++) {
-  //       console.log('tagName', elementChildren[i].tagName);
-  //       console.log('offsetWidth', elementChildren[i].offsetWidth);
-  //       console.log('scrollWidth', elementChildren[i].scrollWidth);
-  //       if (elementChildren[i].offsetWidth < elementChildren[i].scrollWidth) {
-  //         elementChildren[i].setAttribute('title', 'tooltip');
-  //       }
-  //     }
-  //     // this.elementRef.nativeElement.setAttribute('title', 'tooltip');
-  //   }
-  // }
 
   // getter
   get insuredNameKana() { return this.searchControl.value.insuredNameKana; };
@@ -160,7 +146,7 @@ export class ListComponent implements OnInit {
   // 検索処理
   search(): void {
     if (this.searchControl.invalid) {
-      console.log('invalid');
+      console.log('reject search');
     } else {
       // POSTボディ部に検索フォームの内容をディープコピー
       console.log('this.searchControl', this.searchControl.value);
@@ -202,26 +188,47 @@ export class ListComponent implements OnInit {
 
   // 1ページ戻る処理
   previous(): void {
+    if (this.displayFromPages <= 1) {
+      console.log('reject prev');
+    } else {
+      console.log('accept prev');
+      // 1ページ戻ったときのfromPagesをセット
+      this.setDisplayFromPages();
+      // 事案一覧取得
+      this.searchList(JSON.stringify(this.param));
+    }
+  }
+
+  // 1ページ戻ったときのfromPagesをセット
+  setDisplayFromPages(): void {
     if (this.fromPages - 10 > 0) {
       this.param.displayFrom = String(this.fromPages - 10);
     } else {
       this.param.displayFrom = '1';
     }
-    // 事案一覧取得
-    this.searchList(JSON.stringify(this.param));
   }
 
   // 1ページ進む処理
   next(): void {
-    this.param.displayFrom = String(this.toPages + 1);
-    // 事案一覧取得
-    this.searchList(JSON.stringify(this.param));
+    if (this.toPages >= this.totalNumber) {
+      console.log('reject next');
+    } else {
+      console.log('accept next');
+      this.param.displayFrom = String(this.toPages + 1);
+      // 事案一覧取得
+      this.searchList(JSON.stringify(this.param));
+    }
   }
 
   // 開始位置指定して検索処理
   update(): void {
-    this.param.displayFrom = String(this.fromPages);
-    this.searchList(JSON.stringify(this.param));
+    if (this.fromPages < 0 || this.fromPages > this.totalNumber) {
+      console.log('reject update');
+    } else {
+      console.log('accept update');
+      this.param.displayFrom = String(this.fromPages);
+      this.searchList(JSON.stringify(this.param));
+    }
   }
 
   // 事案一覧取得処理
@@ -242,6 +249,7 @@ export class ListComponent implements OnInit {
         });
         this.order = result.data['order'.toString()];
         this.fromPages = result.data['fromPages'.toString()];
+        this.displayFromPages = result.data['fromPages'.toString()];
         this.toPages = result.data['toPages'.toString()];
         this.totalNumber = result.data['totalNumber'.toString()];
       } else {
