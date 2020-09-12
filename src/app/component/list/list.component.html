@@ -1,9 +1,12 @@
-  <header>
-
+<!-- ヘッダエリア -->
+<header>
   <div class="main-header">
     <span>{{ userId }}</span>
   </div>
+</header>
 
+<main>
+  <!-- サブヘッダエリア -->
   <div class="list-header card">
     <form [(formGroup)]="searchControl">
       <div>
@@ -66,51 +69,75 @@
     </form>
   </div>
 
-</header>
+  <ng-container *ngIf="!isError; else error">
 
-<main>
+    <!-- 正常 -->
 
-  <ng-container *ngIf="claims.length != 0">
-    <table class="claim-list card" matSort (matSortChange)="listSort($event)">
-      <tr class="claim-list-header">
-        <th mat-sort-header="claimNumber">受付番号</th>
-        <th mat-sort-header="insuredName">被保険者名</th>
-        <th mat-sort-header="contractorName">契約者名</th>
-        <th mat-sort-header="department">担当部</th>
-        <th mat-sort-header="base">担当拠点</th>
-        <th mat-sort-header="insuranceKind">保険種類</th>
-        <th mat-sort-header="lastUpdateDate">最終更新日</th>
-        <th mat-sort-header="lossDate">事故日</th>
-        <th mat-sort-header="claimCategory">事案カテゴリ</th>
-      </tr>
-      <tr class="claim-list-data" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
-        <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-        <td [appTooltip]="claim.insuredName" style="width: 160px">{{ claim.insuredName }}</td>
-        <td [appTooltip]="claim.contractorName" style="width: 160px">{{ claim.contractorName }}</td>
-        <td>{{ claim.department }}</td>
-        <td>{{ claim.base }}</td>
-        <td>{{ claim.insuranceKind }}</td>
-        <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-        <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-        <td><span class="claim-category" [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
-      </tr>
-    </table>
+    <!-- 事案一覧テーブルエリア -->
+    <ng-container *ngIf="claims.length != 0">
+      <table class="claim-list card" matSort (matSortChange)="listSort($event)">
+        <tr class="claim-list-header">
+          <th mat-sort-header="claimNumber">受付番号</th>
+          <th mat-sort-header="insuredName">被保険者名</th>
+          <th mat-sort-header="contractorName">契約者名</th>
+          <th mat-sort-header="department">担当部</th>
+          <th mat-sort-header="base">担当拠点</th>
+          <th mat-sort-header="insuranceKind">保険種類</th>
+          <th mat-sort-header="lastUpdateDate">最終更新日</th>
+          <th mat-sort-header="lossDate">事故日</th>
+          <th mat-sort-header="claimCategory">事案カテゴリ</th>
+        </tr>
+        <tr class="claim-list-data" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
+          <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+          <td [appTooltip]="claim.insuredName" style="width: 160px">{{ claim.insuredName }}</td>
+          <td [appTooltip]="claim.contractorName" style="width: 160px">{{ claim.contractorName }}</td>
+          <td>{{ claim.department }}</td>
+          <td>{{ claim.base }}</td>
+          <td>{{ claim.insuranceKind }}</td>
+          <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+          <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+          <td><span class="claim-category" [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
+        </tr>
+      </table>
 
-    <div class="pager child-centering">
-      <form>
-        <button *ngIf="displayFromPages > 1" mat-icon-button (click)="previous()">
-          <mat-icon>arrow_back_ios</mat-icon>
-        </button>
-        <input name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
-        <span>～　{{ toPages }}　/　{{ totalNumber }}</span>
-        <button *ngIf="toPages < totalNumber" mat-icon-button (click)="next()">
-          <mat-icon>arrow_forward_ios</mat-icon>
-        </button>
-        <button  mat-icon-button (click)="update()">
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </form>
-    </div>
+      <!-- ページャーエリア -->
+      <div class="pager child-centering">
+        <form>
+          <button *ngIf="displayFromPages > 1" mat-icon-button (click)="previous()">
+            <mat-icon>arrow_back_ios</mat-icon>
+          </button>
+          <input name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
+          <span>～　{{ toPages }}　/　{{ totalNumber }}</span>
+          <button *ngIf="toPages < totalNumber" mat-icon-button (click)="next()">
+            <mat-icon>arrow_forward_ios</mat-icon>
+          </button>
+          <button mat-icon-button (click)="update()">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </form>
+      </div>
+    </ng-container>
+
   </ng-container>
+
+  <!-- 検索エラー -->
+  <ng-template #error>
+    <div class="error-message-box">
+      <div class="error-message">
+        <p class="font-size-xl">検索結果を取得出来ません。</p>
+        <p class="font-size-l">担当者にお問い合わせください。</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- 認可エラー
+    <ng-container *ngSwitchCase="'authError'">
+      <div class="error-message-box">
+        <div class="error-message">
+          <p class="font-size-xl">正常なリクエストを確認出来ませんでした。</p>
+          <p class="font-size-l">事案一覧を表示する権限がありません。。</p>
+        </div>
+      </div>
+    </ng-container> -->
 
 </main>

@@ -1,6 +1,7 @@
 <div>
-  <router-outlet *ngIf="accept; else error"></router-outlet>
+  <router-outlet *ngIf="!isError; else error"></router-outlet>
 </div>
+<!-- 認可エラーメッセージ -->
 <ng-template #error>
   <header>
     <div class="main-header"></div>

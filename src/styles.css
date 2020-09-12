@@ -89,7 +89,29 @@ body {
   font-size: var(--extra-large-font-size);
 }
 
-/* 以下ngClass用 */
+/* エラーメッセージ用 */
+
+.error-message-box {
+  height: 256px;
+  width: 1200px;
+  background-color: var(--error-bg-color);
+  border: solid 1px var(--error-border-color);
+  margin-top: 152px;
+  margin-right: auto;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.error-message {
+  margin: 0 auto;
+}
+
+.error-message p+p {
+  margin-top: 24px;
+}
+
+/* ngClass用 */
 
 ._high {
   background-color: var(--claim-high-color);

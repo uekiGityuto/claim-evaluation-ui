@@ -65,9 +65,9 @@ interface ClaimForDisplay extends Claim {
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit {
-  searchControl: FormGroup;
-  message: string;
-  uri = environment.restapi_url;
+  // エラーメッセージ表示用
+  // errorSwith = '';
+  isError = false;
 
   // ビュー表示用
   userId: string;
@@ -79,6 +79,8 @@ export class ListComponent implements OnInit {
   totalNumber: number;
 
   // 検索用
+  searchControl: FormGroup;
+  uri = environment.restapi_url;
   param: SearchForm;
 
   // // ツールチップ付与用
@@ -136,8 +138,8 @@ export class ListComponent implements OnInit {
     const observer = this.clientService.rxClient(authUri, 'get', null);
     observer.subscribe((result: Result) => {
       if (!result.isSuccess) {
-        // Todo: errorページに遷移
-        console.log('認可NG');
+        console.log('認可エラーページに遷移');
+        this.router.navigate(['/list/error']);
       }
       console.log('認可OK');
     });
@@ -241,6 +243,7 @@ export class ListComponent implements OnInit {
     observer.subscribe((result: Result) => {
       if (result.isSuccess) {
         // console.log('result.data', result.data);
+        this.isError = false;
         // ビュー要素を取得
         this.claims = [];
         result.data['claim'.toString()].forEach((claim: Claim, i) => {
@@ -253,9 +256,9 @@ export class ListComponent implements OnInit {
         this.toPages = result.data['toPages'.toString()];
         this.totalNumber = result.data['totalNumber'.toString()];
       } else {
-        // Todo: errorページへの遷移を修正
-        console.log('errorページに遷移');
-        this.router.navigate(['/list/error']);
+        console.log('検索エラーメッセージ表示');
+        this.isError = true;
+        // this.router.navigate(['/list/error']);
       }
     });
   }
@@ -266,7 +269,6 @@ export class ListComponent implements OnInit {
   isInputMoreThanOne(control: AbstractControl) {
     // Todo: 何か良い方法を検討
     // （for文で回す等したいがdepartmentOrBaseRadioを除外したいのでこの方法を使用）
-    // console.log('message');
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
@@ -297,7 +299,6 @@ export class ListComponent implements OnInit {
 
   // departmentOrBaseを入力する時にdepartmentOrBaseRadioも選択されているか検証
   isDepartmentOrBaseRadio(control: AbstractControl) {
-    // console.log('message2');
     if (control.value && control.value.departmentOrBase && !control.value.departmentOrBaseRadio) {
       return { isDepartmentOrBaseRadio: { valid: false } };
     } else {

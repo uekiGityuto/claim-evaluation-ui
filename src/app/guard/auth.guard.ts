@@ -15,10 +15,9 @@ export class AuthGuard implements CanActivate {
   canActivate(
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    if (this.userInfo.userId) {
-      // Todo: errorページへの遷移を修正
-      console.log('errorページに遷移');
-      this.router.navigate(['/detail/error']);
+    if (!this.userInfo.authFlag) {
+      console.log('認可エラーページに遷移');
+      this.router.navigate(['/list/error']);
       return false;
     }
     return true;

@@ -2,11 +2,10 @@
 /* autoprefixer grid: on */
 
 /* 共通 */
+
 form input:invalid {
   border: solid 1px red;
 }
-
-
 
 /* ヘッダエリア */
 

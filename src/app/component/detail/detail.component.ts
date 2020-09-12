@@ -65,6 +65,9 @@ interface Reason {
 })
 export class DetailComponent implements OnInit {
 
+  // エラーメッセージ表示用
+  isError = false;
+
   // 推論結果取得用
   claimNumber: string;
   uri = environment.restapi_url;
@@ -165,6 +168,7 @@ export class DetailComponent implements OnInit {
     const observer = this.clientService.rxClient(scoreUri + '?claimNumber=' + this.claimNumber, 'get', null);// モック用
     observer.subscribe((result: Result) => {
       if (result.isSuccess) {
+        this.isError = false;
         // 取得結果をシャーローコピー
         this.claim = { ...result.data['claim'.toString()] };
         // console.log('claim:', this.claim);
@@ -187,8 +191,9 @@ export class DetailComponent implements OnInit {
 
       } else {
         // Todo: errorページへの遷移を修正
-        console.log('errorページに遷移');
-        this.router.navigate(['/detail/error']);
+        console.log('照会エラーメッセージ表示');
+        this.isError = true;
+        // this.router.navigate(['/detail/error']);
       }
     });
   }

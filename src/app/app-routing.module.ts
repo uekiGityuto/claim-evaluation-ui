@@ -1,4 +1,4 @@
-// import { AuthGuard } from './guard/auth.guard';
+import { AuthGuard } from './guard/auth.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -7,10 +7,9 @@ import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
 
 const routes: Routes = [
-  { path: 'detail/error', component: ErrorComponent },
   { path: 'detail/:claimNumber', component: DetailComponent },
   { path: 'list/error', component: ErrorComponent },
-  { path: 'list', component: ListComponent }
+  { path: 'list', component: ListComponent, canActivate: [AuthGuard]  }
 ];
 
 @NgModule({
