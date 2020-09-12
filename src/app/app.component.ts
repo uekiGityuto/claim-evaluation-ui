@@ -18,6 +18,7 @@ import { environment } from '../environments/environment';
 export class AppComponent implements OnInit {
 
   uri = environment.restapi_url;
+  accept = true;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -59,7 +60,8 @@ export class AppComponent implements OnInit {
       } else {
         // Todo: errorページへの遷移を修正
         console.log('認可NG');
-        this.router.navigate(['/detail/error']);
+        this.accept = false;
+        // this.router.navigate(['/detail/error']);
       }
     });
   }

@@ -1,3 +1,16 @@
 <div>
-  <router-outlet></router-outlet>
+  <router-outlet *ngIf="accept; else error"></router-outlet>
 </div>
+<ng-template #error>
+  <header>
+    <div class="main-header"></div>
+  </header>
+  <main>
+    <div class="error-message-box">
+      <div class="error-message">
+        <p class="font-size-xl">正常なリクエストを確認出来ませんでした</p>
+        <p class="font-size-l">再度、GNetの事案概要画面から事案評価確認ボタンをクリックしてアクセスして下さい。</p>
+      </div>
+    </div>
+  </main>
+</ng-template>
