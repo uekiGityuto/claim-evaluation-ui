@@ -10,7 +10,6 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 // import { Reason } from '../../model/Reason.model';
 import { Result } from '../../model/result.model';
 import { CategoryClass } from '../../model/category-class.model';
-import { CategoryMatrixClass } from '../../model/category-matrix-class.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/observable-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
@@ -90,12 +89,6 @@ export class DetailComponent implements OnInit {
 
   // ngClass用
   categoryClass: CategoryClass;
-  specialCaseHigh = new CategoryMatrixClass();
-  specialCaseLow = new CategoryMatrixClass();
-  specialCaseMiddle = new CategoryMatrixClass();
-  ncpdHigh = new CategoryMatrixClass();
-  ncpdMiddle = new CategoryMatrixClass();
-  ncpdLow = new CategoryMatrixClass();
 
   // chart用
   @ViewChild('claimCategoryChart')
@@ -125,7 +118,7 @@ export class DetailComponent implements OnInit {
     this.getLatestClaimInfo();
   }
 
-  ngAfterViewInit(): void {
+  // ngAfterViewInit(): void {
     // // console.log('message');
     // // canvasの取得
     // this.context = this.elementRef.nativeElement.getContext('2d');
@@ -154,7 +147,7 @@ export class DetailComponent implements OnInit {
     //   options: this.chartOptions,
     // });
     // console.log('this.chartData.series1', this.chartData.series1);
-  }
+  // }
 
   // 最新の事案情報取得
   getLatestClaimInfo(): void {
@@ -211,38 +204,8 @@ export class DetailComponent implements OnInit {
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
-    // 事案カテゴリマトリクスの赤網掛け
-    this.coverRed(this.scoreDetails);
     // 推論結果の要因をソート
     this.reasonSort(this.scoreDetails);
-  }
-
-  // 事案カテゴリマトリックスの赤網掛け
-  coverRed(scoreDetails: ScoreDetail[]) {
-    // 初期化
-    this.specialCaseHigh.now = false;
-    this.specialCaseMiddle.now = false;
-    this.specialCaseLow.now = false;
-    this.ncpdHigh.now = false;
-    this.ncpdMiddle.now = false;
-    this.ncpdLow.now = false;
-
-    // 赤網掛けする場所を特定
-    // Todo: 保守性が低いので修正
-    if (scoreDetails[0].rank === 'high') {
-      this.specialCaseHigh.now = true;
-    } else if (scoreDetails[0].rank === 'middle') {
-      this.specialCaseMiddle.now = true;
-    } else if (scoreDetails[0].rank === 'low') {
-      this.specialCaseLow.now = true;
-    }
-    if (scoreDetails[1].rank === 'high') {
-      this.ncpdHigh.now = true;
-    } else if (scoreDetails[1].rank === 'middle') {
-      this.ncpdMiddle.now = true;
-    } else if (scoreDetails[1].rank === 'low') {
-      this.ncpdLow.now = true;
-    }
   }
 
   // 推論結果の要因をソート

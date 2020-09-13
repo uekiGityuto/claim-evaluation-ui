@@ -111,7 +111,7 @@ body {
   margin-top: 24px;
 }
 
-/* ngClass用 */
+/* ngClassディレクティブ */
 
 ._high {
   background-color: var(--claim-high-color);
@@ -128,6 +128,8 @@ body {
   color: var(--main-font-color);
 }
 
-._now {
+/* クラスバインディング用 */
+
+.now {
   background-color: #f0554e;
 }

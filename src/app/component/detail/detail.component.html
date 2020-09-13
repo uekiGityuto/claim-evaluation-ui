@@ -42,18 +42,18 @@
         <div class="claim-category-matrix">
           <div class="ncpd-label matrix-label">NC/PD推定モデル</div>
           <div class="special-label matrix-label">特殊事案モデル</div>
-          <div [ngClass]="ncpdHigh" class="ncpd-high matrix-header child-centering">High</div>
-          <div [ngClass]="ncpdMiddle" class="ncpd-middle matrix-header child-centering">Middle</div>
-          <div [ngClass]="ncpdLow" class="ncpd-low matrix-header child-centering">Low</div>
-          <div [ngClass]="specialCaseHigh" class="special-high matrix-header child-centering">High</div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.high" class="ncpd-high matrix-header child-centering">High</div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.middle" class="ncpd-middle matrix-header child-centering">Middle</div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.low" class="ncpd-low matrix-header child-centering">Low</div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.high" class="special-high matrix-header child-centering">High</div>
           <div class="high-high matrix-category child-centering"><span class="high-font-color">高</span></div>
           <div class="high-middle matrix-category child-centering"><span class="high-font-color">高</span></div>
           <div class="high-low matrix-category child-centering"><span class="high-font-color">高</span></div>
-          <div [ngClass]="specialCaseMiddle" class="special-middle matrix-header child-centering">Middle</div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.middle" class="special-middle matrix-header child-centering">Middle</div>
           <div class="middle-high matrix-category child-centering"><span class="middle-font-color">中</span></div>
           <div class="middle-middle matrix-category child-centering"><span class="middle-font-color">中</span></div>
           <div class="middle-low matrix-category child-centering"><span class="middle-font-color">中</span></div>
-          <div [ngClass]="specialCaseLow" class="special-low matrix-header child-centering">Low</div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.low" class="special-low matrix-header child-centering">Low</div>
           <div class="low-high matrix-category child-centering"><span class="middle-font-color">中</span></div>
           <div class="low-middle matrix-category child-centering"><span class="low-font-color">低</span></div>
           <div class="low-low matrix-category child-centering"><span class="low-font-color">低</span></div>
