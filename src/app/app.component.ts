@@ -1,10 +1,17 @@
-import { Component, Type, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { Result } from './model/Result.model';
-import { ObservableClientService } from './service/observable-client.service';
+import { AuthResult } from './model/auth-result';
 import { UserInfoContainerService } from './service/user-info-container.service';
 import { environment } from '../environments/environment';
+
+// 認可処理をGuardで実装しようとしたが、
+// Guard内でルーティングのマトリクスパラメータ（認可処理のレスポンスとして取得するclaimNumber）を変更することが出来ない？ので、
+// AppComponent内で認可処理を実施
+
+// HttpClientサービスをServiceとして切り分けようとしたが、
+// サービス内に記載することが少なすぎるためコンポーネント内に記載（要相談）
 
 /**
  * Main App Component
@@ -17,75 +24,71 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
 
-  uri = environment.restapi_url;
   isError = false;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private clientService: ObservableClientService,
+    private httpClient: HttpClient,
     private userInfo: UserInfoContainerService
   ) { }
 
   public ngOnInit(): void {
     // クエリパラメータをセット
-    // const param = this.route.snapshot.queryParamMap.get('param');
-    // const userId = this.route.snapshot.queryParamMap.get('userId');
-    // Todo: 良い方法があれば修正（<router-outlet>の外ではActivatedRouteが使えない）
     const param = this.getQueryVariable('param');
     const userId = this.getQueryVariable('userId');
 
-    if (param != null && param.length > 0) {
-      this.auth(param, userId);
+    // クエリパラメータがセットされていれば認可処理を実施
+    if (param === '' || userId === '') {
+      console.log('Queryチェックエラー');
+      this.isError = true;
     } else {
-      console.log('クエリパラメータにparamをセットして下さい');
       this.auth(param, userId);
     }
   }
 
-  // 認可処理
-  auth(param: string, userId: string): void {
-    // 認可処理用のuri作成
-    const authUri = this.uri + 'authorization?param=' + param + '&userId=' + userId;
+  // クエリパラメータ取得
+  getQueryVariable(key: string): string {
+    // 文頭「?」を除外
+    const queryAll = window.location.search.slice(1);
 
-    // 認可処理を実施
-    const observer = this.clientService.rxClient(authUri, 'get', null);
-    observer.subscribe((result: Result) => {
-      if (result.isSuccess) {
-        console.log('認可OK');
-        this.userInfo.authFlag = result.data['authFlag'.toString()];
-        this.userInfo.userId = result.data['userId'.toString()];
-        // スコア詳細画面を表示
-        // Todo: ngOnInit()で実施するように修正
-        this.displayDetail(result.data['claimNumber'.toString()]);
-      } else {
-        // Todo: errorページへの遷移を修正
-        console.log('認可NG');
-        this.isError = true;
-        // this.router.navigate(['/detail/error']);
+    let value = '';
+    // 各クエリパラメータのkeyと引数を比較し、一致すれば対応するvalueを返す
+    queryAll.split('&').forEach(query => {
+      const queryPair = query.split('=');
+      if (queryPair[0] === key) {
+        value = queryPair[1];
       }
     });
+    return value;
   }
 
-  // スコア詳細画面を表示
+  // 認可処理
+  auth(param: string, userId: string): void {
+    // HTTPリクエストの各情報セット
+    const authUri = environment.auth_url;
+    const params = { param: param, userId: userId };
+
+    this.httpClient.get(authUri, {
+      params: params
+    }).subscribe(
+      (response: AuthResult) => {
+        console.log('認可OK');
+        this.userInfo.userId = response.userId;
+        this.userInfo.authFlag = response.authFlag;
+
+        // スコア詳細画面を表示
+        this.displayDetail(response.claimNumber);
+      }, error => {
+        console.log('認可NG');
+        this.isError = true;
+      }
+    );
+  }
+
+  // スコア詳細画面表示
   displayDetail(claimNumber: string): void {
     console.log('スコア詳細画面を表示');
     this.router.navigate(['/detail', claimNumber]);
-  }
-
-  getQueryVariable(key): string {
-    // 文頭?を除外
-    const queryAll = window.location.search.slice(1);
-    let variable = '';
-
-    // クエリ文字列を & で分割して処理
-    queryAll.split('&').forEach(query => {
-      // = で分割してkeyが引数と一致すれば対応する値を返す
-      const queryPair = query.split('=');
-      if (queryPair[0] === key) {
-        variable = queryPair[1];
-      }
-    });
-    return variable;
   }
 
 }

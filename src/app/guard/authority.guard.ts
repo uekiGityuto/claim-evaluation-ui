@@ -6,7 +6,7 @@ import { UserInfoContainerService } from '../service/user-info-container.service
 @Injectable({
   providedIn: 'root'
 })
-export class AuthGuard implements CanActivate {
+export class AuthorityGuard implements CanActivate {
 
   constructor(private userInfo: UserInfoContainerService,
     private router: Router

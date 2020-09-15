@@ -1,4 +1,5 @@
-import { AuthGuard } from './guard/auth.guard';
+import { AuthorityGuard } from './guard/authority.guard';
+import { AuthorizationGuard } from './guard/authorization.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -8,8 +9,9 @@ import { ErrorComponent } from './component/error/error.component';
 
 const routes: Routes = [
   { path: 'detail/:claimNumber', component: DetailComponent },
+  // { path: 'detail', component: DetailComponent, canActivate: [AuthorizationGuard]},
   { path: 'list/error', component: ErrorComponent },
-  { path: 'list', component: ListComponent, canActivate: [AuthGuard]  }
+  { path: 'list', component: ListComponent, canActivate: [AuthorityGuard] }
 ];
 
 @NgModule({

@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,23 +32,25 @@ interface SearchForm {
 }
 
 interface ClaimList {
-  claims: Claim[];
-  order: string;
-  fromPages: number;
-  toPages: number;
-  totalNumber: number;
+  CLAIM: Claim[];
+  ORDER: string;
+  FROMPAGES: number;
+  TOPAGES: number;
+  TOTALNUMBER: number;
 }
 
 interface Claim {
-  claimNumber: string;
-  insuredName: string;
-  contractorName: string;
-  department: string;
-  base: string;
-  insuranceKind: string;
-  lastUpdateDate: Date;
-  lossDate: Date;
-  claimCategory: string;
+  CLAIMNUMBER: string;
+  INSUREDNAMEKANJI: string;
+  INSUREDNAMEKANA: string;
+  CONTRACTORNAMEKANJI: string;
+  CONTRACTORNAMEKANA: string;
+  DEPARTMENT: string;
+  BASE: string;
+  INSURANCEKIND: string;
+  LASTUPDATEDATE: Date;
+  LOSSDATE: Date;
+  CLAIMCATEGORY: string;
 }
 
 interface ClaimForDisplay extends Claim {
@@ -66,7 +69,6 @@ interface ClaimForDisplay extends Claim {
 })
 export class ListComponent implements OnInit {
   // エラーメッセージ表示用
-  // errorSwith = '';
   isError = false;
 
   // ビュー表示用
@@ -80,15 +82,11 @@ export class ListComponent implements OnInit {
 
   // 検索用
   searchControl: FormGroup;
-  uri = environment.restapi_url;
   param: SearchForm;
-
-  // // ツールチップ付与用
-  // @ViewChild('tableDatas')
-  // elementRef: ElementRef;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
+    private httpClient: HttpClient,
     private clientService: ObservableClientService,
     private userInfo: UserInfoContainerService,
     private classService: ClassService
@@ -132,17 +130,17 @@ export class ListComponent implements OnInit {
   // 認可処理
   auth(): void {
     // 認可処理用のuri作成
-    const authUri = this.uri + 'claimList';
+    const authUri = environment.claim_list_url;
 
     // 認可処理を実施
-    const observer = this.clientService.rxClient(authUri, 'get', null);
-    observer.subscribe((result: Result) => {
-      if (!result.isSuccess) {
+    this.httpClient.get(authUri).subscribe(
+      response => {
+        console.log('認可OK');
+      }, error => {
         console.log('認可エラーページに遷移');
         this.router.navigate(['/list/error']);
       }
-      console.log('認可OK');
-    });
+    );
   }
 
   // 検索処理
@@ -174,7 +172,7 @@ export class ListComponent implements OnInit {
       console.log('POSTボディ部', JSON.stringify(this.param));
 
       // 事案一覧取得
-      this.searchList(JSON.stringify(this.param));
+      this.searchList(this.param);
     }
   }
 
@@ -185,7 +183,7 @@ export class ListComponent implements OnInit {
     this.param.order = environment[sort.direction];
     // console.log(this.param);
     // 事案一覧取得
-    this.searchList(JSON.stringify(this.param));
+    this.searchList(this.param);
   }
 
   // 1ページ戻る処理
@@ -197,7 +195,7 @@ export class ListComponent implements OnInit {
       // 1ページ戻ったときのfromPagesをセット
       this.setDisplayFromPages();
       // 事案一覧取得
-      this.searchList(JSON.stringify(this.param));
+      this.searchList(this.param);
     }
   }
 
@@ -218,7 +216,7 @@ export class ListComponent implements OnInit {
       console.log('accept next');
       this.param.displayFrom = String(this.toPages + 1);
       // 事案一覧取得
-      this.searchList(JSON.stringify(this.param));
+      this.searchList(this.param);
     }
   }
 
@@ -229,38 +227,43 @@ export class ListComponent implements OnInit {
     } else {
       console.log('accept update');
       this.param.displayFrom = String(this.fromPages);
-      this.searchList(JSON.stringify(this.param));
+      this.searchList(this.param);
     }
   }
 
   // 事案一覧取得処理
-  searchList(param: string): void {
-    const claimUri = this.uri + 'claims';
+  searchList(params: SearchForm): void {
+    const claimsUri = environment.claims_url;
+    const headers = { 'Content-Type': 'application/json' };
 
     // 事案一覧を取得
-    // const observer = this.clientService.rxClient(claimUri, 'post', param);// 本番用
-    const observer = this.clientService.rxClient(claimUri, 'get', null);// モック用
-    observer.subscribe((result: Result) => {
-      if (result.isSuccess) {
-        // console.log('result.data', result.data);
-        this.isError = false;
-        // ビュー要素を取得
-        this.claims = [];
-        result.data['claim'.toString()].forEach((claim: Claim, i) => {
-          const categoryClass = this.classService.setCategoryClass('低', '中', '高', claim.claimCategory);
-          this.claims[i] = { ...claim, categoryClass };
-        });
-        this.order = result.data['order'.toString()];
-        this.fromPages = result.data['fromPages'.toString()];
-        this.displayFromPages = result.data['fromPages'.toString()];
-        this.toPages = result.data['toPages'.toString()];
-        this.totalNumber = result.data['totalNumber'.toString()];
-      } else {
-        console.log('検索エラーメッセージ表示');
-        this.isError = true;
-        // this.router.navigate(['/list/error']);
-      }
-    });
+    // 本番用
+    // 本番用
+    // this.httpClient.post(claimsUri, params ,{
+    //   headers: headers})
+    // スタブ用
+    this.httpClient.get(claimsUri)
+      .subscribe(
+        response => {
+          // console.log('response:', response);
+          this.isError = false;
+          // ビュー要素を取得
+          this.claims = [];
+          response['CLAIM'.toString()].forEach((claim: Claim, i) => {
+            const categoryClass = this.classService.setCategoryClass('低', '中', '高', claim.CLAIMCATEGORY);
+            this.claims[i] = { ...claim, categoryClass };
+          });
+          this.order = response['ORDER'.toString()];
+          this.fromPages = response['FROMPAGES'.toString()];
+          this.displayFromPages = response['FROMPAGES'.toString()];
+          this.toPages = response['TOPAGES'.toString()];
+          this.totalNumber = response['TOTALNUMBER'.toString()];
+        }, error => {
+          console.log('検索エラーメッセージ表示');
+          this.isError = true;
+          // this.router.navigate(['/list/error']);
+        }
+      );
   }
 
   // Todo: validationは切り離すか要検討
