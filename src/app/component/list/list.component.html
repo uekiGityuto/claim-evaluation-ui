@@ -10,25 +10,23 @@
   <div class="list-header card">
     <form [(formGroup)]="searchControl">
       <div>
-        <input type="text" formControlName="claimNumber" placeholder="受付番号">
+        <input type="text" formControlName="CLAIMNUMBER" placeholder="受付番号">
       </div>
       <div>
-        <select formControlName="claimCategory" placeholder="事案カテゴリ">
-          <option value=""></option>
+        <select formControlName="CLAIMCATEGORYINFO" placeholder="事案カテゴリ" multiple>
           <option value="高">高</option>
           <option value="中">中</option>
           <option value="低">低</option>
         </select>
       </div>
       <div>
-        <select formControlName="insuranceKindInfo" placeholder="保険種類">
-          <option value=""></option>
+        <select formControlName="INSURANCEKINDINFO" placeholder="保険種類" multiple>
           <option value="自動車">自動車</option>
           <option value="火災">火災</option>
         </select>
       </div>
       <div class="from-lossdate-form">
-        <input type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
+        <input type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="FROMLOSSDATE">
         <span class=datepicker>
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom></mat-datepicker>
@@ -38,30 +36,30 @@
         <span>～</span>
       </div>
       <div class="to-lossdate-form">
-        <input type=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="toLossDate">
+        <input type=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="TOLOSSDATE">
         <span class=datepicker>
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo></mat-datepicker>
         </span>
       </div>
       <div>
-        <input type="text" type="text" formControlName="insuredNameKana" placeholder="被保険者名（カナ）">
+        <input type="text" type="text" formControlName="INSUREDNAMEKANA" placeholder="被保険者名（カナ）">
       </div>
       <div>
-        <input type="text" type="text" formControlName="insuredNameKanji" placeholder="被保険者名（漢字）">
+        <input type="text" type="text" formControlName="INSUREDNAMEKANJI" placeholder="被保険者名（漢字）">
       </div>
       <div>
-        <input type="text" type="text" formControlName="contractorNameKana" placeholder="契約者名（カナ）">
+        <input type="text" type="text" formControlName="CONTRACTORNAMEKANA" placeholder="契約者名（カナ）">
       </div>
       <div>
-        <input type="text" type="text" formControlName="contractorNameKanji" placeholder="契約者名（漢字）">
+        <input type="text" type="text" formControlName="CONTRACTORNAMEKANJI" placeholder="契約者名（漢字）">
       </div>
       <div class="radio-form">
-        <div><input type="radio" formControlName="departmentOrBaseRadio" value="department">担当部</div>
-        <div><input type="radio" formControlName="departmentOrBaseRadio" value="base">担当拠点</div>
+        <div><input type="radio" formControlName="DEPARTMENTORBASERADIO" value="department">担当部</div>
+        <div><input type="radio" formControlName="DEPARTMENTORBASERADIO" value="base">担当拠点</div>
       </div>
       <div>
-        <input type="text" type="text" formControlName="departmentOrBase" placeholder="担当部・担当拠点">
+        <input type="text" type="text" formControlName="DEPARTMENTORBASE" placeholder="担当部・担当拠点">
       </div>
       <div>
         <button [disabled]="searchControl.invalid" (click)="search()">検索</button>

@@ -18,7 +18,7 @@ export class ObservableClientService {
   constructor(private http: HttpClient) {
     this.headers = {
       'Content-Type': 'application/json',
-      'Authorization': environment.pre_token + environment.token
+      // 'Authorization': environment.pre_token + environment.token
     };
   }
 
@@ -43,31 +43,31 @@ export class ObservableClientService {
         },
         err => {
           this.result.isSuccess = false;
-          if (err.status === 401) {
-            this.result.errMsgList.push({ key: '401', value: environment.err_401 });
-          } else if (err.status === 403) {
-            this.result.errMsgList.push({ key: '403', value: environment.err_403 });
-          } else if (err.status === 404) {
-            this.result.errMsgList.push({ key: '404', value: environment.err_404 });
-          } else if (err.status === 500) {
-            this.result.errMsgList.push({ key: '500', value: environment.err_500 });
-          } else if (err.status === 504) {
-            this.result.errMsgList.push({ key: '504', value: environment.err_504 });
-          } else if (err.status === 510) {
-            this.result.errMsgList.push({ key: '510', value: environment.err_510 });
-          } else if (err.status === 520) {
-            this.result.errMsgList.push({ key: '520', value: environment.err_520 });
-          } else if (err.status === 521) {
-            this.result.errMsgList.push({ key: '521', value: environment.err_521 });
-          } else if (err.status === 522) {
-            this.result.errMsgList.push({ key: '522', value: environment.err_522 });
-          } else if (err.status === 523) {
-            this.result.errMsgList.push({ key: '523', value: environment.err_523 });
-          } else if (err.status === 524) {
-            this.result.errMsgList.push({ key: '524', value: environment.err_524 });
-          } else if (err.status === 525) {
-            this.result.errMsgList.push({ key: '525', value: environment.err_525 });
-          } else if (err.status === 526) { this.result.errMsgList.push({ key: '526', value: environment.err_526 }); }
+          // if (err.status === 401) {
+          //   this.result.errMsgList.push({ key: '401', value: environment.err_401 });
+          // } else if (err.status === 403) {
+          //   this.result.errMsgList.push({ key: '403', value: environment.err_403 });
+          // } else if (err.status === 404) {
+          //   this.result.errMsgList.push({ key: '404', value: environment.err_404 });
+          // } else if (err.status === 500) {
+          //   this.result.errMsgList.push({ key: '500', value: environment.err_500 });
+          // } else if (err.status === 504) {
+          //   this.result.errMsgList.push({ key: '504', value: environment.err_504 });
+          // } else if (err.status === 510) {
+          //   this.result.errMsgList.push({ key: '510', value: environment.err_510 });
+          // } else if (err.status === 520) {
+          //   this.result.errMsgList.push({ key: '520', value: environment.err_520 });
+          // } else if (err.status === 521) {
+          //   this.result.errMsgList.push({ key: '521', value: environment.err_521 });
+          // } else if (err.status === 522) {
+          //   this.result.errMsgList.push({ key: '522', value: environment.err_522 });
+          // } else if (err.status === 523) {
+          //   this.result.errMsgList.push({ key: '523', value: environment.err_523 });
+          // } else if (err.status === 524) {
+          //   this.result.errMsgList.push({ key: '524', value: environment.err_524 });
+          // } else if (err.status === 525) {
+          //   this.result.errMsgList.push({ key: '525', value: environment.err_525 });
+          // } else if (err.status === 526) { this.result.errMsgList.push({ key: '526', value: environment.err_526 }); }
           observer.next(this.result);
           observer.complete();
         });

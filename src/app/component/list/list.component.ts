@@ -4,7 +4,6 @@ import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-import { Result } from '../../model/result.model';
 import { CategoryClass } from '../../model/category-class.model';
 import { environment } from '../../../environments/environment';
 import { ObservableClientService } from '../../service/observable-client.service';
@@ -14,21 +13,29 @@ import { ClassService } from '../../service/class.service';
 // Todo: interfaceをmodelとして切り離すか要検討
 
 interface SearchForm {
-  userId: string;
-  claimNumber: string;
-  claimCategory: string[];
-  insuranceKindInfo: string[];
-  fromLossDate: string;
-  toLossDate: string;
-  insuredNameKana: string;
-  insuredNameKanji: string;
-  contractorNameKana: string;
-  contractorNameKanji: string;
-  department: string;
-  base: string;
-  labelType: string;
-  order: string;
-  displayFrom: string;
+  REQ_USER_ID: string;
+  CLAIMNUMBER: string;
+  CLAIMCATEGORYINFO: claimCategory[];
+  INSURANCEKINDINFO: insuranceKind[];
+  FROMLOSSDATE: string;
+  TOLOSSDATE: string;
+  INSUREDNAMEKANA: string;
+  INSUREDNAMEKANJI: string;
+  CONTRACTORNAMEKANA: string;
+  CONTRACTORNAMEKANJI: string;
+  DEPARTMENT: string;
+  BASE: string;
+  LABELTYPE: string;
+  ORDER: string;
+  DISPLAYFROM: string;
+}
+
+interface claimCategory {
+  CLAIMCATEGORY: string;
+}
+
+interface insuranceKind {
+  INSURANCEKIND: string;
 }
 
 interface ClaimList {
@@ -101,31 +108,29 @@ export class ListComponent implements OnInit {
 
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
-      claimNumber: new FormControl(''),
-      claimCategory: new FormControl(''),
-      insuranceKindInfo: new FormControl(''),
-      fromLossDate: new FormControl(),
-      toLossDate: new FormControl(),
-      insuredNameKana: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      insuredNameKanji: new FormControl(''),
-      contractorNameKana: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      contractorNameKanji: new FormControl(''),
-      departmentOrBaseRadio: new FormControl(''),
-      departmentOrBase: new FormControl('')
+      CLAIMNUMBER: new FormControl(''),
+      CLAIMCATEGORYINFO: new FormControl(''),
+      INSURANCEKINDINFO: new FormControl(''),
+      FROMLOSSDATE: new FormControl(),
+      TOLOSSDATE: new FormControl(),
+      INSUREDNAMEKANA: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      INSUREDNAMEKANJI: new FormControl(''),
+      CONTRACTORNAMEKANA: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      CONTRACTORNAMEKANJI: new FormControl(''),
+      DEPARTMENTORBASERADIO: new FormControl(''),
+      DEPARTMENTORBASE: new FormControl('')
     }, {
       // 複数項目に対してのvalidation
       // Todo: 全てのFormControlについて一回ずつ実施してしまうので他に良い方法がないか検討
       validators: [this.isInputMoreThanOne, this.isDepartmentOrBaseRadio]
     });
 
-    // this.fromPages = new FormControl(1, [Validators.required, Validators.min(1), Validators.max(this.totalNumber)]);
-
     this.claims = [];
   }
 
   // getter
-  get insuredNameKana() { return this.searchControl.value.insuredNameKana; };
-  get contractorNameKana() { return this.searchControl.value.contractorNameKana; };
+  get insuredNameKana() { return this.searchControl.value.INSUREDNAMEKANA; };
+  get contractorNameKana() { return this.searchControl.value.CONTRACTORNAMEKANA; };
 
   // 認可処理
   auth(): void {
@@ -148,28 +153,44 @@ export class ListComponent implements OnInit {
     if (this.searchControl.invalid) {
       console.log('reject search');
     } else {
-      // POSTボディ部に検索フォームの内容をディープコピー
       console.log('this.searchControl', this.searchControl.value);
-      const { departmentOrBaseRadio, departmentOrBase, ...rest } = this.searchControl.value;
+
+      // フォームコントロールの事案カテゴリと保険種類の要素にkeyをつける
+      this.searchControl.value.CLAIMCATEGORYINFO.forEach(
+        (claimCategory, i) => {
+          claimCategory = {CLAIMCATEGORY: claimCategory};
+          this.searchControl.value.CLAIMCATEGORYINFO[i] = claimCategory;
+        }
+      );
+      this.searchControl.value.INSURANCEKINDINFO.forEach(
+        (insuranceKind, i) => {
+          insuranceKind = {INSURANCEKIND: insuranceKind[0]};
+          this.searchControl.value.INSURANCEKINDINFO[i] = insuranceKind;
+        }
+      );
+
+      // POSTボディ部に検索フォームの内容をディープコピー
+      const { DEPARTMENTORBASERADIO, DEPARTMENTORBASE, ...rest }
+      = this.searchControl.value;
       // this.param = { ...rest };
       this.param = JSON.parse(JSON.stringify(rest));
 
       // POSTボディ部の残り（検索フォーム以外の内容）をセット
-      this.param.userId = this.userId;
-      if (departmentOrBaseRadio === 'department') {
-        this.param.department = departmentOrBase;
-        this.param.base = '';
-      } else if (departmentOrBaseRadio === 'base') {
-        this.param.department = '';
-        this.param.base = departmentOrBase;
+      this.param.REQ_USER_ID = this.userId;
+      if (DEPARTMENTORBASERADIO === 'department') {
+        this.param.DEPARTMENT = DEPARTMENTORBASE;
+        this.param.BASE = '';
+      } else if (DEPARTMENTORBASERADIO === 'base') {
+        this.param.DEPARTMENT = '';
+        this.param.BASE = DEPARTMENTORBASE;
       } else {
-        this.param.department = '';
-        this.param.base = '';
+        this.param.DEPARTMENT = '';
+        this.param.BASE = '';
       }
-      this.param.labelType = environment.lossDate;
-      this.param.order = environment.desc;
-      this.param.displayFrom = '1';
-      console.log('POSTボディ部', JSON.stringify(this.param));
+      this.param.LABELTYPE = environment.lossDate;
+      this.param.ORDER = environment.desc;
+      this.param.DISPLAYFROM = '1';
+      console.log('POSTボディ部', this.param);
 
       // 事案一覧取得
       this.searchList(this.param);
@@ -179,8 +200,8 @@ export class ListComponent implements OnInit {
   // ソート処理
   listSort(sort: Sort) {
     // console.log(this.param);
-    this.param.labelType = environment[sort.active];
-    this.param.order = environment[sort.direction];
+    this.param.LABELTYPE = environment[sort.active];
+    this.param.ORDER = environment[sort.direction];
     // console.log(this.param);
     // 事案一覧取得
     this.searchList(this.param);
@@ -202,9 +223,9 @@ export class ListComponent implements OnInit {
   // 1ページ戻ったときのfromPagesをセット
   setDisplayFromPages(): void {
     if (this.fromPages - 10 > 0) {
-      this.param.displayFrom = String(this.fromPages - 10);
+      this.param.DISPLAYFROM = String(this.fromPages - 10);
     } else {
-      this.param.displayFrom = '1';
+      this.param.DISPLAYFROM = '1';
     }
   }
 
@@ -214,7 +235,7 @@ export class ListComponent implements OnInit {
       console.log('reject next');
     } else {
       console.log('accept next');
-      this.param.displayFrom = String(this.toPages + 1);
+      this.param.DISPLAYFROM = String(this.toPages + 1);
       // 事案一覧取得
       this.searchList(this.param);
     }
@@ -226,7 +247,7 @@ export class ListComponent implements OnInit {
       console.log('reject update');
     } else {
       console.log('accept update');
-      this.param.displayFrom = String(this.fromPages);
+      this.param.DISPLAYFROM = String(this.fromPages);
       this.searchList(this.param);
     }
   }
@@ -275,23 +296,23 @@ export class ListComponent implements OnInit {
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
-    if (control.value.claimNumber) {
+    if (control.value.CLAIMNUMBER) {
       return null;
-    } else if (control.value.claimCategory) {
+    } else if (control.value.CLAIMCATEGORYINFO) {
       return null;
-    } else if (control.value.insuranceKindInfo) {
+    } else if (control.value.INSURANCEKINDINFO) {
       return null;
-    } else if (control.value.fromLossDate) {
+    } else if (control.value.FROMLOSSDATE) {
       return null;
-    } else if (control.value.toLossDate) {
+    } else if (control.value.TOLOSSDATE) {
       return null;
-    } else if (control.value.insuredNameKana) {
+    } else if (control.value.INSUREDNAMEKANA) {
       return null;
-    } else if (control.value.insuredNameKanji) {
+    } else if (control.value.INSUREDNAMEKANJI) {
       return null;
-    } else if (control.value.contractorNameKana) {
+    } else if (control.value.CONTRACTORNAMEKANA) {
       return null;
-    } else if (control.value.contractorNameKanji) {
+    } else if (control.value.CONTRACTORNAMEKANJI) {
       return null;
     } else if (control.value.departmentOrBase) {
       return null;
