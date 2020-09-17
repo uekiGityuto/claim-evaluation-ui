@@ -107,8 +107,8 @@ export class ListComponent implements OnInit {
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
       CLAIMNUMBER: new FormControl(''),
-      CLAIMCATEGORYINFO: new FormControl(''),
-      INSURANCEKINDINFO: new FormControl(''),
+      CLAIMCATEGORYINFO: new FormControl(),
+      INSURANCEKINDINFO: new FormControl(),
       FROMLOSSDATE: new FormControl(),
       TOLOSSDATE: new FormControl(),
       INSUREDNAMEKANA: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
@@ -125,10 +125,6 @@ export class ListComponent implements OnInit {
 
     this.claims = [];
   }
-
-  // getter
-  get insuredNameKana() { return this.searchControl.value.INSUREDNAMEKANA; };
-  get contractorNameKana() { return this.searchControl.value.CONTRACTORNAMEKANA; };
 
   // 認可処理
   auth(): void {
@@ -153,7 +149,7 @@ export class ListComponent implements OnInit {
     } else {
       console.log('this.searchControl', this.searchControl.value);
 
-      // フォームコントロールの事案カテゴリと保険種類の要素にkeyをつける
+      // フォームコントロールの事案カテゴリ要素にkeyをつける
       if (this.searchControl.value.CLAIMCATEGORYINFO) {
         this.searchControl.value.CLAIMCATEGORYINFO.forEach(
           (claimCategory, i) => {
@@ -163,12 +159,12 @@ export class ListComponent implements OnInit {
       } else {
         this.searchControl.value.CLAIMCATEGORYINFO = [];
       }
+      // フォームコントロールの保険種類要素にkeyをつける
       if (this.searchControl.value.INSURANCEKINDINFO) {
         this.searchControl.value.INSURANCEKINDINFO.forEach(
           (insuranceKind, i) => {
-            insuranceKind = { INSURANCEKIND: insuranceKind[0] };
+            insuranceKind = { INSURANCEKIND: insuranceKind };
             this.searchControl.value.INSURANCEKINDINFO[i] = insuranceKind
-            console.log(this.searchControl.value.INSURANCEKINDINFO[i]);;
           });
       } else {
         this.searchControl.value.INSURANCEKINDINFO = [];
