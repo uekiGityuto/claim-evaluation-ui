@@ -102,7 +102,7 @@ export class ListComponent implements OnInit {
     this.userId = this.userInfo.userId;
 
     // 認可処理を実施
-    this.auth();
+    this.authorize();
 
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
@@ -127,7 +127,7 @@ export class ListComponent implements OnInit {
   }
 
   // 認可処理
-  auth(): void {
+  authorize(): void {
     // 認可処理用のuri作成
     const authUri = environment.claim_list_url;
 
