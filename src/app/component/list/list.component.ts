@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { Component, OnInit, ɵSWITCH_VIEW_CONTAINER_REF_FACTORY__POST_R3__ } from '@angular/core';
+import { FormControl, FormGroup, Validators, AbstractControl, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
@@ -9,13 +9,13 @@ import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
 
-// Todo: interfaceをmodelとして切り離すか要検討
+// TODO: interfaceをmodelとして切り離すか要検討
 
 interface SearchForm {
   REQ_USER_ID: string;
   CLAIMNUMBER: string;
-  CLAIMCATEGORYINFO: claimCategory[];
-  INSURANCEKINDINFO: insuranceKind[];
+  CLAIMCATEGORYINFO: ClaimCategory[];
+  INSURANCEKINDINFO: InsuranceKind[];
   FROMLOSSDATE: string;
   TOLOSSDATE: string;
   INSUREDNAMEKANA: string;
@@ -29,11 +29,11 @@ interface SearchForm {
   DISPLAYFROM: string;
 }
 
-interface claimCategory {
+interface ClaimCategory {
   CLAIMCATEGORY: string;
 }
 
-interface insuranceKind {
+interface InsuranceKind {
   INSURANCEKIND: string;
 }
 
@@ -106,20 +106,20 @@ export class ListComponent implements OnInit {
 
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
-      CLAIMNUMBER: new FormControl(''),
+      CLAIMNUMBER: new FormControl(),
       CLAIMCATEGORYINFO: new FormControl(),
       INSURANCEKINDINFO: new FormControl(),
       FROMLOSSDATE: new FormControl(),
       TOLOSSDATE: new FormControl(),
-      INSUREDNAMEKANA: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      INSUREDNAMEKANJI: new FormControl(''),
-      CONTRACTORNAMEKANA: new FormControl('', [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      CONTRACTORNAMEKANJI: new FormControl(''),
-      DEPARTMENTORBASERADIO: new FormControl(''),
-      DEPARTMENTORBASE: new FormControl('')
+      INSUREDNAMEKANA: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      INSUREDNAMEKANJI: new FormControl(),
+      CONTRACTORNAMEKANA: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      CONTRACTORNAMEKANJI: new FormControl(),
+      DEPARTMENTORBASERADIO: new FormControl(),
+      DEPARTMENTORBASE: new FormControl()
     }, {
       // 複数項目に対してのvalidation
-      // Todo: 全てのFormControlについて一回ずつ実施してしまうので他に良い方法がないか検討
+      // TODO: 全てのFormControlについて一回ずつ（つまり11回）実施してしまうので他に良い方法がないか検討
       validators: [this.isInputMoreThanOne, this.isDepartmentOrBaseRadio]
     });
 
@@ -144,58 +144,80 @@ export class ListComponent implements OnInit {
 
   // 検索処理
   search(): void {
+    // バリデーション
     if (this.searchControl.invalid) {
       console.log('reject search');
-    } else {
-      console.log('this.searchControl', this.searchControl.value);
-
-      // フォームコントロールの事案カテゴリ要素にkeyをつける
-      if (this.searchControl.value.CLAIMCATEGORYINFO) {
-        this.searchControl.value.CLAIMCATEGORYINFO.forEach(
-          (claimCategory, i) => {
-            claimCategory = { CLAIMCATEGORY: claimCategory };
-            this.searchControl.value.CLAIMCATEGORYINFO[i] = claimCategory;
-          });
-      } else {
-        this.searchControl.value.CLAIMCATEGORYINFO = [];
-      }
-      // フォームコントロールの保険種類要素にkeyをつける
-      if (this.searchControl.value.INSURANCEKINDINFO) {
-        this.searchControl.value.INSURANCEKINDINFO.forEach(
-          (insuranceKind, i) => {
-            insuranceKind = { INSURANCEKIND: insuranceKind };
-            this.searchControl.value.INSURANCEKINDINFO[i] = insuranceKind
-          });
-      } else {
-        this.searchControl.value.INSURANCEKINDINFO = [];
-      }
-
-      // POSTボディ部に検索フォームの内容をディープコピー
-      const { DEPARTMENTORBASERADIO, DEPARTMENTORBASE, ...rest }
-        = this.searchControl.value;
-      // this.param = { ...rest };
-      this.param = JSON.parse(JSON.stringify(rest));
-
-      // POSTボディ部の残り（検索フォーム以外の内容）をセット
-      this.param.REQ_USER_ID = this.userId;
-      if (DEPARTMENTORBASERADIO === 'department') {
-        this.param.DEPARTMENT = DEPARTMENTORBASE;
-        this.param.BASE = '';
-      } else if (DEPARTMENTORBASERADIO === 'base') {
-        this.param.DEPARTMENT = '';
-        this.param.BASE = DEPARTMENTORBASE;
-      } else {
-        this.param.DEPARTMENT = '';
-        this.param.BASE = '';
-      }
-      this.param.LABELTYPE = environment.lossDate;
-      this.param.ORDER = environment.desc;
-      this.param.DISPLAYFROM = '1';
-      console.log('POSTボディ部', this.param);
-
-      // 事案一覧取得
-      this.searchList(this.param);
+      return;
     }
+
+    // console.log('this.searchControl', this.searchControl.value);
+
+    // フォームの配列の各要素を{key, value}形式に変換
+    this.setKeyArrayElement(this.searchControl);
+
+    // フォームの全要素に対してnullを空文字に変換
+    Object.keys(this.searchControl.value)
+      .forEach(key => {
+        if (this.searchControl.value[key] === null) this.searchControl.value[key] = '';
+      });
+
+    // POSTボディ部に検索フォームの内容をディープコピー
+    this.createPostBody(this.searchControl, this.param, this.userId);
+
+    // 事案一覧取得
+    this.searchList(this.param);
+
+    // フォームの初期化
+    this.searchControl.reset();
+    // console.log('this.searchControl(初期化後)', this.searchControl.value);
+  }
+
+  // フォームの配列の各要素を{key, value}形式に変換
+  setKeyArrayElement(form :FormGroup) {
+    // フォームコントロールの事案カテゴリ要素にkeyをつける（nullならば空の配列に変換）
+    if (form.value.CLAIMCATEGORYINFO) {
+      form.value.CLAIMCATEGORYINFO.forEach(
+        (claimCategory, i) => {
+          claimCategory = { CLAIMCATEGORY: claimCategory };
+          form.value.CLAIMCATEGORYINFO[i] = claimCategory;
+        });
+    } else {
+      form.value.CLAIMCATEGORYINFO = [];
+    }
+    // フォームコントロールの保険種類要素にkeyをつける（nullならば空の配列に変換）
+    if (form.value.INSURANCEKINDINFO) {
+      form.value.INSURANCEKINDINFO.forEach(
+        (insuranceKind, i) => {
+          insuranceKind = { INSURANCEKIND: insuranceKind };
+          form.value.INSURANCEKINDINFO[i] = insuranceKind;
+        });
+    } else {
+      form.value.INSURANCEKINDINFO = [];
+    }
+  }
+
+  // HTTPリクエストのボディ部を作成
+  createPostBody(form :FormGroup, param: SearchForm, userId: string) {
+    // ボディ部に検索フォームの内容をディープコピー
+    const { DEPARTMENTORBASERADIO, DEPARTMENTORBASE, ...rest } = form.value;
+    param = JSON.parse(JSON.stringify(rest));
+
+    // ボディ部の残り（検索フォーム以外の内容）をセット
+    param.REQ_USER_ID = userId;
+    if (DEPARTMENTORBASERADIO === 'department') {
+      param.DEPARTMENT = DEPARTMENTORBASE;
+      param.BASE = '';
+    } else if (DEPARTMENTORBASERADIO === 'base') {
+      param.DEPARTMENT = '';
+      param.BASE = DEPARTMENTORBASE;
+    } else {
+      param.DEPARTMENT = '';
+      param.BASE = '';
+    }
+    param.LABELTYPE = environment.lossDate;
+    param.ORDER = environment.desc;
+    param.DISPLAYFROM = '1';
+    console.log('POSTボディ部', param);
   }
 
   // ソート処理
@@ -260,7 +282,6 @@ export class ListComponent implements OnInit {
 
     // 事案一覧を取得
     // 本番用
-    // 本番用
     // this.httpClient.post(claimsUri, params ,{
     //   headers: headers})
     // スタブ用
@@ -288,11 +309,11 @@ export class ListComponent implements OnInit {
       );
   }
 
-  // Todo: validationは切り離すか要検討
+  // TODO: validationは切り離すか要検討
 
   // 一つ以上フォーム入力されているか検証（departmentOrBaseRadioは除外）
   isInputMoreThanOne(control: AbstractControl) {
-    // Todo: 何か良い方法を検討
+    // TODO: 何か良い方法を検討
     // （for文で回す等したいがdepartmentOrBaseRadioを除外したいのでこの方法を使用）
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
