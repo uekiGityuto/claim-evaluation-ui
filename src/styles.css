@@ -113,17 +113,17 @@ body {
 
 /* ngClassディレクティブ */
 
-._high {
+.high {
   background-color: var(--claim-high-color);
   color: var(--main-font-color);
 }
 
-._middle {
+.middle {
   background-color: var(--claim-middle-color);
   color: var(--main-font-color);
 }
 
-._low {
+.low {
   background-color: var(--claim-low-color);
   color: var(--main-font-color);
 }

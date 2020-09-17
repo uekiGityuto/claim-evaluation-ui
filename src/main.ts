@@ -12,8 +12,9 @@ platformBrowserDynamic().bootstrapModule(AppModule)
   .catch(err => console.error(err));
 
 /**
- * IE11対応：CSS共通化(ponyfill)
- * @author SKK231099 李
+ * IE11対応でcss variableをponyfillで使用できる設定。
+ *
+ * css-vars-ponyfillを使用。
  */
 cssVars({
   include: 'style',

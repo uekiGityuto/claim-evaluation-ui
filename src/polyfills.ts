@@ -61,8 +61,7 @@ import 'zone.js/dist/zone';  // Included with Angular CLI.
  */
 
  /**
- * IE11対応
- * @author SKK231099 李
+ * IE11対応のため、polyfillを有効化。
  */
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 import 'core-js/es/symbol';

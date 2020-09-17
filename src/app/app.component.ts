@@ -2,16 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { UserInfoContainerService } from './service/user-info-container.service'
 import { AuthResult } from './model/auth-result';
-import { UserInfoContainerService } from './service/user-info-container.service';
 import { environment } from '../environments/environment';
-
-// 認可処理をGuardで実装しようとしたが、
-// Guard内でルーティングのマトリクスパラメータ（認可処理のレスポンスとして取得するclaimNumber）を変更することが出来ない？ので、
-// AppComponent内で認可処理を実施
-
-// HttpClientサービスをServiceとして切り分けようとしたが、
-// サービス内に記載することが少なすぎるためコンポーネント内に記載（要相談）
 
 /**
  * Main App Component
@@ -42,7 +35,7 @@ export class AppComponent implements OnInit {
       console.log('Queryチェックエラー');
       this.isError = true;
     } else {
-      this.auth(param, userId);
+      this.authorize(param, userId);
     }
   }
 
@@ -63,7 +56,7 @@ export class AppComponent implements OnInit {
   }
 
   // 認可処理
-  auth(param: string, userId: string): void {
+  authorize(param: string, userId: string): void {
     // HTTPリクエストの各情報セット
     const authUri = environment.auth_url;
     const params = { param: param, userId: userId };

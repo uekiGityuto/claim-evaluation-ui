@@ -1,13 +1,14 @@
 import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 
 import { CategoryClass } from '../../model/category-class.model';
 import { environment } from '../../../environments/environment';
-import { UserInfoContainerService } from '../../service/user-info-container.service';
+import { UserInfoContainerService } from '../../service/user-info-container.service'
 import { ClassService } from '../../service/class.service';
 
 // interfaceをmodelとして切り離したいが、
@@ -89,6 +90,7 @@ export class DetailComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
+    private title: Title,
     private httpClient: HttpClient,
     private userInfo: UserInfoContainerService,
     private datepipe: DatePipe,
@@ -102,6 +104,8 @@ export class DetailComponent implements OnInit {
 
     // 受付番号取得
     this.claimNumber = this.route.snapshot.paramMap.get('claimNumber');
+    // HTMLのTitleタグの内容を更新
+    this.title.setTitle(this.claimNumber);
 
     // 事案情報取得
     this.getLatestClaimInfo(this.claimNumber);

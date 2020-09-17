@@ -1,5 +1,4 @@
 import { AuthorityGuard } from './guard/authority.guard';
-import { AuthorizationGuard } from './guard/authorization.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 

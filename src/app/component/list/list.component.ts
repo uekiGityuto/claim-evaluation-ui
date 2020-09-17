@@ -1,12 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
 import { CategoryClass } from '../../model/category-class.model';
 import { environment } from '../../../environments/environment';
-import { ObservableClientService } from '../../service/observable-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
 
@@ -94,7 +93,6 @@ export class ListComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private httpClient: HttpClient,
-    private clientService: ObservableClientService,
     private userInfo: UserInfoContainerService,
     private classService: ClassService
   ) { }
@@ -156,22 +154,29 @@ export class ListComponent implements OnInit {
       console.log('this.searchControl', this.searchControl.value);
 
       // フォームコントロールの事案カテゴリと保険種類の要素にkeyをつける
-      this.searchControl.value.CLAIMCATEGORYINFO.forEach(
-        (claimCategory, i) => {
-          claimCategory = {CLAIMCATEGORY: claimCategory};
-          this.searchControl.value.CLAIMCATEGORYINFO[i] = claimCategory;
-        }
-      );
-      this.searchControl.value.INSURANCEKINDINFO.forEach(
-        (insuranceKind, i) => {
-          insuranceKind = {INSURANCEKIND: insuranceKind[0]};
-          this.searchControl.value.INSURANCEKINDINFO[i] = insuranceKind;
-        }
-      );
+      if (this.searchControl.value.CLAIMCATEGORYINFO) {
+        this.searchControl.value.CLAIMCATEGORYINFO.forEach(
+          (claimCategory, i) => {
+            claimCategory = { CLAIMCATEGORY: claimCategory };
+            this.searchControl.value.CLAIMCATEGORYINFO[i] = claimCategory;
+          });
+      } else {
+        this.searchControl.value.CLAIMCATEGORYINFO = [];
+      }
+      if (this.searchControl.value.INSURANCEKINDINFO) {
+        this.searchControl.value.INSURANCEKINDINFO.forEach(
+          (insuranceKind, i) => {
+            insuranceKind = { INSURANCEKIND: insuranceKind[0] };
+            this.searchControl.value.INSURANCEKINDINFO[i] = insuranceKind
+            console.log(this.searchControl.value.INSURANCEKINDINFO[i]);;
+          });
+      } else {
+        this.searchControl.value.INSURANCEKINDINFO = [];
+      }
 
       // POSTボディ部に検索フォームの内容をディープコピー
       const { DEPARTMENTORBASERADIO, DEPARTMENTORBASE, ...rest }
-      = this.searchControl.value;
+        = this.searchControl.value;
       // this.param = { ...rest };
       this.param = JSON.parse(JSON.stringify(rest));
 
