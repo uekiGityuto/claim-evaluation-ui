@@ -116,6 +116,7 @@ export class DetailComponent implements OnInit {
 
         // 取得結果をシャーローコピー
         // this.claim = { ...response['CLAIM'.toString()] };
+        console.log('response:', response);
         this.claim = { ...response.CLAIM };
 
         // 不正請求スコア履歴を算出日の古い順にソート

@@ -5,8 +5,10 @@
 export const environment = {
   production: false,
   // restapi_url: 'api',
-  auth_url: 'http://localhost:3000/authorize',
-  scores_url: 'http://localhost:3000/scores',
+  // auth_url: 'http://localhost:3000/authorize',
+  auth_url: 'fraud-detection/api/authorize/auth',
+  // scores_url: 'http://localhost:3000/scores',
+  scores_url: 'fraud-detection/api/scores',
   claim_list_url: 'http://localhost:3000/claimList',
   claims_url: 'http://localhost:3000/claims',
   help_url: 'https://angular.jp/docs',
