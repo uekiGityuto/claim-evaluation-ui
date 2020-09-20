@@ -7,7 +7,6 @@ import { Sort } from '@angular/material/sort';
 import { CategoryClass } from '../../model/category-class';
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
-import { ClassService } from '../../service/class.service';
 
 // TODO: interfaceをmodelとして切り離すか要検討
 
@@ -93,8 +92,7 @@ export class ListComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private httpClient: HttpClient,
-    private userInfo: UserInfoContainerService,
-    private classService: ClassService
+    private userInfo: UserInfoContainerService
   ) { }
 
   ngOnInit(): void {
@@ -293,7 +291,7 @@ export class ListComponent implements OnInit {
           // ビュー要素を取得
           this.claims = [];
           response['CLAIM'.toString()].forEach((claim: Claim, i) => {
-            const categoryClass = this.classService.setCategoryClass('低', '中', '高', claim.CLAIMCATEGORY);
+            const categoryClass = new CategoryClass('高', '中', '低', claim.CLAIMCATEGORY);
             this.claims[i] = { ...claim, categoryClass };
           });
           this.order = response['ORDER'.toString()];

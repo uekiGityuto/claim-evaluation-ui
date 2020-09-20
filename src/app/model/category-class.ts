@@ -1,13 +1,21 @@
 export class CategoryClass {
 
-  public low: boolean;
-  public middle: boolean;
-  public high: boolean;
+  highBgColor: boolean;
+  middleBgColor: boolean;
+  lowBgColor: boolean;
 
-  constructor(low = false, middle = false, high = false) {
-    this.low = low;
-    this.middle = middle;
-    this.high = high;
+  constructor(high: string, middle: string, low: string, category: string) {
+    this.highBgColor = false;
+    this.middleBgColor = false;
+    this.lowBgColor = false;
+
+    if (category === high) {
+      this.highBgColor = true;
+    } else if (category === middle) {
+      this.middleBgColor = true;
+    } else if (category === low) {
+      this.lowBgColor = true;
+    }
   }
 
 }

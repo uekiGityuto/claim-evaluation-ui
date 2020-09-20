@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 
-import { ClassService } from './class.service';
+import { CategoryClassService } from './category-class.service';
 
 describe('ClassService', () => {
-  let service: ClassService;
+  let service: CategoryClassService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});

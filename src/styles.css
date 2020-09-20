@@ -113,19 +113,31 @@ body {
 
 /* ngClassディレクティブ */
 
-.high {
+.highBgColor {
   background-color: var(--claim-high-color);
   color: var(--main-font-color);
 }
 
-.middle {
+.middleBgColor {
   background-color: var(--claim-middle-color);
   color: var(--main-font-color);
 }
 
-.low {
+.lowBgColor {
   background-color: var(--claim-low-color);
   color: var(--main-font-color);
+}
+
+.highColor {
+  color: var(--claim-high-color);
+}
+
+.middleColor {
+  color: var(--claim-middle-color);
+}
+
+.lowColor {
+  color: var(--claim-low-color);
 }
 
 /* クラスバインディング用 */

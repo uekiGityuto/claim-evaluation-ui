@@ -8,6 +8,7 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 
 import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
+import { CategoryMatrixClass } from '../../model/category-matrix-class';
 import { RaiseLowerReason } from '../../model/raise-lower-reason';
 import { ScoreCategory } from '../../model/score-category';
 import { ScoreDetail } from '../../model/score-detail';
@@ -16,7 +17,6 @@ import { FraudScore } from '../../model/fraud-score';
 
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
-import { ClassService } from '../../service/class.service';
 
 interface Claim {
   CLAIMNUMBER: string;
@@ -73,8 +73,7 @@ export class DetailComponent implements OnInit {
     private title: Title,
     private httpClient: HttpClient,
     private userInfo: UserInfoContainerService,
-    private datepipe: DatePipe,
-    private classService: ClassService
+    private datepipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -144,7 +143,7 @@ export class DetailComponent implements OnInit {
     // 事案カテゴリをセット
     this.claimCategory = fraudScoreView.CLAIMCATEGORY;
     // 事案カテゴリの背景色をセット
-    this.categoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
+    this.categoryClass = new CategoryClass('高', '中', '低', this.claimCategory);
     // 算出日のセット
     this.scoringDate = fraudScoreView.SCORINGDATE;
     // 事案カテゴリマトリクスをセット
@@ -152,7 +151,8 @@ export class DetailComponent implements OnInit {
     // スコア詳細のセット
     this.scoreDetails = [];
     fraudScoreView.SCOREDETAIL.forEach((scoreDetail, i) => {
-      const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.RANK);
+      // TODO: 大文字小文字を確認
+      const categoryClass = new CategoryClass('high', 'middle', 'low', scoreDetail.RANK);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
@@ -161,63 +161,62 @@ export class DetailComponent implements OnInit {
   }
 
   // 事案カテゴリマトリクスのセット
-  setCategoryMatrix(scoreCategorys: ScoreCategory[]):CategoryMatrix {
-    let highHigh = '';
-    let highMiddle = '';
-    let highLow = '';
-    let middleHigh = '';
-    let middleMiddle = '';
-    let middleLow = '';
-    let lowHigh = '';
-    let lowMiddle = '';
-    let lowLow = '';
+  setCategoryMatrix(scoreCategorys: ScoreCategory[]): CategoryMatrix {
+    const categoryMatrix = new CategoryMatrix();
 
     scoreCategorys.forEach(scoreCategory => {
       switch (scoreCategory.TOKUSHUSCORECLASS) {
         case 'High':
           switch (scoreCategory.NCPDSCORECLASS) {
             case 'High':
-              highHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Middle':
-              highMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Low':
-              highLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.highLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
           }
           break;
         case 'Middle':
           switch (scoreCategory.NCPDSCORECLASS) {
             case 'High':
-              middleHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Middle':
-              middleMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Low':
-              middleLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.middleLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
           }
           break;
         case 'Low':
           switch (scoreCategory.NCPDSCORECLASS) {
             case 'High':
-              lowHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Middle':
-              lowMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Low':
-              lowLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowLow = scoreCategory.CLAIMCATEGORYTYPE;
+              categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
           }
         break;
       }
     });
-
-    return new CategoryMatrix(highHigh, highMiddle, highLow,
-       middleHigh, middleMiddle, middleLow, lowHigh, lowMiddle, lowLow);
+    return categoryMatrix;
   }
 
   // 推論結果の要因をソート
@@ -229,8 +228,8 @@ export class DetailComponent implements OnInit {
       const descReason = reasons.sort((a, b) => {
         return (a.REASON > b.REASON ? -1 : 1);
       });
-      const raiseReason = descReason.reverse().filter(val => val.REASON < 0);
-      const lowerReason = descReason.filter(val => val.REASON >= 0);
+      const raiseReason = descReason.filter(val => val.REASON >= 0);
+      const lowerReason = descReason.reverse().filter(val => val.REASON < 0);
       const raizeLowerReason = new RaiseLowerReason(raiseReason, lowerReason);
       raiseLowerReasons.push(raizeLowerReason);
     });
@@ -290,14 +289,14 @@ export class DetailComponent implements OnInit {
       data: {
         labels: this.chartData.labels,
         datasets: [{
-          label: '特殊事案モデル',
+          label: this.scoreDetails[0].MODELTYPE,
           data: this.chartData.series1,
           backgroundColor: [environment.specialCase_bg_color],
           borderColor: [environment.specialCase_border_color],
           steppedLine: true,
           borderWidth: 4,
         }, {
-          label: 'NC/PDモデル',
+          label: this.scoreDetails[1].MODELTYPE,
           data: this.chartData.series2,
           backgroundColor: [environment.ncpd_bg_color],
           borderColor: [environment.ncpd_border_color],
