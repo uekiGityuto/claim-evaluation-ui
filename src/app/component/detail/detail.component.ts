@@ -9,14 +9,14 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
 import { RaiseLowerReason } from '../../model/raise-lower-reason';
+import { ScoreCategory } from '../../model/score-category';
+import { ScoreDetail } from '../../model/score-detail';
+import { ScoreDetailView } from '../../model/score-detail-view';
+import { FraudScore } from '../../model/fraud-score';
 
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
-
-// interfaceをmodelとして切り離したいが、
-// IF08APIとIF15APIのそれぞれ異なるフィールドを持つCLAIMオブジェクトを持っているので、
-// コンポーネント内に記載
 
 interface Claim {
   CLAIMNUMBER: string;
@@ -28,37 +28,6 @@ interface Claim {
   LOSSDATE: Date;
   UPDATEDATE: Date;
   FRAUDSCOREHISTORY: FraudScore[];
-}
-
-interface FraudScore {
-  SCORINGDATE: Date;
-  CLAIMCATEGORY: string;
-  SCOREDETAIL: ScoreDetail[];
-  SCORECATEGORIES: ScoreCategory[];
-}
-
-interface ScoreDetail {
-  MODELTYPE: string;
-  RANK: string;
-  SCORE: string;
-  REASONS: Reason[];
-}
-
-interface ScoreDetailForDisplay extends ScoreDetail {
-  // ngClass用
-  categoryClass: CategoryClass;
-}
-
-interface Reason {
-  REASON: number;
-  FEATURENAME: string;
-  FEATUREDESCRIPTION: string;
-}
-
-interface ScoreCategory {
-  TOKUSHUSCORECLASS: string;
-  NCPDSCORECLASS: string;
-  CLAIMCATEGORYTYPE: string;
 }
 
 /**
@@ -85,7 +54,7 @@ export class DetailComponent implements OnInit {
   claimCategory: string;
   scoringDate: Date;
   categoryMatrix: CategoryMatrix;
-  scoreDetails: ScoreDetailForDisplay[];
+  scoreDetails: ScoreDetailView[];
   raiseLowerReasons: RaiseLowerReason[] = [];
 
   // ngClass用
@@ -150,8 +119,8 @@ export class DetailComponent implements OnInit {
 
         // 最新の推論結果を元にビュー要素を取得
         const end = this.claim.FRAUDSCOREHISTORY.length - 1;
-        const displayFraudScore = this.claim.FRAUDSCOREHISTORY[end];
-        this.getScoreInfo(displayFraudScore);
+        const fraudScoreView = this.claim.FRAUDSCOREHISTORY[end];
+        this.getScoreInfo(fraudScoreView);
 
         // チャート作成
         this.chartCreate(this.claim.FRAUDSCOREHISTORY);
@@ -171,18 +140,18 @@ export class DetailComponent implements OnInit {
   }
 
   // 特定算出日の推論結果を元にビュー要素を取得
-  getScoreInfo(displayFraudScore: FraudScore) {
+  getScoreInfo(fraudScoreView: FraudScore) {
     // 事案カテゴリをセット
-    this.claimCategory = displayFraudScore.CLAIMCATEGORY;
+    this.claimCategory = fraudScoreView.CLAIMCATEGORY;
     // 事案カテゴリの背景色をセット
     this.categoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
     // 算出日のセット
-    this.scoringDate = displayFraudScore.SCORINGDATE;
+    this.scoringDate = fraudScoreView.SCORINGDATE;
     // 事案カテゴリマトリクスをセット
-    this.categoryMatrix = this.setCategoryMatrix(displayFraudScore.SCORECATEGORIES);
+    this.categoryMatrix = this.setCategoryMatrix(fraudScoreView.SCORECATEGORIES);
     // スコア詳細のセット
     this.scoreDetails = [];
-    displayFraudScore.SCOREDETAIL.forEach((scoreDetail, i) => {
+    fraudScoreView.SCOREDETAIL.forEach((scoreDetail, i) => {
       const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.RANK);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
@@ -347,8 +316,8 @@ export class DetailComponent implements OnInit {
     } else {
       const element = elements[0];
       console.log('onClick._index:', element['_index'.toString()]);
-      const displayFraudScore = history[element['_index'.toString()]];
-      this.getScoreInfo(displayFraudScore);
+      const fraudScoreView = history[element['_index'.toString()]];
+      this.getScoreInfo(fraudScoreView);
     }
   }
 
