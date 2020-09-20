@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CategoryClass } from '../model/category-class.model';
+import { CategoryClass } from '../model/category-class';
 
 /**
  * ngClassに値セットするservice

@@ -6,9 +6,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Chart, ChartData, ChartOptions } from 'chart.js';
 
-import { CategoryClass } from '../../model/category-class.model';
+import { CategoryClass } from '../../model/category-class';
+import { CategoryMatrix } from '../../model/category-matrix';
 import { environment } from '../../../environments/environment';
-import { UserInfoContainerService } from '../../service/user-info-container.service'
+import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
 
 // interfaceをmodelとして切り離したいが、
@@ -31,6 +32,7 @@ interface FraudScore {
   SCORINGDATE: Date;
   CLAIMCATEGORY: string;
   SCOREDETAIL: ScoreDetail[];
+  SCORECATEGORIES: ScoreCategory[];
 }
 
 interface ScoreDetail {
@@ -49,6 +51,12 @@ interface Reason {
   REASON: number;
   FEATURENAME: string;
   FEATUREDESCRIPTION: string;
+}
+
+interface ScoreCategory {
+  TOKUSHUSCORECLASS: string;
+  NCPDSCORECLASS: string;
+  CLAIMCATEGORYTYPE: string;
 }
 
 /**
@@ -74,6 +82,7 @@ export class DetailComponent implements OnInit {
   // ビュー表示用（任意のスコアリング日に応じて変化する部分）
   claimCategory: string;
   scoringDate: Date;
+  categoryMatrix: CategoryMatrix;
   scoreDetails: ScoreDetailForDisplay[];
   reasons: { rReason: Reason[], gReason: Reason[]; }[];
 
@@ -139,8 +148,8 @@ export class DetailComponent implements OnInit {
 
         // 最新の推論結果を元にビュー要素を取得
         const end = this.claim.FRAUDSCOREHISTORY.length - 1;
-        const diplayFraudScore = this.claim.FRAUDSCOREHISTORY[end];
-        this.getScoreInfo(diplayFraudScore);
+        const displayFraudScore = this.claim.FRAUDSCOREHISTORY[end];
+        this.getScoreInfo(displayFraudScore);
 
         // チャート作成
         this.chartCreate(this.claim.FRAUDSCOREHISTORY);
@@ -160,22 +169,84 @@ export class DetailComponent implements OnInit {
   }
 
   // 特定算出日の推論結果を元にビュー要素を取得
-  getScoreInfo(diplayFraudScore: FraudScore) {
+  getScoreInfo(displayFraudScore: FraudScore) {
     // 事案カテゴリをセット
-    this.claimCategory = diplayFraudScore.CLAIMCATEGORY;
+    this.claimCategory = displayFraudScore.CLAIMCATEGORY;
     // 事案カテゴリの背景色をセット
     this.categoryClass = this.classService.setCategoryClass('低', '中', '高', this.claimCategory);
     // 算出日のセット
-    this.scoringDate = diplayFraudScore.SCORINGDATE;
+    this.scoringDate = displayFraudScore.SCORINGDATE;
+    // 事案カテゴリマトリクスをセット
+    this.categoryMatrix = this.setCategoryMatrix(displayFraudScore.SCORECATEGORIES);
     // スコア詳細のセット
     this.scoreDetails = [];
-    diplayFraudScore.SCOREDETAIL.forEach((scoreDetail, i) => {
+    displayFraudScore.SCOREDETAIL.forEach((scoreDetail, i) => {
       const categoryClass = this.classService.setCategoryClass('low', 'middle', 'high', scoreDetail.RANK);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
     // 推論結果の要因をソート
     this.reasonSort(this.scoreDetails);
+  }
+
+  // 事案カテゴリマトリクスのセット
+  setCategoryMatrix(scoreCategorys: ScoreCategory[]):CategoryMatrix {
+    let highHigh = '';
+    let highMiddle = '';
+    let highLow = '';
+    let middleHigh = '';
+    let middleMiddle = '';
+    let middleLow = '';
+    let lowHigh = '';
+    let lowMiddle = '';
+    let lowLow = '';
+
+    scoreCategorys.forEach(scoreCategory => {
+      switch (scoreCategory.TOKUSHUSCORECLASS) {
+        case 'High':
+          switch (scoreCategory.NCPDSCORECLASS) {
+            case 'High':
+              highHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Middle':
+              highMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Low':
+              highLow = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+          }
+          break;
+        case 'Middle':
+          switch (scoreCategory.NCPDSCORECLASS) {
+            case 'High':
+              middleHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Middle':
+              middleMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Low':
+              middleLow = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+          }
+          break;
+        case 'Low':
+          switch (scoreCategory.NCPDSCORECLASS) {
+            case 'High':
+              lowHigh = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Middle':
+              lowMiddle = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+            case 'Low':
+              lowLow = scoreCategory.CLAIMCATEGORYTYPE;
+              break;
+          }
+        break;
+      }
+    });
+
+    return new CategoryMatrix(highHigh, highMiddle, highLow,
+       middleHigh, middleMiddle, middleLow, lowHigh, lowMiddle, lowLow);
   }
 
   // 推論結果の要因をソート
@@ -273,8 +344,8 @@ export class DetailComponent implements OnInit {
     } else {
       const element = elements[0];
       console.log('onClick._index:', element['_index'.toString()]);
-      const diplayFraudScore = history[element['_index'.toString()]];
-      this.getScoreInfo(diplayFraudScore);
+      const displayFraudScore = history[element['_index'.toString()]];
+      this.getScoreInfo(displayFraudScore);
     }
   }
 
