@@ -4,37 +4,11 @@ import { FormControl, FormGroup, Validators, AbstractControl, NgForm } from '@an
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
+import { SearchForm } from '../../model/search-form';
 import { CategoryClass } from '../../model/category-class';
+
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
-
-// TODO: interfaceをmodelとして切り離すか要検討
-
-interface SearchForm {
-  REQ_USER_ID: string;
-  CLAIMNUMBER: string;
-  CLAIMCATEGORYINFO: ClaimCategory[];
-  INSURANCEKINDINFO: InsuranceKind[];
-  FROMLOSSDATE: string;
-  TOLOSSDATE: string;
-  INSUREDNAMEKANA: string;
-  INSUREDNAMEKANJI: string;
-  CONTRACTORNAMEKANA: string;
-  CONTRACTORNAMEKANJI: string;
-  DEPARTMENT: string;
-  BASE: string;
-  LABELTYPE: string;
-  ORDER: string;
-  DISPLAYFROM: string;
-}
-
-interface ClaimCategory {
-  CLAIMCATEGORY: string;
-}
-
-interface InsuranceKind {
-  INSURANCEKIND: string;
-}
 
 interface ClaimList {
   CLAIM: Claim[];
@@ -50,8 +24,8 @@ interface Claim {
   INSUREDNAMEKANA: string;
   CONTRACTORNAMEKANJI: string;
   CONTRACTORNAMEKANA: string;
-  DEPARTMENT: string;
-  BASE: string;
+  BUTENKANJI: string;
+  KYOTENKANJI: string;
   INSURANCEKIND: string;
   LASTUPDATEDATE: Date;
   LOSSDATE: Date;
@@ -113,12 +87,12 @@ export class ListComponent implements OnInit {
       INSUREDNAMEKANJI: new FormControl(),
       CONTRACTORNAMEKANA: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
       CONTRACTORNAMEKANJI: new FormControl(),
-      DEPARTMENTORBASERADIO: new FormControl(),
-      DEPARTMENTORBASE: new FormControl()
+      BUTENKYOTENRADIO: new FormControl(),
+      BUTENKYOTEN: new FormControl()
     }, {
       // 複数項目に対してのvalidation
       // TODO: 全てのFormControlについて一回ずつ（つまり11回）実施してしまうので他に良い方法がないか検討
-      validators: [this.isInputMoreThanOne, this.isDepartmentOrBaseRadio]
+      validators: [this.isInputMoreThanOne, this.isButenKyotenRadio]
     });
 
     this.claims = [];
@@ -197,20 +171,20 @@ export class ListComponent implements OnInit {
   // HTTPリクエストのボディ部を作成
   createPostBody(form :FormGroup, param: SearchForm, userId: string) {
     // ボディ部に検索フォームの内容をディープコピー
-    const { DEPARTMENTORBASERADIO, DEPARTMENTORBASE, ...rest } = form.value;
+    const { BUTENKYOTENRADIO, BUTENKYOTEN, ...rest } = form.value;
     param = JSON.parse(JSON.stringify(rest));
 
     // ボディ部の残り（検索フォーム以外の内容）をセット
     param.REQ_USER_ID = userId;
-    if (DEPARTMENTORBASERADIO === 'department') {
-      param.DEPARTMENT = DEPARTMENTORBASE;
-      param.BASE = '';
-    } else if (DEPARTMENTORBASERADIO === 'base') {
-      param.DEPARTMENT = '';
-      param.BASE = DEPARTMENTORBASE;
+    if (BUTENKYOTENRADIO === 'buten') {
+      param.BUTENKANJI = BUTENKYOTEN;
+      param.KYOTENKANJI = '';
+    } else if (BUTENKYOTENRADIO === 'kyoten') {
+      param.BUTENKANJI = '';
+      param.KYOTENKANJI = BUTENKYOTEN;
     } else {
-      param.DEPARTMENT = '';
-      param.BASE = '';
+      param.BUTENKANJI = '';
+      param.KYOTENKANJI = '';
     }
     param.LABELTYPE = environment.lossDate;
     param.ORDER = environment.desc;
@@ -285,20 +259,20 @@ export class ListComponent implements OnInit {
     // スタブ用
     this.httpClient.get(claimsUri)
       .subscribe(
-        response => {
+        (response: ClaimList) => {
           // console.log('response:', response);
           this.isError = false;
           // ビュー要素を取得
           this.claims = [];
-          response['CLAIM'.toString()].forEach((claim: Claim, i) => {
+          response.CLAIM.forEach((claim: Claim, i) => {
             const categoryClass = new CategoryClass('高', '中', '低', claim.CLAIMCATEGORY);
             this.claims[i] = { ...claim, categoryClass };
           });
-          this.order = response['ORDER'.toString()];
-          this.fromPages = response['FROMPAGES'.toString()];
-          this.displayFromPages = response['FROMPAGES'.toString()];
-          this.toPages = response['TOPAGES'.toString()];
-          this.totalNumber = response['TOTALNUMBER'.toString()];
+          this.order = response.ORDER;
+          this.fromPages = response.FROMPAGES;
+          this.displayFromPages = response.FROMPAGES;
+          this.toPages = response.TOPAGES;
+          this.totalNumber = response.TOTALNUMBER;
         }, error => {
           console.log('検索エラーメッセージ表示');
           this.isError = true;
@@ -309,10 +283,10 @@ export class ListComponent implements OnInit {
 
   // TODO: validationは切り離すか要検討
 
-  // 一つ以上フォーム入力されているか検証（departmentOrBaseRadioは除外）
+  // 一つ以上フォーム入力されているか検証（BUTENKYOTENRADIOは除外）
+  // TODO: CLAIMCATEGORYINFOとINSURANCEKINDINFOを選択→選択解除すると、
+  // 何も選択されていないのに検証okになってしまうので対応
   isInputMoreThanOne(control: AbstractControl) {
-    // TODO: 何か良い方法を検討
-    // （for文で回す等したいがdepartmentOrBaseRadioを除外したいのでこの方法を使用）
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
@@ -334,17 +308,17 @@ export class ListComponent implements OnInit {
       return null;
     } else if (control.value.CONTRACTORNAMEKANJI) {
       return null;
-    } else if (control.value.departmentOrBase) {
+    } else if (control.value.BUTENKYOTEN) {
       return null;
     } else {
       return { isInputMoreThanOne: { valid: false } };
     };
   }
 
-  // departmentOrBaseを入力する時にdepartmentOrBaseRadioも選択されているか検証
-  isDepartmentOrBaseRadio(control: AbstractControl) {
-    if (control.value && control.value.departmentOrBase && !control.value.departmentOrBaseRadio) {
-      return { isDepartmentOrBaseRadio: { valid: false } };
+  // BUTENKYOTENを入力する時にBUTENKYOTENRADIOも選択されているか検証
+  isButenKyotenRadio(control: AbstractControl) {
+    if (control.value && control.value.BUTENKYOTEN && !control.value.BUTENKYOTENRADIO) {
+      return { isButenKyotenRadio: { valid: false } };
     } else {
       return null;
     }

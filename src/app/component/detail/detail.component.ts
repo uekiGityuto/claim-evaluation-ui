@@ -18,6 +18,10 @@ import { FraudScore } from '../../model/fraud-score';
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 
+interface Scores {
+  CLAIM: Claim;
+}
+
 interface Claim {
   CLAIMNUMBER: string;
   INSUREDNAMEKANJI: string;
@@ -105,13 +109,14 @@ export class DetailComponent implements OnInit {
     this.httpClient.get(scoresUri, {
       params: params
     }).subscribe(
-      response => {
+      (response: Scores) => {
         // console.log('claim:', response);
         console.log('推論結果取得OK');
         this.isError = false;
 
         // 取得結果をシャーローコピー
-        this.claim = { ...response['CLAIM'.toString()] };
+        // this.claim = { ...response['CLAIM'.toString()] };
+        this.claim = { ...response.CLAIM };
 
         // 不正請求スコア履歴を算出日の古い順にソート
         this.fraudScoreSort(this.claim.FRAUDSCOREHISTORY);

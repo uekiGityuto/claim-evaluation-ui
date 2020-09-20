@@ -55,11 +55,11 @@
         <input type="text" type="text" formControlName="CONTRACTORNAMEKANJI" placeholder="契約者名（漢字）">
       </div>
       <div class="radio-form">
-        <div><input type="radio" formControlName="DEPARTMENTORBASERADIO" value="department">担当部</div>
-        <div><input type="radio" formControlName="DEPARTMENTORBASERADIO" value="base">担当拠点</div>
+        <div><input type="radio" formControlName="BUTENKYOTENRADIO" value="buten">担当部</div>
+        <div><input type="radio" formControlName="BUTENKYOTENRADIO" value="kyoten">担当拠点</div>
       </div>
       <div>
-        <input type="text" type="text" formControlName="DEPARTMENTORBASE" placeholder="担当部・担当拠点">
+        <input type="text" type="text" formControlName="BUTENKYOTEN" placeholder="担当部・担当拠点">
       </div>
       <div>
         <button [disabled]="searchControl.invalid" (click)="search()">検索</button>
@@ -78,8 +78,8 @@
           <th mat-sort-header="claimNumber">受付番号</th>
           <th mat-sort-header="insuredName">被保険者名</th>
           <th mat-sort-header="contractorName">契約者名</th>
-          <th mat-sort-header="department">担当部</th>
-          <th mat-sort-header="base">担当拠点</th>
+          <th mat-sort-header="butenKanji">担当部</th>
+          <th mat-sort-header="kyotenKanji">担当拠点</th>
           <th mat-sort-header="insuranceKind">保険種類</th>
           <th mat-sort-header="lastUpdateDate">最終更新日</th>
           <th mat-sort-header="lossDate">事故日</th>
@@ -89,8 +89,8 @@
           <td><a [routerLink]="['/detail', claim.CLAIMNUMBER]">{{ claim.CLAIMNUMBER }}</a></td>
           <td [appTooltip]="claim.INSUREDNAMEKANA" style="width: 160px">{{ claim.INSUREDNAMEKANA }}</td>
           <td [appTooltip]="claim.CONTRACTORNAMEKANA" style="width: 160px">{{ claim.CONTRACTORNAMEKANA }}</td>
-          <td>{{ claim.DEPARTMENT }}</td>
-          <td>{{ claim.BASE }}</td>
+          <td>{{ claim.BUTENKANJI }}</td>
+          <td>{{ claim.KYOTENKANJI }}</td>
           <td>{{ claim.INSURANCEKIND }}</td>
           <td>{{ claim.LASTUPDATEDATE | date : 'yyyy/M/d' }}</td>
           <td>{{ claim.LOSSDATE | date : 'yyyy/M/d'}}</td>
