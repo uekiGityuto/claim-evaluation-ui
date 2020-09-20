@@ -285,7 +285,7 @@ export class DetailComponent implements OnInit {
     // チャートの作成
     // console.log('this.chartData.series1', this.chartData.series1);
     this.chart = new Chart(this.context, {
-      type: 'line',
+      type: environment.chart_type,
       data: {
         labels: this.chartData.labels,
         datasets: [{

@@ -10,6 +10,7 @@ export const environment = {
   claim_list_url: 'http://localhost:3000/claimList',
   claims_url: 'http://localhost:3000/claims',
   help_url: 'https://angular.jp/docs',
+  chart_type: 'line',
   specialCase_bg_color: 'rgba(0, 0, 255, 0)',
   specialCase_border_color: 'rgba(20, 0, 255, 100)',
   ncpd_bg_color: 'rgba(135, 206, 250, 0)',
