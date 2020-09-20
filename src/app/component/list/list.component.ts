@@ -116,6 +116,7 @@ export class ListComponent implements OnInit {
 
   // 検索処理
   search(): void {
+    console.log(this.searchControl.value);
     // バリデーション
     if (this.searchControl.invalid) {
       console.log('reject search');
@@ -284,17 +285,15 @@ export class ListComponent implements OnInit {
   // TODO: validationは切り離すか要検討
 
   // 一つ以上フォーム入力されているか検証（BUTENKYOTENRADIOは除外）
-  // TODO: CLAIMCATEGORYINFOとINSURANCEKINDINFOを選択→選択解除すると、
-  // 何も選択されていないのに検証okになってしまうので対応
   isInputMoreThanOne(control: AbstractControl) {
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
     if (control.value.CLAIMNUMBER) {
       return null;
-    } else if (control.value.CLAIMCATEGORYINFO) {
+    } else if (control.value.CLAIMCATEGORYINFO && control.value.CLAIMCATEGORYINFO.length > 0) {
       return null;
-    } else if (control.value.INSURANCEKINDINFO) {
+    } else if (control.value.INSURANCEKINDINFO && control.value.INSURANCEKINDINFO.length > 0) {
       return null;
     } else if (control.value.FROMLOSSDATE) {
       return null;
