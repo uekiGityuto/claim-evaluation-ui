@@ -3,7 +3,7 @@ import { CategoryClass } from '../model/category-class';
 
 /**
  * ngClassに値セットするservice
- * @author SKK231527 李
+ * @author SKK231527 植木宥登
  */
 @Injectable({
   providedIn: 'root'

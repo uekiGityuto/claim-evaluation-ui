@@ -4,7 +4,7 @@ import { FormControl, FormGroup, Validators, AbstractControl, NgForm } from '@an
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-import { CategoryClass } from '../../model/category-class.model';
+import { CategoryClass } from '../../model/category-class';
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';

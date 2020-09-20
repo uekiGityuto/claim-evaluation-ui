@@ -83,7 +83,7 @@
               <div class="factor-header raize child-centering">
                 <p>スコア上昇要因↑</p>
               </div>
-              <div class="model-card-box" *ngFor="let reason of reasons[i].gReason">
+              <div class="model-card-box" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
                 <p class="factor-score">スコア：{{ reason.REASON }}</p>
                 <p class="feature-value">{{ reason.FEATURENAME }}</p>
                 <p class="feature-value-description">{{ reason.FEATUREDESCRIPTION }}</p>
@@ -93,7 +93,7 @@
               <div class="factor-header lower child-centering">
                 <p>スコア減少要因↓</p>
               </div>
-              <div class="model-card-box" *ngFor="let reason of reasons[i].rReason">
+              <div class="model-card-box" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
                 <p class="factor-score">スコア：{{ reason.REASON }}</p>
                 <p class="feature-value">{{ reason.FEATURENAME }}</p>
                 <p class="feature-value-description">{{ reason.FEATUREDESCRIPTION }}</p>

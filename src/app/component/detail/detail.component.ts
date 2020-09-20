@@ -8,6 +8,8 @@ import { Chart, ChartData, ChartOptions } from 'chart.js';
 
 import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
+import { RaiseLowerReason } from '../../model/raise-lower-reason';
+
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 import { ClassService } from '../../service/class.service';
@@ -84,7 +86,7 @@ export class DetailComponent implements OnInit {
   scoringDate: Date;
   categoryMatrix: CategoryMatrix;
   scoreDetails: ScoreDetailForDisplay[];
-  reasons: { rReason: Reason[], gReason: Reason[]; }[];
+  raiseLowerReasons: RaiseLowerReason[] = [];
 
   // ngClass用
   categoryClass: CategoryClass;
@@ -186,7 +188,7 @@ export class DetailComponent implements OnInit {
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
     // 推論結果の要因をソート
-    this.reasonSort(this.scoreDetails);
+    this.raiseLowerReasons = this.reasonSort(this.scoreDetails);
   }
 
   // 事案カテゴリマトリクスのセット
@@ -250,19 +252,20 @@ export class DetailComponent implements OnInit {
   }
 
   // 推論結果の要因をソート
-  reasonSort(scoreDetails: ScoreDetail[]): void {
-    this.reasons = [];
+  reasonSort(scoreDetails: ScoreDetail[]): RaiseLowerReason[] {
+    let raiseLowerReasons: RaiseLowerReason[] = [];
     // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
     scoreDetails.forEach((scoreDetail, i) => {
       const reasons = scoreDetail.REASONS.slice();
       const descReason = reasons.sort((a, b) => {
         return (a.REASON > b.REASON ? -1 : 1);
       });
-      const gReason = descReason.filter(val => val.REASON >= 0);
-      const rReason = descReason.reverse().filter(val => val.REASON < 0);
-      this.reasons[i] = { gReason, rReason };
+      const raiseReason = descReason.reverse().filter(val => val.REASON < 0);
+      const lowerReason = descReason.filter(val => val.REASON >= 0);
+      const raizeLowerReason = new RaiseLowerReason(raiseReason, lowerReason);
+      raiseLowerReasons.push(raizeLowerReason);
     });
-    console.log('this.reasons', this.reasons);
+    return raiseLowerReasons;
   };
 
   // チャート作成
