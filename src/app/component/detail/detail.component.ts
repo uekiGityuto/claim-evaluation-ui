@@ -98,18 +98,18 @@ export class DetailComponent implements OnInit {
   getLatestClaimInfo(claimNumber: string): void {
     // HTTPリクエストの各情報セット
     const scoresUri = environment.scores_url;
-    const params = { claimNumber: claimNumber };
+    const params = { CLAIMNUMBER: claimNumber };
     const headers = { 'Content-Type': 'application/json' };
 
     // 事案情報を取得
     // 本番用
-    this.httpClient.post(scoresUri, params ,{
+    this.httpClient.post<Scores>(scoresUri, params ,{
       headers: headers
     // スタブ用
     // this.httpClient.get(scoresUri, {
     //   params: params
     }).subscribe(
-      (response: Scores) => {
+      response => {
         // console.log('claim:', response);
         console.log('推論結果取得OK');
         this.isError = false;

@@ -2,7 +2,7 @@ import { ClaimCategory } from './claim-category';
 import { InsuranceKind } from './insurance-kind';
 
 export interface SearchForm {
-  REQ_USER_ID: string;
+  // REQ_USER_ID: string;
   CLAIMNUMBER: string;
   CLAIMCATEGORYINFO: ClaimCategory[];
   INSURANCEKINDINFO: InsuranceKind[];

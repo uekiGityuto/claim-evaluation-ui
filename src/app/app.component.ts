@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
   public ngOnInit(): void {
     // クエリパラメータをセット
     const param = this.getQueryVariable('param');
-    const userId = this.getQueryVariable('userId');
+    const userId = this.getQueryVariable('Uid');
 
     // クエリパラメータがセットされていれば認可処理を実施
     if (param === '' || userId === '') {

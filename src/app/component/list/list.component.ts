@@ -135,7 +135,7 @@ export class ListComponent implements OnInit {
       });
 
     // POSTボディ部に検索フォームの内容をディープコピー
-    this.createPostBody(this.searchControl, this.param, this.userId);
+    this.param = this.createPostBody(this.searchControl, this.param, this.userId);
 
     // 事案一覧取得
     this.searchList(this.param);
@@ -176,7 +176,7 @@ export class ListComponent implements OnInit {
     param = JSON.parse(JSON.stringify(rest));
 
     // ボディ部の残り（検索フォーム以外の内容）をセット
-    param.REQ_USER_ID = userId;
+    // param.REQ_USER_ID = userId;
     if (BUTENKYOTENRADIO === 'buten') {
       param.BUTENKANJI = BUTENKYOTEN;
       param.KYOTENKANJI = '';
@@ -190,7 +190,8 @@ export class ListComponent implements OnInit {
     param.LABELTYPE = environment.lossDate;
     param.ORDER = environment.desc;
     param.DISPLAYFROM = '1';
-    console.log('POSTボディ部', param);
+    // console.log('POSTボディ部', param);
+    return param;
   }
 
   // ソート処理
@@ -255,12 +256,11 @@ export class ListComponent implements OnInit {
 
     // 事案一覧を取得
     // 本番用
-    // this.httpClient.post(claimsUri, params ,{
-    //   headers: headers})
+    this.httpClient.post<ClaimList>(claimsUri, params ,{ headers: headers})
     // スタブ用
-    this.httpClient.get(claimsUri)
+    // this.httpClient.get(claimsUri)
       .subscribe(
-        (response: ClaimList) => {
+        response => {
           // console.log('response:', response);
           this.isError = false;
           // ビュー要素を取得
