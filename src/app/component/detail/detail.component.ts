@@ -67,7 +67,7 @@ export class DetailComponent implements OnInit {
   // chart用
   @ViewChild('claimCategoryChart')
   elementRef: ElementRef;
-  chartData = { labels: [], series1: [], series2: [] };
+  chartData = { labels1: [], labels2: [], series1: [], series2: [] };
   chartOptions: ChartOptions;
   context: CanvasRenderingContext2D;
   chart: Chart;
@@ -103,11 +103,11 @@ export class DetailComponent implements OnInit {
 
     // 事案情報を取得
     // 本番用
-    this.httpClient.post<Scores>(scoresUri, params ,{
+    this.httpClient.post<Scores>(scoresUri, params, {
       headers: headers
-    // スタブ用
-    // this.httpClient.get(scoresUri, {
-    //   params: params
+      // スタブ用
+      // this.httpClient.get(scoresUri, {
+      //   params: params
     }).subscribe(
       response => {
         // console.log('claim:', response);
@@ -219,7 +219,7 @@ export class DetailComponent implements OnInit {
               categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
           }
-        break;
+          break;
       }
     });
     return categoryMatrix;
@@ -245,40 +245,118 @@ export class DetailComponent implements OnInit {
   // チャート作成
   chartCreate(history: FraudScore[]): void {
     // チャートデータのセット
-    this.chartData.labels = [];
+    this.chartData.labels1 = [];
+    this.chartData.labels2 = [];
     this.chartData.series1 = [];
     this.chartData.series2 = [];
 
     history.forEach((fraudScore, i) => {
       const scoringDate = new Date(fraudScore.SCORINGDATE);
       // ラベルを日付と事案カテゴリの配列にする（日付\n事案カテゴリと表示される）
-      this.chartData.labels[i] =
-        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.CLAIMCATEGORY];
+      this.chartData.labels1[i] = this.datepipe.transform(scoringDate, 'M/d');
+      console.log('日付:', this.chartData.labels1[i]);
+      this.chartData.labels2[i] = fraudScore.CLAIMCATEGORY;
+      console.log('事案カテゴリ:', fraudScore.CLAIMCATEGORY);
       this.chartData.series1[i] = fraudScore.SCOREDETAIL[0].SCORE;
       this.chartData.series2[i] = fraudScore.SCOREDETAIL[1].SCORE;
       // console.log('this.chartData.series1', this.chartData.series1);
     });
 
+    // 描写後処理追加
+    Chart.plugins.register({
+      afterDatasetsDraw: (chart, easing) => {
+        console.log('if文前:', chart.canvas.id);
+        // if (chart.canvas.id === 'claimCategoryChart') {
+        // 縦軸ラベル描写
+        this.context.font = '10pt Arial';
+        this.context.fillStyle = 'rgba(137, 137, 137)';
+        this.context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
+        console.log('「スコア」設定後のcontext:', this.context);
+        let nLeft = 62;
+        const nRight = 110;
+        const nMove = (chart.width - nLeft - nRight) / this.chart.data.labels.length;
+        nLeft += nMove / 2;
+        for (let i = 0; i < this.chart.data.labels.length; i++) {
+          // 日付ラベル表示
+          this.context.fillStyle = 'rgba(137, 137, 137)';
+          let nTextWidth = this.context.measureText(this.chart.data.labels[i] as string).width;
+          this.context.fillText(this.chart.data.labels[i] as string, nLeft - (nTextWidth / 2), 10);
+          // 事案カテゴリ表示
+          if (this.chart.data.labels2[i] === '高') {
+            this.context.fillStyle = 'rgba(255, 95, 88)';
+          } else if (this.chart.data.labels2[i] === '中') {
+            this.context.fillStyle = 'rgba(245, 212, 98)';
+          } else if (this.chart.data.labels2[i] === '低') {
+            this.context.fillStyle = 'rgba(42, 201, 64)';
+          }
+          nTextWidth = this.context.measureText(this.chart.data.labels2[i] as string).width;
+          this.context.fillText(this.chart.data.labels2[i] as string, nLeft - (nTextWidth / 2), 30);
+          nLeft += nMove;
+        }
+      }
+      // }
+    });
+
     // チャートオプションのセット
     this.chartOptions = {
+      tooltips: {
+        mode: 'nearest',
+        intersect: false,
+      },
+      responsive: true,
+      layout: {
+        padding: {
+          left: 25,
+          right: 0,
+          top: 16,
+          bottom: 0
+        }
+      },
+      legend: {
+        display: true,
+        position: 'right',
+        fullWidth: true,
+      },
       scales: {
-        yAxes: [
-          {
-            ticks: {
-              min: 0,
-              max: 100
-            },
-          }],
-        xAxes: [
-          {
-            ticks: {
-              fontSize: 16,
-              // fontColor: ['#f0554e', '#f3ca3e'],
-              // callback: (tickValue, index, ticks) => {
-              // return tickValue;
-              // }
-            },
-          }],
+        xAxes: [{
+          position: 'top',
+          ticks: {
+            callback: (value, index, values) => {
+              return '';
+            }
+          },
+          gridLines: {
+            display: false,
+          },
+        }],
+        yAxes: [{
+          id: 'y-axis-1',
+          type: 'linear',
+          position: 'left',
+          ticks: {
+            max: 120,
+            min: 0,
+            stepSize: 20,
+            callback: (value, index, values) => {
+              return (value === 100 || value === 0) ? value : '';
+            }
+          },
+          scaleLabel: {
+            display: false
+          },
+        }, {
+          id: 'y-axis-2',
+          type: 'linear',
+          display: false,
+          ticks: {
+            max: 120,
+            min: 0,
+            stepSize: 20
+          },
+          gridLines: {
+            drawOnChartArea: false
+          }
+        }],
       },
       events: ['click'],
       onClick: (event, elements) => {
@@ -291,26 +369,32 @@ export class DetailComponent implements OnInit {
     // チャートの作成
     // console.log('this.chartData.series1', this.chartData.series1);
     this.chart = new Chart(this.context, {
-      type: environment.chart_type,
+      type: 'bar',
       data: {
-        labels: this.chartData.labels,
+        labels: this.chartData.labels1,
+        labels2: this.chartData.labels2,
         datasets: [{
           label: this.scoreDetails[0].MODELTYPE,
+          type: 'line',
+          fill: false,
           data: this.chartData.series1,
           backgroundColor: [environment.specialCase_bg_color],
           borderColor: [environment.specialCase_border_color],
+          yAxisID: 'y-axis-1',
           steppedLine: true,
-          borderWidth: 4,
+          borderWidth: 4
         }, {
           label: this.scoreDetails[1].MODELTYPE,
+          type: 'line',
+          fill: false,
           data: this.chartData.series2,
           backgroundColor: [environment.ncpd_bg_color],
           borderColor: [environment.ncpd_border_color],
           steppedLine: true,
-          borderWidth: 2,
+          borderWidth: 2
         }],
       },
-      options: this.chartOptions,
+      options: this.chartOptions
     });
   };
 
