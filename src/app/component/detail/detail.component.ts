@@ -67,7 +67,7 @@ export class DetailComponent implements OnInit {
   // chart用
   @ViewChild('claimCategoryChart')
   elementRef: ElementRef;
-  chartData = { labels1: [], labels2: [], series1: [], series2: [] };
+  chartData = { labels: [], series1: [], series2: [] };
   chartOptions: ChartOptions;
   context: CanvasRenderingContext2D;
   chart: Chart;
@@ -245,56 +245,57 @@ export class DetailComponent implements OnInit {
   // チャート作成
   chartCreate(history: FraudScore[]): void {
     // チャートデータのセット
-    this.chartData.labels1 = [];
-    this.chartData.labels2 = [];
+    this.chartData.labels = [];
     this.chartData.series1 = [];
     this.chartData.series2 = [];
 
     history.forEach((fraudScore, i) => {
       const scoringDate = new Date(fraudScore.SCORINGDATE);
-      // ラベルを日付と事案カテゴリの配列にする（日付\n事案カテゴリと表示される）
-      this.chartData.labels1[i] = this.datepipe.transform(scoringDate, 'M/d');
-      console.log('日付:', this.chartData.labels1[i]);
-      this.chartData.labels2[i] = fraudScore.CLAIMCATEGORY;
-      console.log('事案カテゴリ:', fraudScore.CLAIMCATEGORY);
+      this.chartData.labels[i] =
+        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.CLAIMCATEGORY];
       this.chartData.series1[i] = fraudScore.SCOREDETAIL[0].SCORE;
       this.chartData.series2[i] = fraudScore.SCOREDETAIL[1].SCORE;
       // console.log('this.chartData.series1', this.chartData.series1);
     });
 
+    // chartのグローバル設定セット
+    Chart.defaults.global.defaultFontColor = '#000000';
+    Chart.defaults.global.defaultFontFamily = '"Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic"';
+    Chart.defaults.global.defaultFontSize = 12;
+
     // 描写後処理追加
     Chart.plugins.register({
       afterDatasetsDraw: (chart, easing) => {
-        console.log('if文前:', chart.canvas.id);
-        // if (chart.canvas.id === 'claimCategoryChart') {
         // 縦軸ラベル描写
-        this.context.font = '10pt Arial';
-        this.context.fillStyle = 'rgba(137, 137, 137)';
+        this.context.font = '12px "Meiryo UI"';
+        this.context.fillStyle = '#000000';
         this.context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
         console.log('「スコア」設定後のcontext:', this.context);
+        // 日付ラベルと事案カテゴリラベルの表示位置を決める情報を算出
         let nLeft = 62;
-        const nRight = 110;
+        const nRight = 170;
         const nMove = (chart.width - nLeft - nRight) / this.chart.data.labels.length;
         nLeft += nMove / 2;
         for (let i = 0; i < this.chart.data.labels.length; i++) {
           // 日付ラベル表示
-          this.context.fillStyle = 'rgba(137, 137, 137)';
-          let nTextWidth = this.context.measureText(this.chart.data.labels[i] as string).width;
-          this.context.fillText(this.chart.data.labels[i] as string, nLeft - (nTextWidth / 2), 10);
-          // 事案カテゴリ表示
-          if (this.chart.data.labels2[i] === '高') {
-            this.context.fillStyle = 'rgba(255, 95, 88)';
-          } else if (this.chart.data.labels2[i] === '中') {
-            this.context.fillStyle = 'rgba(245, 212, 98)';
-          } else if (this.chart.data.labels2[i] === '低') {
-            this.context.fillStyle = 'rgba(42, 201, 64)';
+          this.context.font = '16px "Meiryo UI"';
+          this.context.fillStyle = '#000000';
+          let nTextWidth = this.context.measureText(this.chart.data.labels[i][0] as string).width;
+          this.context.fillText(this.chart.data.labels[i][0] as string, nLeft - (nTextWidth / 2), 10);
+          // 事案カテゴリラベル表示
+          this.context.font = '16px "Meiryo UI"';
+          if (this.chart.data.labels[i][1] === '高') {
+            this.context.fillStyle = '#f0554e';
+          } else if (this.chart.data.labels[i][1] === '中') {
+            this.context.fillStyle = '#f3ca3e';
+          } else if (this.chart.data.labels[i][1] === '低') {
+            this.context.fillStyle = '#2ac940 ';
           }
-          nTextWidth = this.context.measureText(this.chart.data.labels2[i] as string).width;
-          this.context.fillText(this.chart.data.labels2[i] as string, nLeft - (nTextWidth / 2), 30);
+          nTextWidth = this.context.measureText(this.chart.data.labels[i][1] as string).width;
+          this.context.fillText(this.chart.data.labels[i][1] as string, nLeft - (nTextWidth / 2), 30);
           nLeft += nMove;
         }
       }
-      // }
     });
 
     // チャートオプションのセット
@@ -371,8 +372,7 @@ export class DetailComponent implements OnInit {
     this.chart = new Chart(this.context, {
       type: 'bar',
       data: {
-        labels: this.chartData.labels1,
-        labels2: this.chartData.labels2,
+        labels: this.chartData.labels,
         datasets: [{
           label: this.scoreDetails[0].MODELTYPE,
           type: 'line',
