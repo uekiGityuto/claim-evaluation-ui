@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
   // 認可処理
   authorize(param: string, userId: string): void {
     // HTTPリクエストの各情報セット
-    const authUri = environment.auth_url;
+    const authUri = environment.authorize_url;
     const params = { param: param, userId: userId };
 
     this.httpClient.get(authUri, {

@@ -101,7 +101,7 @@ export class ListComponent implements OnInit {
   // 認可処理
   authorize(): void {
     // 認可処理用のuri作成
-    const authUri = environment.claim_list_url;
+    const authUri = environment.transition_url;
 
     // 認可処理を実施
     this.httpClient.get(authUri).subscribe(
