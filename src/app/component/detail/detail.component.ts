@@ -67,10 +67,13 @@ export class DetailComponent implements OnInit {
   // chart用
   @ViewChild('claimCategoryChart')
   elementRef: ElementRef;
-  chartData = { labels: [], series1: [], series2: [] };
-  chartOptions: ChartOptions;
-  context: CanvasRenderingContext2D;
-  chart: Chart;
+  // chartData = { labels: [], series1: [], series2: [] };
+  // labels: Array<string[]> = [];
+  // series1: number[] = [];
+  // series2: number[] = [];
+  // chartOptions: ChartOptions;
+  // context: CanvasRenderingContext2D;
+  // chart: Chart;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -244,62 +247,52 @@ export class DetailComponent implements OnInit {
 
   // チャート作成
   chartCreate(history: FraudScore[]): void {
-    // チャートデータのセット
-    this.chartData.labels = [];
-    this.chartData.series1 = [];
-    this.chartData.series2 = [];
 
-    history.forEach((fraudScore, i) => {
-      const scoringDate = new Date(fraudScore.SCORINGDATE);
-      this.chartData.labels[i] =
-        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.CLAIMCATEGORY];
-      this.chartData.series1[i] = fraudScore.SCOREDETAIL[0].SCORE;
-      this.chartData.series2[i] = fraudScore.SCOREDETAIL[1].SCORE;
-      // console.log('this.chartData.series1', this.chartData.series1);
-    });
-
-    // chartのグローバル設定セット
+    // グローバル設定セット
     Chart.defaults.global.defaultFontColor = '#000000';
     Chart.defaults.global.defaultFontFamily = '"Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic"';
     Chart.defaults.global.defaultFontSize = 12;
 
-    // 描写後処理追加
-    Chart.plugins.register({
-      afterDatasetsDraw: (chart, easing) => {
-        // 縦軸ラベル描写
-        this.context.font = '12px "Meiryo UI"';
-        this.context.fillStyle = '#000000';
-        this.context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
-        console.log('「スコア」設定後のcontext:', this.context);
-        // 日付ラベルと事案カテゴリラベルの表示位置を決める情報を算出
-        let nLeft = 62;
-        const nRight = 170;
-        const nMove = (chart.width - nLeft - nRight) / this.chart.data.labels.length;
-        nLeft += nMove / 2;
-        for (let i = 0; i < this.chart.data.labels.length; i++) {
-          // 日付ラベル表示
-          this.context.font = '16px "Meiryo UI"';
-          this.context.fillStyle = '#000000';
-          let nTextWidth = this.context.measureText(this.chart.data.labels[i][0] as string).width;
-          this.context.fillText(this.chart.data.labels[i][0] as string, nLeft - (nTextWidth / 2), 10);
-          // 事案カテゴリラベル表示
-          this.context.font = '16px "Meiryo UI"';
-          if (this.chart.data.labels[i][1] === '高') {
-            this.context.fillStyle = '#f0554e';
-          } else if (this.chart.data.labels[i][1] === '中') {
-            this.context.fillStyle = '#f3ca3e';
-          } else if (this.chart.data.labels[i][1] === '低') {
-            this.context.fillStyle = '#2ac940 ';
-          }
-          nTextWidth = this.context.measureText(this.chart.data.labels[i][1] as string).width;
-          this.context.fillText(this.chart.data.labels[i][1] as string, nLeft - (nTextWidth / 2), 30);
-          nLeft += nMove;
-        }
-      }
+    // ラベルとデータセットのセット
+    const labels: Array<string[]> = [];
+    const series1: number[] = [];
+    const series2: number[] = [];
+    history.forEach((fraudScore, i) => {
+      const scoringDate = new Date(fraudScore.SCORINGDATE);
+      labels[i] =
+        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.CLAIMCATEGORY];
+      series1[i] = parseFloat(fraudScore.SCOREDETAIL[0].SCORE);
+      series2[i] = parseFloat(fraudScore.SCOREDETAIL[1].SCORE);
     });
 
+    // チャートデータのセット
+    const chartData: ChartData = {
+      labels: labels,
+      datasets: [{
+        label: this.scoreDetails[0].MODELTYPE,
+        type: 'line',
+        fill: false,
+        data: series1,
+        backgroundColor: [environment.specialCase_bg_color],
+        borderColor: [environment.specialCase_border_color],
+        yAxisID: 'y-axis-1',
+        steppedLine: true,
+        borderWidth: 4
+      }, {
+        label: this.scoreDetails[1].MODELTYPE,
+        type: 'line',
+        fill: false,
+        data: series2,
+        backgroundColor: [environment.ncpd_bg_color],
+        borderColor: [environment.ncpd_border_color],
+        yAxisID: 'y-axis-1',
+        steppedLine: true,
+        borderWidth: 2
+      }],
+    };
+
     // チャートオプションのセット
-    this.chartOptions = {
+    const chartOptions: ChartOptions = {
       tooltips: {
         mode: 'nearest',
         intersect: false,
@@ -359,6 +352,8 @@ export class DetailComponent implements OnInit {
           }
         }],
       },
+      // TODO: tooltipがclickをトリガーに表示されるようになり、
+      // 他のポイントをクリックしないと消えなくなるので要検討
       events: ['click'],
       onClick: (event, elements) => {
         this.changeDate(elements, history);
@@ -366,35 +361,48 @@ export class DetailComponent implements OnInit {
     };
 
     // canvasの取得
-    this.context = this.elementRef.nativeElement.getContext('2d');
+    const context: CanvasRenderingContext2D = this.elementRef.nativeElement.getContext('2d');
+
     // チャートの作成
-    // console.log('this.chartData.series1', this.chartData.series1);
-    this.chart = new Chart(this.context, {
+    const chartLines = new Chart(context, {
       type: 'bar',
-      data: {
-        labels: this.chartData.labels,
-        datasets: [{
-          label: this.scoreDetails[0].MODELTYPE,
-          type: 'line',
-          fill: false,
-          data: this.chartData.series1,
-          backgroundColor: [environment.specialCase_bg_color],
-          borderColor: [environment.specialCase_border_color],
-          yAxisID: 'y-axis-1',
-          steppedLine: true,
-          borderWidth: 4
-        }, {
-          label: this.scoreDetails[1].MODELTYPE,
-          type: 'line',
-          fill: false,
-          data: this.chartData.series2,
-          backgroundColor: [environment.ncpd_bg_color],
-          borderColor: [environment.ncpd_border_color],
-          steppedLine: true,
-          borderWidth: 2
-        }],
-      },
-      options: this.chartOptions
+      data: chartData,
+      options: chartOptions
+    });
+
+    // データセット描写後処理
+    Chart.plugins.register({
+      afterDatasetsDraw: (chart, easing) => {
+        // 縦軸ラベル描写
+        context.font = '12px "Meiryo UI"';
+        context.fillStyle = '#000000';
+        context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
+        console.log('「スコア」設定後のcontext:', context);
+        // 日付ラベルと事案カテゴリラベルの表示位置を決める情報をセット
+        let nLeft = 62;
+        const nRight = 170;
+        const nMove = (chart.width - nLeft - nRight) / chartLines.data.labels.length;
+        nLeft += nMove / 2;
+        chartLines.data.labels.forEach(label => {
+          // 日付ラベル表示
+          context.font = '16px "Meiryo UI"';
+          context.fillStyle = '#000000';
+          let nTextWidth = context.measureText(label[0]).width;
+          context.fillText(label[0], nLeft - (nTextWidth / 2), 10);
+          // 事案カテゴリラベル表示
+          context.font = '16px "Meiryo UI"';
+          if (label[1] === '高') {
+            context.fillStyle = '#f0554e';
+          } else if (label[1] === '中') {
+            context.fillStyle = '#f3ca3e';
+          } else if (label[1] === '低') {
+            context.fillStyle = '#2ac940';
+          }
+          nTextWidth = context.measureText(label[1]).width;
+          context.fillText(label[1], nLeft - (nTextWidth / 2), 30);
+          nLeft += nMove;
+        });
+      }
     });
   };
 
