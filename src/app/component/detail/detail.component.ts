@@ -67,13 +67,6 @@ export class DetailComponent implements OnInit {
   // chart用
   @ViewChild('claimCategoryChart')
   elementRef: ElementRef;
-  // chartData = { labels: [], series1: [], series2: [] };
-  // labels: Array<string[]> = [];
-  // series1: number[] = [];
-  // series2: number[] = [];
-  // chartOptions: ChartOptions;
-  // context: CanvasRenderingContext2D;
-  // chart: Chart;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -248,6 +241,10 @@ export class DetailComponent implements OnInit {
   // チャート作成
   chartCreate(history: FraudScore[]): void {
 
+    // canvasの取得
+    const context: CanvasRenderingContext2D = this.elementRef.nativeElement.getContext('2d');
+    // context.scale(2,2);
+
     // グローバル設定セット
     Chart.defaults.global.defaultFontColor = '#000000';
     Chart.defaults.global.defaultFontFamily = '"Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic"';
@@ -359,9 +356,6 @@ export class DetailComponent implements OnInit {
         this.changeDate(elements, history);
       }
     };
-
-    // canvasの取得
-    const context: CanvasRenderingContext2D = this.elementRef.nativeElement.getContext('2d');
 
     // チャートの作成
     const chartLines = new Chart(context, {
