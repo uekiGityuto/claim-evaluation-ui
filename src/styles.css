@@ -81,13 +81,13 @@ body {
   align-items: center;
 }
 
-.font-size-l {
+/* .font-size-l {
   font-size: var(--large-font-size);
 }
 
 .font-size-xl {
   font-size: var(--extra-large-font-size);
-}
+} */
 
 /* エラーメッセージ用 */
 
@@ -107,11 +107,19 @@ body {
   margin: 0 auto;
 }
 
+.error-message__main {
+  font-size: var(--extra-large-font-size);
+}
+
+.error-message__sub {
+  font-size: var(--large-font-size);
+}
+
 .error-message p+p {
   margin-top: 24px;
 }
 
-/* ngClassディレクティブ */
+/* ngClassディレクティブ用 */
 
 .highBgColor {
   background-color: var(--claim-high-color);

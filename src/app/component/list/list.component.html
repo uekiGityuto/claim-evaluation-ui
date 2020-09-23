@@ -7,62 +7,62 @@
 
 <main>
   <!-- サブヘッダエリア -->
-  <div class="list-header card">
-    <form [(formGroup)]="searchControl">
-      <div>
-        <input type="text" formControlName="CLAIMNUMBER" placeholder="受付番号">
+  <div class="list-header-card">
+    <form class="list-header-card-form" [(formGroup)]="searchControl">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="CLAIMNUMBER" placeholder="受付番号">
       </div>
-      <div>
-        <select formControlName="CLAIMCATEGORYINFO" placeholder="事案カテゴリ" multiple>
+      <div class="list-header-card-form-content">
+        <select class="list-header-card-form-content__input" formControlName="CLAIMCATEGORYINFO" placeholder="事案カテゴリ" multiple>
           <option value="高">高</option>
           <option value="中">中</option>
           <option value="低">低</option>
         </select>
       </div>
-      <div>
-        <select formControlName="INSURANCEKINDINFO" placeholder="保険種類" multiple>
+      <div class="list-header-card-form-content">
+        <select class="list-header-card-form-content__input" formControlName="INSURANCEKINDINFO" placeholder="保険種類" multiple>
           <option value="自動車">自動車</option>
           <option value="火災">火災</option>
         </select>
       </div>
-      <div class="from-lossdate-form">
-        <input type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="FROMLOSSDATE">
-        <span class=datepicker>
+      <div class="list-header-card-form-content list-header-card-form-content--from-lossdate">
+        <input class="list-header-card-form-content__input" type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="FROMLOSSDATE">
+        <span class=list-header-card-form-content__datepicker>
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom></mat-datepicker>
         </span>
       </div>
-      <div>
+      <div class="list-header-card-form-content">
         <span>～</span>
       </div>
-      <div class="to-lossdate-form">
-        <input type=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="TOLOSSDATE">
-        <span class=datepicker>
+      <div class="list-header-card-form-content list-header-card-form-content--to-lossdate">
+        <input class="list-header-card-form-content__input" type=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="TOLOSSDATE">
+        <span class=list-header-card-form-content__datepicker>
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo></mat-datepicker>
         </span>
       </div>
-      <div>
-        <input type="text" type="text" formControlName="INSUREDNAMEKANA" placeholder="被保険者名（カナ）">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="INSUREDNAMEKANA" placeholder="被保険者名（カナ）">
       </div>
-      <div>
-        <input type="text" type="text" formControlName="INSUREDNAMEKANJI" placeholder="被保険者名（漢字）">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="INSUREDNAMEKANJI" placeholder="被保険者名（漢字）">
       </div>
-      <div>
-        <input type="text" type="text" formControlName="CONTRACTORNAMEKANA" placeholder="契約者名（カナ）">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="CONTRACTORNAMEKANA" placeholder="契約者名（カナ）">
       </div>
-      <div>
-        <input type="text" type="text" formControlName="CONTRACTORNAMEKANJI" placeholder="契約者名（漢字）">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="CONTRACTORNAMEKANJI" placeholder="契約者名（漢字）">
       </div>
-      <div class="radio-form">
+      <div class="list-header-card-form-content list-header-card-form-content__radio">
         <div><input type="radio" formControlName="BUTENKYOTENRADIO" value="buten">担当部</div>
         <div><input type="radio" formControlName="BUTENKYOTENRADIO" value="kyoten">担当拠点</div>
       </div>
-      <div>
-        <input type="text" type="text" formControlName="BUTENKYOTEN" placeholder="担当部・担当拠点">
+      <div class="list-header-card-form-content">
+        <input class="list-header-card-form-content__input" type="text" formControlName="BUTENKYOTEN" placeholder="担当部・担当拠点">
       </div>
-      <div>
-        <button [disabled]="searchControl.invalid" (click)="search()">検索</button>
+      <div class="list-header-card-form-content">
+        <button class="list-header-card-form-content__button" [disabled]="searchControl.invalid" (click)="search()">検索</button>
       </div>
     </form>
   </div>
@@ -73,7 +73,7 @@
 
     <!-- 事案一覧テーブルエリア -->
     <ng-container *ngIf="claims.length != 0">
-      <table class="claim-list card" matSort (matSortChange)="listSort($event)">
+      <table class="claim-list-card" matSort (matSortChange)="listSort($event)">
         <tr class="claim-list-header">
           <th mat-sort-header="claimNumber">受付番号</th>
           <th mat-sort-header="insuredName">被保険者名</th>
@@ -85,31 +85,31 @@
           <th mat-sort-header="lossDate">事故日</th>
           <th mat-sort-header="claimCategory">事案カテゴリ</th>
         </tr>
-        <tr class="claim-list-data" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
-          <td><a [routerLink]="['/detail', claim.CLAIMNUMBER]">{{ claim.CLAIMNUMBER }}</a></td>
-          <td [appTooltip]="claim.INSUREDNAMEKANA" style="width: 160px">{{ claim.INSUREDNAMEKANA }}</td>
-          <td [appTooltip]="claim.CONTRACTORNAMEKANA" style="width: 160px">{{ claim.CONTRACTORNAMEKANA }}</td>
-          <td>{{ claim.BUTENKANJI }}</td>
-          <td>{{ claim.KYOTENKANJI }}</td>
-          <td>{{ claim.INSURANCEKIND }}</td>
-          <td>{{ claim.LASTUPDATEDATE | date : 'yyyy/M/d' }}</td>
-          <td>{{ claim.LOSSDATE | date : 'yyyy/M/d'}}</td>
-          <td><span class="claim-category" [ngClass]="claim.categoryClass">{{ claim.CLAIMCATEGORY }}</span></td>
+        <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
+          <td class="claim-list-dataset__data"><a [routerLink]="['/detail', claim.CLAIMNUMBER]">{{ claim.CLAIMNUMBER }}</a></td>
+          <td class="claim-list-dataset__data" [appTooltip]="claim.INSUREDNAMEKANA" style="width: 160px">{{ claim.INSUREDNAMEKANA }}</td>
+          <td class="claim-list-dataset__data" [appTooltip]="claim.CONTRACTORNAMEKANA" style="width: 160px">{{ claim.CONTRACTORNAMEKANA }}</td>
+          <td class="claim-list-dataset__data">{{ claim.BUTENKANJI }}</td>
+          <td class="claim-list-dataset__data">{{ claim.KYOTENKANJI }}</td>
+          <td class="claim-list-dataset__data">{{ claim.INSURANCEKIND }}</td>
+          <td class="claim-list-dataset__data">{{ claim.LASTUPDATEDATE | date : 'yyyy/M/d' }}</td>
+          <td class="claim-list-dataset__data">{{ claim.LOSSDATE | date : 'yyyy/M/d'}}</td>
+          <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category" [ngClass]="claim.categoryClass">{{ claim.CLAIMCATEGORY }}</span></td>
         </tr>
       </table>
 
       <!-- ページャーエリア -->
-      <div class="pager child-centering">
+      <div class="pager">
         <form>
           <button *ngIf="displayFromPages > 1" mat-icon-button (click)="previous()">
             <mat-icon>arrow_back_ios</mat-icon>
           </button>
-          <input name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
+          <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
           <span>～　{{ toPages }}　/　{{ totalNumber }}</span>
           <button *ngIf="toPages < totalNumber" mat-icon-button (click)="next()">
             <mat-icon>arrow_forward_ios</mat-icon>
           </button>
-          <button mat-icon-button (click)="update()">
+          <button class="pager__update-button" mat-icon-button (click)="update()">
             <mat-icon>refresh</mat-icon>
           </button>
         </form>
@@ -122,8 +122,8 @@
   <ng-template #error>
     <div class="error-message-box">
       <div class="error-message">
-        <p class="font-size-xl">検索結果を取得出来ません。</p>
-        <p class="font-size-l">担当者にお問い合わせください。</p>
+        <p class="error-message__main">検索結果を取得出来ません。</p>
+        <p class="error-message__sub">担当者にお問い合わせください。</p>
       </div>
     </div>
   </ng-template>

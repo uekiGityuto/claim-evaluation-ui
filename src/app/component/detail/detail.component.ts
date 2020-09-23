@@ -112,7 +112,7 @@ export class DetailComponent implements OnInit {
 
         // 取得結果をシャーローコピー
         // this.claim = { ...response['CLAIM'.toString()] };
-        console.log('response:', response);
+        // console.log('response:', response);
         this.claim = { ...response.CLAIM };
 
         // 不正請求スコア履歴を算出日の古い順にソート
@@ -204,7 +204,7 @@ export class DetailComponent implements OnInit {
           switch (scoreCategory.NCPDSCORECLASS) {
             case 'High':
               categoryMatrix.lowHigh = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.lowHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
               break;
             case 'Middle':
               categoryMatrix.lowMiddle = scoreCategory.CLAIMCATEGORYTYPE;
@@ -371,7 +371,6 @@ export class DetailComponent implements OnInit {
         context.font = '12px "Meiryo UI"';
         context.fillStyle = '#000000';
         context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
-        console.log('「スコア」設定後のcontext:', context);
         // 日付ラベルと事案カテゴリラベルの表示位置を決める情報をセット
         let nLeft = 62;
         const nRight = 170;

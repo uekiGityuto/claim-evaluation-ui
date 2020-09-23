@@ -3,24 +3,25 @@
 
 /* 共通 */
 
-form input:invalid {
+/* form input:invalid {
   border: solid 1px red;
-}
+} */
 
 /* ヘッダエリア */
 
-.list-header {
+.list-header-card {
   height: 96px;
   background-color: var(--card-bg-color);
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
+  box-shadow: 0 0 4px var(--shadow-color);
 }
 
-.list-header * {
+.list-header-card * {
   font-size: var(--large-font-size);
 }
 
-.list-header form {
+.list-header-card-form {
   height: 100%;
   display: flex;
   justify-content: flex-start;
@@ -28,16 +29,16 @@ form input:invalid {
   flex-wrap: wrap;
 }
 
-.list-header form>div {
+.list-header-card-form-content {
   padding-right: 8px;
 }
 
-.list-header form>div:last-child {
+.list-header-card-form-content:last-child {
   margin-left: auto;
   padding-right: 0;
 }
 
-.list-header input[type="text"], .list-header select {
+.list-header-card-form-content__input {
   width: 200px;
   height: 40px;
 }
@@ -47,26 +48,26 @@ form input:invalid {
   height: 40px;
 } */
 
-.from-lossdate-form {
+.list-header-card-form-content--from-lossdate {
   position: relative;
 }
 
-.to-lossdate-form {
+.list-header-card-form-content--to-lossdate {
   position: relative;
 }
 
-.datepicker {
+.list-header-card-form-content__datepicker {
   position: absolute;
   right: 0;
 }
 
-.radio-form {
+.list-header-card-form-content__radio {
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.list-header button {
+.list-header-card-form-content__button {
   height: 40px;
   appearance: none;
   border: 0;
@@ -76,13 +77,13 @@ form input:invalid {
   padding: 8px 16px;
 }
 
-.list-header button:disabled {
+.list-header-card-form-content__button:disabled {
   background: #abb6cc;
 }
 
 /* 事案一覧テーブルエリア */
 
-.claim-list {
+.claim-list-card {
   width: 1264px;
   height: 780px;
   margin-top: 56px;
@@ -90,6 +91,7 @@ form input:invalid {
   margin-left: auto;
   background-color: var(--card-bg-color);
   border-collapse: collapse;
+  box-shadow: 0 0 4px var(--shadow-color);
 }
 
 .claim-list-header {
@@ -100,14 +102,14 @@ form input:invalid {
   padding-left: var(--left-write-common-padding);
 }
 
-.claim-list-data {
+.claim-list-dataset {
   font-size: var(--medium-font-size);
   background-color: var(--card-bg-color);
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
 }
 
-.claim-list-data td {
+.claim-list-dataset__data {
   border-bottom: 1px solid #cacaca;
   /* white-space: nowrap;
   overflow: hidden;
@@ -115,7 +117,7 @@ form input:invalid {
   max-width: 0; */
 }
 
-.claim-category {
+.claim-list-dataset__claim-category {
   font-size: var(--large-font-size);
   padding-right: 8px;
   padding-left: 8px;
@@ -135,15 +137,22 @@ form input:invalid {
   display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .pager * {
   font-size: var(--large-font-size);
 }
 
-.pager input {
+.pager__input {
   width: 64px;
   height: 28px;
+}
+
+.pager__input:invalid {
+  border: solid 1px red;
 }
 
 /* お試しスタイルエリア */
