@@ -1,41 +1,17 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ɵSWITCH_VIEW_CONTAINER_REF_FACTORY__POST_R3__ } from '@angular/core';
-import { FormControl, FormGroup, Validators, AbstractControl, NgForm } from '@angular/forms';
+import { Component, OnInit} from '@angular/core';
+import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
 import { SearchForm } from '../../model/search-form';
 import { CategoryClass } from '../../model/category-class';
+import { ClaimView } from '../../model/claim-view';
+import { ClaimList } from '../../model/claim-list/claim-list';
+import { Claim } from '../../model/claim-list/claim';
 
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
-
-interface ClaimList {
-  CLAIM: Claim[];
-  ORDER: string;
-  FROMPAGES: number;
-  TOPAGES: number;
-  TOTALNUMBER: number;
-}
-
-interface Claim {
-  CLAIMNUMBER: string;
-  INSUREDNAMEKANJI: string;
-  INSUREDNAMEKANA: string;
-  CONTRACTORNAMEKANJI: string;
-  CONTRACTORNAMEKANA: string;
-  BUTENKANJI: string;
-  KYOTENKANJI: string;
-  INSURANCEKIND: string;
-  LASTUPDATEDATE: Date;
-  LOSSDATE: Date;
-  CLAIMCATEGORY: string;
-}
-
-interface ClaimForDisplay extends Claim {
-  // ngClass用
-  categoryClass: CategoryClass;
-}
 
 /**
  * List Component
@@ -52,7 +28,7 @@ export class ListComponent implements OnInit {
 
   // ビュー表示用
   userId: string;
-  claims: ClaimForDisplay[];
+  claims: ClaimView[] = [];
   order: string;
   fromPages: number; // 入力フォームと同期しているfromPagesの値
   displayFromPages: number; // apiから受け取ったfromPagesの値
@@ -266,16 +242,16 @@ export class ListComponent implements OnInit {
           // console.log('response:', response);
           this.isError = false;
           // ビュー要素を取得
-          this.claims = [];
-          response.CLAIM.forEach((claim: Claim, i) => {
-            const categoryClass = new CategoryClass('高', '中', '低', claim.CLAIMCATEGORY);
+          // this.claims = [];
+          response.claim.forEach((claim: Claim, i) => {
+            const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
             this.claims[i] = { ...claim, categoryClass };
           });
-          this.order = response.ORDER;
-          this.fromPages = response.FROMPAGES;
-          this.displayFromPages = response.FROMPAGES;
-          this.toPages = response.TOPAGES;
-          this.totalNumber = response.TOTALNUMBER;
+          this.order = response.order;
+          this.fromPages = response.fromPages;
+          this.displayFromPages = response.fromPages;
+          this.toPages = response.toPages;
+          this.totalNumber = response.totalNumber;
         }, error => {
           console.log('検索エラーメッセージ表示');
           this.isError = true;
