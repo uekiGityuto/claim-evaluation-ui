@@ -78,17 +78,17 @@ export class ListComponent implements OnInit {
 
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({
-      CLAIMNUMBER: new FormControl(),
-      CLAIMCATEGORYINFO: new FormControl(),
-      INSURANCEKINDINFO: new FormControl(),
-      FROMLOSSDATE: new FormControl(),
-      TOLOSSDATE: new FormControl(),
-      INSUREDNAMEKANA: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      INSUREDNAMEKANJI: new FormControl(),
-      CONTRACTORNAMEKANA: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
-      CONTRACTORNAMEKANJI: new FormControl(),
-      BUTENKYOTENRADIO: new FormControl(),
-      BUTENKYOTEN: new FormControl()
+      claimNumber: new FormControl(),
+      claimCategoryInfo: new FormControl(),
+      insuranceKindInfo: new FormControl(),
+      fromLossDate: new FormControl(),
+      toLossDate: new FormControl(),
+      insuredNameKana: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      insuredNameKanji: new FormControl(),
+      contractorNameKana: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
+      contractorNameKanji: new FormControl(),
+      butenKyotenRadio: new FormControl(),
+      butenKyoten: new FormControl()
     }, {
       // 複数項目に対してのvalidation
       // TODO: 全てのFormControlについて一回ずつ（つまり11回）実施してしまうので他に良い方法がないか検討
@@ -116,10 +116,10 @@ export class ListComponent implements OnInit {
 
   // 検索処理
   search(): void {
-    console.log(this.searchControl.value);
+    // console.log(this.searchControl.value);
     // バリデーション
     if (this.searchControl.invalid) {
-      console.log('reject search');
+      console.log('バリデーションエラー');
       return;
     }
 
@@ -148,48 +148,48 @@ export class ListComponent implements OnInit {
   // フォームの配列の各要素を{key, value}形式に変換
   setKeyArrayElement(form :FormGroup) {
     // フォームコントロールの事案カテゴリ要素にkeyをつける（nullならば空の配列に変換）
-    if (form.value.CLAIMCATEGORYINFO) {
-      form.value.CLAIMCATEGORYINFO.forEach(
+    if (form.value.claimCategoryInfo) {
+      form.value.claimCategoryInfo.forEach(
         (claimCategory, i) => {
-          claimCategory = { CLAIMCATEGORY: claimCategory };
-          form.value.CLAIMCATEGORYINFO[i] = claimCategory;
+          claimCategory = { claimCategory: claimCategory };
+          form.value.claimCategoryInfo[i] = claimCategory;
         });
     } else {
-      form.value.CLAIMCATEGORYINFO = [];
+      form.value.claimCategoryInfo = [];
     }
     // フォームコントロールの保険種類要素にkeyをつける（nullならば空の配列に変換）
-    if (form.value.INSURANCEKINDINFO) {
-      form.value.INSURANCEKINDINFO.forEach(
+    if (form.value.insuranceKindInfo) {
+      form.value.insuranceKindInfo.forEach(
         (insuranceKind, i) => {
-          insuranceKind = { INSURANCEKIND: insuranceKind };
-          form.value.INSURANCEKINDINFO[i] = insuranceKind;
+          insuranceKind = { insuranceKind: insuranceKind };
+          form.value.insuranceKindInfo[i] = insuranceKind;
         });
     } else {
-      form.value.INSURANCEKINDINFO = [];
+      form.value.insuranceKindInfo = [];
     }
   }
 
   // HTTPリクエストのボディ部を作成
   createPostBody(form :FormGroup, param: SearchForm, userId: string) {
     // ボディ部に検索フォームの内容をディープコピー
-    const { BUTENKYOTENRADIO, BUTENKYOTEN, ...rest } = form.value;
+    const { butenKyotenRadio, butenKyoten, ...rest } = form.value;
     param = JSON.parse(JSON.stringify(rest));
 
     // ボディ部の残り（検索フォーム以外の内容）をセット
     // param.REQ_USER_ID = userId;
-    if (BUTENKYOTENRADIO === 'buten') {
-      param.BUTENKANJI = BUTENKYOTEN;
-      param.KYOTENKANJI = '';
-    } else if (BUTENKYOTENRADIO === 'kyoten') {
-      param.BUTENKANJI = '';
-      param.KYOTENKANJI = BUTENKYOTEN;
+    if (butenKyotenRadio === 'buten') {
+      param.butenKanji = butenKyoten;
+      param.kyotenKanji = '';
+    } else if (butenKyotenRadio === 'kyoten') {
+      param.butenKanji = '';
+      param.kyotenKanji = butenKyoten;
     } else {
-      param.BUTENKANJI = '';
-      param.KYOTENKANJI = '';
+      param.butenKanji = '';
+      param.kyotenKanji = '';
     }
-    param.LABELTYPE = environment.lossDate;
-    param.ORDER = environment.desc;
-    param.DISPLAYFROM = '1';
+    param.labelType = environment.lossDate;
+    param.order = environment.desc;
+    param.displayFrom = '1';
     // console.log('POSTボディ部', param);
     return param;
   }
@@ -197,8 +197,9 @@ export class ListComponent implements OnInit {
   // ソート処理
   listSort(sort: Sort) {
     // console.log(this.param);
-    this.param.LABELTYPE = environment[sort.active];
-    this.param.ORDER = environment[sort.direction];
+    // TODO: environmentからの取得方法の書き方を他と合わせる
+    this.param.labelType = environment[sort.active];
+    this.param.order = environment[sort.direction];
     // console.log(this.param);
     // 事案一覧取得
     this.searchList(this.param);
@@ -220,9 +221,9 @@ export class ListComponent implements OnInit {
   // 1ページ戻ったときのfromPagesをセット
   setDisplayFromPages(): void {
     if (this.fromPages - 10 > 0) {
-      this.param.DISPLAYFROM = String(this.fromPages - 10);
+      this.param.displayFrom = String(this.fromPages - 10);
     } else {
-      this.param.DISPLAYFROM = '1';
+      this.param.displayFrom = '1';
     }
   }
 
@@ -232,7 +233,7 @@ export class ListComponent implements OnInit {
       console.log('reject next');
     } else {
       console.log('accept next');
-      this.param.DISPLAYFROM = String(this.toPages + 1);
+      this.param.displayFrom = String(this.toPages + 1);
       // 事案一覧取得
       this.searchList(this.param);
     }
@@ -244,13 +245,14 @@ export class ListComponent implements OnInit {
       console.log('reject update');
     } else {
       console.log('accept update');
-      this.param.DISPLAYFROM = String(this.fromPages);
+      this.param.displayFrom = String(this.fromPages);
       this.searchList(this.param);
     }
   }
 
   // 事案一覧取得処理
   searchList(params: SearchForm): void {
+    console.log('postボディ:', params);
     const claimsUri = environment.claims_url;
     const headers = { 'Content-Type': 'application/json' };
 
@@ -284,39 +286,39 @@ export class ListComponent implements OnInit {
 
   // TODO: validationは切り離すか要検討
 
-  // 一つ以上フォーム入力されているか検証（BUTENKYOTENRADIOは除外）
+  // 一つ以上フォーム入力されているか検証（butenKyotenRadioは除外）
   isInputMoreThanOne(control: AbstractControl) {
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
     }
-    if (control.value.CLAIMNUMBER) {
+    if (control.value.claimNumber) {
       return null;
-    } else if (control.value.CLAIMCATEGORYINFO && control.value.CLAIMCATEGORYINFO.length > 0) {
+    } else if (control.value.claimCategoryInfo && control.value.claimCategoryInfo.length > 0) {
       return null;
-    } else if (control.value.INSURANCEKINDINFO && control.value.INSURANCEKINDINFO.length > 0) {
+    } else if (control.value.insuranceKindInfo && control.value.insuranceKindInfo.length > 0) {
       return null;
-    } else if (control.value.FROMLOSSDATE) {
+    } else if (control.value.fromLossDate) {
       return null;
-    } else if (control.value.TOLOSSDATE) {
+    } else if (control.value.toLossDate) {
       return null;
-    } else if (control.value.INSUREDNAMEKANA) {
+    } else if (control.value.insuredNameKana) {
       return null;
-    } else if (control.value.INSUREDNAMEKANJI) {
+    } else if (control.value.insuredNameKanji) {
       return null;
-    } else if (control.value.CONTRACTORNAMEKANA) {
+    } else if (control.value.contractorNameKana) {
       return null;
-    } else if (control.value.CONTRACTORNAMEKANJI) {
+    } else if (control.value.contractorNameKanji) {
       return null;
-    } else if (control.value.BUTENKYOTEN) {
+    } else if (control.value.butenKyoten) {
       return null;
     } else {
       return { isInputMoreThanOne: { valid: false } };
     };
   }
 
-  // BUTENKYOTENを入力する時にBUTENKYOTENRADIOも選択されているか検証
+  // butenKyotenを入力する時にbutenKyotenRadioも選択されているか検証
   isButenKyotenRadio(control: AbstractControl) {
-    if (control.value && control.value.BUTENKYOTEN && !control.value.BUTENKYOTENRADIO) {
+    if (control.value && control.value.butenKyoten && !control.value.butenKyotenRadio) {
       return { isButenKyotenRadio: { valid: false } };
     } else {
       return null;

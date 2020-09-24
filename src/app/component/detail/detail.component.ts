@@ -10,29 +10,15 @@ import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
 import { CategoryMatrixClass } from '../../model/category-matrix-class';
 import { RaiseLowerReason } from '../../model/raise-lower-reason';
-import { ScoreCategory } from '../../model/score-category';
-import { ScoreDetail } from '../../model/score-detail';
+import { Scores } from '../../model/scores/scores';
+import { DetailClaim } from '../../model/scores/detail-claim';
+import { FraudScore } from '../../model/scores/fraud-score';
+import { ScoreDetail } from '../../model/scores/score-detail';
+import { ScoreCategory } from '../../model/scores/score-category';
 import { ScoreDetailView } from '../../model/score-detail-view';
-import { FraudScore } from '../../model/fraud-score';
 
 import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
-
-interface Scores {
-  CLAIM: Claim;
-}
-
-interface Claim {
-  CLAIMNUMBER: string;
-  INSUREDNAMEKANJI: string;
-  INSUREDNAMEKANA: string;
-  CONTRACTORNAMEKANJI: string;
-  CONTRACTORNAMEKANA: string;
-  INSURANCEKIND_EXT: string;
-  LOSSDATE: Date;
-  UPDATEDATE: Date;
-  FRAUDSCOREHISTORY: FraudScore[];
-}
 
 /**
  * Detail Component
@@ -50,7 +36,7 @@ export class DetailComponent implements OnInit {
 
   // ビュー表示用（共通部分）
   claimNumber: string;
-  claim: Claim;
+  claim: DetailClaim;
   userId: string;
   authFlag: boolean;
 
@@ -94,7 +80,7 @@ export class DetailComponent implements OnInit {
   getLatestClaimInfo(claimNumber: string): void {
     // HTTPリクエストの各情報セット
     const scoresUri = environment.scores_url;
-    const params = { CLAIMNUMBER: claimNumber };
+    const params = { claimNumber: claimNumber };
     const headers = { 'Content-Type': 'application/json' };
 
     // 事案情報を取得
@@ -106,25 +92,25 @@ export class DetailComponent implements OnInit {
       //   params: params
     }).subscribe(
       response => {
-        // console.log('claim:', response);
+        console.log('取得結果:', response);
         console.log('推論結果取得OK');
         this.isError = false;
 
         // 取得結果をシャーローコピー
         // this.claim = { ...response['CLAIM'.toString()] };
         // console.log('response:', response);
-        this.claim = { ...response.CLAIM };
+        this.claim = { ...response.claim };
 
         // 不正請求スコア履歴を算出日の古い順にソート
-        this.fraudScoreSort(this.claim.FRAUDSCOREHISTORY);
+        this.fraudScoreSort(this.claim.fraudScoreHistory);
 
         // 最新の推論結果を元にビュー要素を取得
-        const end = this.claim.FRAUDSCOREHISTORY.length - 1;
-        const fraudScoreView = this.claim.FRAUDSCOREHISTORY[end];
+        const end = this.claim.fraudScoreHistory.length - 1;
+        const fraudScoreView = this.claim.fraudScoreHistory[end];
         this.getScoreInfo(fraudScoreView);
 
         // チャート作成
-        this.chartCreate(this.claim.FRAUDSCOREHISTORY);
+        this.chartCreate(this.claim.fraudScoreHistory);
 
       }, error => {
         console.log('照会エラーメッセージ表示');
@@ -136,25 +122,25 @@ export class DetailComponent implements OnInit {
   // 不正請求スコア履歴を算出日の古い順（昇順）にソート
   fraudScoreSort(history: FraudScore[]): void {
     history.sort((a, b) => {
-      return (new Date(a.SCORINGDATE) > new Date(b.SCORINGDATE) ? 1 : -1);
+      return (new Date(a.scoringDate) > new Date(b.scoringDate) ? 1 : -1);
     });
   }
 
   // 特定算出日の推論結果を元にビュー要素を取得
   getScoreInfo(fraudScoreView: FraudScore) {
     // 事案カテゴリをセット
-    this.claimCategory = fraudScoreView.CLAIMCATEGORY;
+    this.claimCategory = fraudScoreView.claimCategory;
     // 事案カテゴリの背景色をセット
     this.categoryClass = new CategoryClass('高', '中', '低', this.claimCategory);
     // 算出日のセット
-    this.scoringDate = fraudScoreView.SCORINGDATE;
+    this.scoringDate = fraudScoreView.scoringDate;
     // 事案カテゴリマトリクスをセット
-    this.categoryMatrix = this.setCategoryMatrix(fraudScoreView.SCORECATEGORIES);
+    this.categoryMatrix = this.setCategoryMatrix(fraudScoreView.scoreCategories);
     // スコア詳細のセット
     this.scoreDetails = [];
-    fraudScoreView.SCOREDETAIL.forEach((scoreDetail, i) => {
+    fraudScoreView.scoreDetail.forEach((scoreDetail, i) => {
       // TODO: 大文字小文字を確認
-      const categoryClass = new CategoryClass('high', 'middle', 'low', scoreDetail.RANK);
+      const categoryClass = new CategoryClass('high', 'middle', 'low', scoreDetail.rank);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
@@ -167,52 +153,52 @@ export class DetailComponent implements OnInit {
     const categoryMatrix = new CategoryMatrix();
 
     scoreCategorys.forEach(scoreCategory => {
-      switch (scoreCategory.TOKUSHUSCORECLASS) {
+      switch (scoreCategory.tokushuScoreClass) {
         case 'High':
-          switch (scoreCategory.NCPDSCORECLASS) {
+          switch (scoreCategory.ncpdScoreClass) {
             case 'High':
-              categoryMatrix.highHigh = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.highHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.highHigh = scoreCategory.claimCategoryType;
+              categoryMatrix.highHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Middle':
-              categoryMatrix.highMiddle = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.highMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.highMiddle = scoreCategory.claimCategoryType;
+              categoryMatrix.highMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Low':
-              categoryMatrix.highLow = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.highLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.highLow = scoreCategory.claimCategoryType;
+              categoryMatrix.highLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
           }
           break;
         case 'Middle':
-          switch (scoreCategory.NCPDSCORECLASS) {
+          switch (scoreCategory.ncpdScoreClass) {
             case 'High':
-              categoryMatrix.middleHigh = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.middleHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.middleHigh = scoreCategory.claimCategoryType;
+              categoryMatrix.middleHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Middle':
-              categoryMatrix.middleMiddle = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.middleMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.middleMiddle = scoreCategory.claimCategoryType;
+              categoryMatrix.middleMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Low':
-              categoryMatrix.middleLow = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.middleLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.middleLow = scoreCategory.claimCategoryType;
+              categoryMatrix.middleLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
           }
           break;
         case 'Low':
-          switch (scoreCategory.NCPDSCORECLASS) {
+          switch (scoreCategory.ncpdScoreClass) {
             case 'High':
-              categoryMatrix.lowHigh = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.lowHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.lowHigh = scoreCategory.claimCategoryType;
+              categoryMatrix.lowHighColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Middle':
-              categoryMatrix.lowMiddle = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.lowMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.lowMiddle = scoreCategory.claimCategoryType;
+              categoryMatrix.lowMiddleColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
             case 'Low':
-              categoryMatrix.lowLow = scoreCategory.CLAIMCATEGORYTYPE;
-              categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.CLAIMCATEGORYTYPE);
+              categoryMatrix.lowLow = scoreCategory.claimCategoryType;
+              categoryMatrix.lowLowColor = new CategoryMatrixClass('高', '中', '低', scoreCategory.claimCategoryType);
               break;
           }
           break;
@@ -223,15 +209,15 @@ export class DetailComponent implements OnInit {
 
   // 推論結果の要因をソート
   reasonSort(scoreDetails: ScoreDetail[]): RaiseLowerReason[] {
-    let raiseLowerReasons: RaiseLowerReason[] = [];
+    const raiseLowerReasons: RaiseLowerReason[] = [];
     // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
     scoreDetails.forEach((scoreDetail, i) => {
-      const reasons = scoreDetail.REASONS.slice();
+      const reasons = scoreDetail.reasons.slice();
       const descReason = reasons.sort((a, b) => {
-        return (a.REASON > b.REASON ? -1 : 1);
+        return (a.reason > b.reason ? -1 : 1);
       });
-      const raiseReason = descReason.filter(val => val.REASON >= 0);
-      const lowerReason = descReason.reverse().filter(val => val.REASON < 0);
+      const raiseReason = descReason.filter(val => val.reason >= 0);
+      const lowerReason = descReason.reverse().filter(val => val.reason < 0);
       const raizeLowerReason = new RaiseLowerReason(raiseReason, lowerReason);
       raiseLowerReasons.push(raizeLowerReason);
     });
@@ -255,18 +241,18 @@ export class DetailComponent implements OnInit {
     const series1: number[] = [];
     const series2: number[] = [];
     history.forEach((fraudScore, i) => {
-      const scoringDate = new Date(fraudScore.SCORINGDATE);
+      const scoringDate = new Date(fraudScore.scoringDate);
       labels[i] =
-        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.CLAIMCATEGORY];
-      series1[i] = parseFloat(fraudScore.SCOREDETAIL[0].SCORE);
-      series2[i] = parseFloat(fraudScore.SCOREDETAIL[1].SCORE);
+        [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.claimCategory];
+      series1[i] = parseFloat(fraudScore.scoreDetail[0].score);
+      series2[i] = parseFloat(fraudScore.scoreDetail[1].score);
     });
 
     // チャートデータのセット
     const chartData: ChartData = {
       labels: labels,
       datasets: [{
-        label: this.scoreDetails[0].MODELTYPE,
+        label: this.scoreDetails[0].modelType,
         type: 'line',
         fill: false,
         data: series1,
@@ -276,7 +262,7 @@ export class DetailComponent implements OnInit {
         steppedLine: true,
         borderWidth: 4
       }, {
-        label: this.scoreDetails[1].MODELTYPE,
+        label: this.scoreDetails[1].modelType,
         type: 'line',
         fill: false,
         data: series2,

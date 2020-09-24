@@ -14,13 +14,13 @@
 
     <!-- サブヘッダエリア -->
     <div class="detail-header-card">
-      <span class="detail-header-card__item">事案番号：{{ this.claim?.CLAIMNUMBER }}</span>
-      <span class="detail-header-card__item">被保険者名：{{ this.claim?.INSUREDNAMEKANA }}</span>
+      <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
+      <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
       <span class="detail-header-card__item">契約者名：</span>
-      <span class="detail-header-card__item">{{ this.claim?.CONTRACTORNAMEKANA }}</span>
-      <span class="detail-header-card__item">保険種類：{{ this.claim?.INSURANCEKIND_EXT }}</span>
-      <span class="detail-header-card__item">事故日：{{ this.claim?.LOSSDATE | date : 'yyyy/M/d' }}</span>
-      <span class="detail-header-card__item">更新日：{{ this.claim?.UPDATEDATE | date : 'yyyy/M/d' }}</span>
+      <span class="detail-header-card__item">{{ this.claim?.contractorNameKana }}</span>
+      <span class="detail-header-card__item">保険種類：{{ this.claim?.insuranceKindExt }}</span>
+      <span class="detail-header-card__item">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
+      <span class="detail-header-card__item">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
     </div>
 
     <!-- 事案カテゴリエリア -->
@@ -68,15 +68,15 @@
         <div class="model-card">
           <div class="model-card-header">
             <div class="model-card-header-content">
-              <span>{{ scoreDetail.MODELTYPE }}</span>
+              <span>{{ scoreDetail.modelType }}</span>
               <button class="model-card-header-content__button" mat-icon-button (click)="displayHelp()">
                 <mat-icon inline="true">help</mat-icon>
               </button>
               <span>： </span>
-              <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.RANK }}</span>
+              <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
             </div>
             <div class="model-card-header-content">
-              <span>スコア：{{ scoreDetail.SCORE }}</span>
+              <span>スコア：{{ scoreDetail.score }}</span>
             </div>
           </div>
           <div class="model-card-contents">
@@ -85,9 +85,9 @@
                 <p class="factor-header__item">スコア上昇要因↑</p>
               </div>
               <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
-                <p class="factor-contens__score">スコア：{{ reason.REASON }}</p>
-                <p class="factor-contens__feature">{{ reason.FEATURENAME }}</p>
-                <p class="factor-contens__feature-description">{{ reason.FEATUREDESCRIPTION }}</p>
+                <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
               </div>
             </div>
             <div class="factor">
@@ -95,9 +95,9 @@
                 <p class="factor-header__item">スコア減少要因↓</p>
               </div>
               <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
-                <p class="factor-contens__score">スコア：{{ reason.REASON }}</p>
-                <p class="factor-contens__feature">{{ reason.FEATURENAME }}</p>
-                <p class="factor-contens__feature-description">{{ reason.FEATUREDESCRIPTION }}</p>
+                <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
               </div>
             </div>
           </div>

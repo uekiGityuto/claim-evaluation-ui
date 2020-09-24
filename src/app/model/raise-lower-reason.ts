@@ -1,4 +1,4 @@
-import { Reason } from './reason';
+import { Reason } from './scores/reason';
 
 export class RaiseLowerReason {
 

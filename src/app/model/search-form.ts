@@ -3,18 +3,18 @@ import { InsuranceKind } from './insurance-kind';
 
 export interface SearchForm {
   // REQ_USER_ID: string;
-  CLAIMNUMBER: string;
-  CLAIMCATEGORYINFO: ClaimCategory[];
-  INSURANCEKINDINFO: InsuranceKind[];
-  FROMLOSSDATE: string;
-  TOLOSSDATE: string;
-  INSUREDNAMEKANA: string;
-  INSUREDNAMEKANJI: string;
-  CONTRACTORNAMEKANA: string;
-  CONTRACTORNAMEKANJI: string;
-  BUTENKANJI: string;
-  KYOTENKANJI: string;
-  LABELTYPE: string;
-  ORDER: string;
-  DISPLAYFROM: string;
+  claimNumber: string;
+  claimCategoryInfo: ClaimCategory[];
+  insuranceKindInfo: InsuranceKind[];
+  fromLossDate: string;
+  toLossDate: string;
+  insuredNameKana: string;
+  insuredNameKanji: string;
+  contractorNameKana: string;
+  contractorNameKanji: string;
+  butenKanji: string;
+  kyotenKanji: string;
+  labelType: string;
+  order: string;
+  displayFrom: string;
 }
