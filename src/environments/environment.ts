@@ -15,6 +15,7 @@ export const environment = {
   claims_url: 'fraud-detection/api/claims/get',
   help_url: 'https://angular.jp/docs',
   priority_model: '特殊事案推定モデル',
+  secondary_model: 'NC/PD推定モデル',
   chart_type: 'line',
   specialCase_bg_color: 'rgba(0, 0, 255, 0)',
   specialCase_border_color: 'rgba(20, 0, 255, 100)',

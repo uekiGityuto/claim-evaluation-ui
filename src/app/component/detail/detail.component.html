@@ -105,20 +105,22 @@
             </div>
           </div>
           <div class="model-card-contents">
-            <div class="factor">
-              <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
-                <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
-                <p class="factor-contens__feature">{{ reason.featureName }}</p>
-                <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+            <ng-container *ngIf="scoreDetail.modelPresence; else nothingModel">
+              <div class="factor">
+                <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
+                  <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                  <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                  <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+                </div>
               </div>
-            </div>
-            <div class="factor">
-              <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
-                <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
-                <p class="factor-contens__feature">{{ reason.featureName }}</p>
-                <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+              <div class="factor">
+                <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
+                  <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                  <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                  <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+                </div>
               </div>
-            </div>
+            </ng-container>
           </div>
         </div>
       </ng-container>
@@ -134,6 +136,10 @@
         <p class="error-message__sub">担当者にお問い合わせください。</p>
       </div>
     </div>
+  </ng-template>
+
+  <ng-template #nothingModel>
+    <p class="message">推論結果が存在しません。</p>
   </ng-template>
 
 </div>

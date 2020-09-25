@@ -351,3 +351,10 @@
   background-color: var(--feature-description-bg-color);
   overflow-y: auto;
 }
+
+.message {
+  font-size: var(--extra-large-font-size);
+  margin-top: 240px;
+  margin-right: auto;
+  margin-left: auto;
+}

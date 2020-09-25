@@ -97,12 +97,14 @@ export class DetailComponent implements OnInit {
         this.isError = false;
 
         // 取得結果をシャーローコピー
-        // this.claim = { ...response['CLAIM'.toString()] };
-        // console.log('response:', response);
         this.claim = { ...response.claim };
+        console.log('claim:', this.claim);
+
+        // モデルが1つしかない場合に対応するための処理
+        this.claim.fraudScoreHistory = this.setModel(this.claim.fraudScoreHistory);
 
         // 不正請求スコア履歴を算出日の古い順にソート
-        this.fraudScoreSort(this.claim.fraudScoreHistory);
+        this.claim.fraudScoreHistory = this.fraudScoreSort(this.claim.fraudScoreHistory);
 
         // 最新の推論結果を元にビュー要素を取得
         const end = this.claim.fraudScoreHistory.length - 1;
@@ -119,11 +121,30 @@ export class DetailComponent implements OnInit {
     );
   }
 
+  // モデルが存在すればmodelPresenceにtrueをセットし、
+  // 存在しなければmodelPresenceにfalseがセットされたScoreDetailを追加
+  setModel(history: FraudScore[]) {
+    history.forEach(fraudScore => {
+      if (fraudScore.scoreDetail.length === 1) {
+        fraudScore.scoreDetail[0].modelPresence = true;
+        const modelType = fraudScore.scoreDetail[0].modelType === environment.priority_model ?
+          environment.secondary_model : environment.priority_model;
+        fraudScore.scoreDetail.push(new ScoreDetail(modelType));
+      } else {
+        fraudScore.scoreDetail.forEach(scoreDetail => {
+          scoreDetail.modelPresence = true;
+        });
+      }
+    });
+    return history;
+  }
+
   // 不正請求スコア履歴を算出日の古い順（昇順）にソート
-  fraudScoreSort(history: FraudScore[]): void {
+  fraudScoreSort(history: FraudScore[]): FraudScore[] {
     history.sort((a, b) => {
       return (new Date(a.scoringDate) > new Date(b.scoringDate) ? 1 : -1);
     });
+    return history;
   }
 
   // 特定算出日の推論結果を元にビュー要素を取得
@@ -222,17 +243,21 @@ export class DetailComponent implements OnInit {
     const raiseLowerReasons: RaiseLowerReason[] = [];
     // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
     scoreDetails.forEach((scoreDetail, i) => {
-      const reasons = scoreDetail.reasons.slice();
-      const descReason = reasons.sort((a, b) => {
-        return (a.reason > b.reason ? -1 : 1);
-      });
-      const raiseReason = descReason.filter(val => val.reason >= 0);
-      const lowerReason = descReason.reverse().filter(val => val.reason < 0);
-      const raizeLowerReason = new RaiseLowerReason(raiseReason, lowerReason);
-      raiseLowerReasons.push(raizeLowerReason);
+      if (scoreDetail.modelPresence) {
+        const reasons = scoreDetail.reasons.slice();
+        const descReason = reasons.sort((a, b) => {
+          return (a.reason > b.reason ? -1 : 1);
+        });
+        const raiseReason = descReason.filter(val => val.reason >= 0);
+        const lowerReason = descReason.reverse().filter(val => val.reason < 0);
+        const raizeLowerReason = new RaiseLowerReason(raiseReason, lowerReason);
+        raiseLowerReasons.push(raizeLowerReason);
+      } else {
+        raiseLowerReasons.push(null);
+      }
     });
     return raiseLowerReasons;
-  };
+  }
 
   // チャート作成
   chartCreate(history: FraudScore[]): void {
@@ -254,8 +279,10 @@ export class DetailComponent implements OnInit {
       const scoringDate = new Date(fraudScore.scoringDate);
       labels[i] =
         [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.claimCategory];
-      series1[i] = parseFloat(fraudScore.scoreDetail[0].score);
-      series2[i] = parseFloat(fraudScore.scoreDetail[1].score);
+      // series1[i] = parseFloat(fraudScore.scoreDetail[0].score);
+      // series2[i] = parseFloat(fraudScore.scoreDetail[1].score);
+      series1[i] = fraudScore.scoreDetail[0].score;
+      series2[i] = fraudScore.scoreDetail[1].score;
     });
 
     // チャートデータのセット
@@ -278,6 +305,7 @@ export class DetailComponent implements OnInit {
         data: series2,
         backgroundColor: [environment.ncpd_bg_color],
         borderColor: [environment.ncpd_border_color],
+        // TODO: 多分y-axis-2の間違い
         yAxisID: 'y-axis-1',
         steppedLine: true,
         borderWidth: 2

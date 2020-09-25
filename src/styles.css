@@ -115,7 +115,7 @@ body {
   font-size: var(--large-font-size);
 }
 
-.error-message p+p {
+.error-message__sub:first-child {
   margin-top: 24px;
 }
 
