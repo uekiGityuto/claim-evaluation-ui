@@ -92,7 +92,8 @@
                 <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
               </div>
               <div class="model-card-main-header-content">
-                <span>スコア：{{ scoreDetail.score }}</span>
+                <span *ngIf="scoreDetail.score; else nothingScore">スコア：{{ scoreDetail.score }}</span>
+                <ng-template #nothingScore><span>スコア：-</span></ng-template>
               </div>
             </div>
             <div class="model-card-sub-header">
