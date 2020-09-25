@@ -43,21 +43,36 @@
         <div class="claim-category-matrix">
           <div class="claim-category-matrix__ncpd-label">NC/PD推定モデル</div>
           <div class="claim-category-matrix__special-label">特殊事案モデル</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.highBgColor" class="claim-category-matrix__ncpd-high">High</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.middleBgColor" class="claim-category-matrix__ncpd-middle">Middle</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.lowBgColor" class="claim-category-matrix__ncpd-low">Low</div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.highBgColor" class="claim-category-matrix__special-high">High</div>
-          <div class="claim-category-matrix__high-high"><span [ngClass]="categoryMatrix?.highHighColor">{{ categoryMatrix?.highHigh }}</span></div>
-          <div class="claim-category-matrix__high-middle"><span [ngClass]="categoryMatrix?.highMiddleColor">{{ categoryMatrix?.highMiddle }}</span></div>
-          <div class="claim-category-matrix__high-low"><span [ngClass]="categoryMatrix?.highLowColor">{{ categoryMatrix?.highLow }}</span></div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.middleBgColor" class="claim-category-matrix__special-middle">Middle</div>
-          <div class="claim-category-matrix__middle-high"><span [ngClass]="categoryMatrix?.middleHighColor">{{ categoryMatrix?.middleHigh }}</span></div>
-          <div class="claim-category-matrix__middle-middle"><span [ngClass]="categoryMatrix?.middleMiddleColor">{{ categoryMatrix?.middleMiddle }}</span></div>
-          <div class="claim-category-matrix__middle-low"><span [ngClass]="categoryMatrix?.middleLowColor">{{ categoryMatrix?.middleLow }}</span></div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.lowBgColor" class="claim-category-matrix__special-low">Low</div>
-          <div class="claim-category-matrix__low-high"><span [ngClass]="categoryMatrix?.lowHighColor">{{ categoryMatrix?.lowHigh }}</span></div>
-          <div class="claim-category-matrix__low-middle"><span [ngClass]="categoryMatrix?.lowMiddleColor">{{ categoryMatrix?.lowMiddle }}</span></div>
-          <div class="claim-category-matrix__low-low"><span [ngClass]="categoryMatrix?.lowLowColor">{{ categoryMatrix?.lowLow }}</span></div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.highBgColor"
+            class="claim-category-matrix__ncpd-high">High</div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.middleBgColor"
+            class="claim-category-matrix__ncpd-middle">Middle</div>
+          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.lowBgColor"
+            class="claim-category-matrix__ncpd-low">Low</div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.highBgColor"
+            class="claim-category-matrix__special-high">High</div>
+          <div class="claim-category-matrix__high-high"><span
+              [ngClass]="categoryMatrix?.highHighColor">{{ categoryMatrix?.highHigh }}</span></div>
+          <div class="claim-category-matrix__high-middle"><span
+              [ngClass]="categoryMatrix?.highMiddleColor">{{ categoryMatrix?.highMiddle }}</span></div>
+          <div class="claim-category-matrix__high-low"><span
+              [ngClass]="categoryMatrix?.highLowColor">{{ categoryMatrix?.highLow }}</span></div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.middleBgColor"
+            class="claim-category-matrix__special-middle">Middle</div>
+          <div class="claim-category-matrix__middle-high"><span
+              [ngClass]="categoryMatrix?.middleHighColor">{{ categoryMatrix?.middleHigh }}</span></div>
+          <div class="claim-category-matrix__middle-middle"><span
+              [ngClass]="categoryMatrix?.middleMiddleColor">{{ categoryMatrix?.middleMiddle }}</span></div>
+          <div class="claim-category-matrix__middle-low"><span
+              [ngClass]="categoryMatrix?.middleLowColor">{{ categoryMatrix?.middleLow }}</span></div>
+          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.lowBgColor"
+            class="claim-category-matrix__special-low">Low</div>
+          <div class="claim-category-matrix__low-high"><span
+              [ngClass]="categoryMatrix?.lowHighColor">{{ categoryMatrix?.lowHigh }}</span></div>
+          <div class="claim-category-matrix__low-middle"><span
+              [ngClass]="categoryMatrix?.lowMiddleColor">{{ categoryMatrix?.lowMiddle }}</span></div>
+          <div class="claim-category-matrix__low-low"><span
+              [ngClass]="categoryMatrix?.lowLowColor">{{ categoryMatrix?.lowLow }}</span></div>
         </div>
       </div>
     </div>
@@ -67,23 +82,30 @@
       <ng-container *ngFor="let scoreDetail of scoreDetails; index as i">
         <div class="model-card">
           <div class="model-card-header">
-            <div class="model-card-header-content">
-              <span>{{ scoreDetail.modelType }}</span>
-              <button class="model-card-header-content__button" mat-icon-button (click)="displayHelp()">
-                <mat-icon inline="true">help</mat-icon>
-              </button>
-              <span>： </span>
-              <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
+            <div class="model-card-main-header">
+              <div class="model-card-main-header-content">
+                <span>{{ scoreDetail.modelType }}</span>
+                <button class="model-card-main-header-content__button" mat-icon-button (click)="displayHelp()">
+                  <mat-icon inline="true">help</mat-icon>
+                </button>
+                <span>： </span>
+                <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
+              </div>
+              <div class="model-card-main-header-content">
+                <span>スコア：{{ scoreDetail.score }}</span>
+              </div>
             </div>
-            <div class="model-card-header-content">
-              <span>スコア：{{ scoreDetail.score }}</span>
+            <div class="model-card-sub-header">
+              <div class="factor-header factor-header--raise">
+                <p class="factor-header__item">スコア上昇要因↑</p>
+              </div>
+              <div class="factor-header factor-header--lower">
+                <p class="factor-header__item">スコア減少要因↓</p>
+              </div>
             </div>
           </div>
           <div class="model-card-contents">
             <div class="factor">
-              <div class="factor-header factor-header--raise">
-                <p class="factor-header__item">スコア上昇要因↑</p>
-              </div>
               <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
                 <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
                 <p class="factor-contens__feature">{{ reason.featureName }}</p>
@@ -91,9 +113,6 @@
               </div>
             </div>
             <div class="factor">
-              <div class="factor-header factor-header--lower">
-                <p class="factor-header__item">スコア減少要因↓</p>
-              </div>
               <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
                 <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
                 <p class="factor-contens__feature">{{ reason.featureName }}</p>

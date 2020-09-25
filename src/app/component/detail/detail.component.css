@@ -261,7 +261,7 @@
   box-shadow: 0 0 4px var(--shadow-color);
 }
 
-.model-card-header {
+.model-card-main-header {
   height: var(--card-header-height);
   font-size: var(--large-font-size);
   background-color: var(--card-header-bg-color);
@@ -272,13 +272,13 @@
   padding-left: var(--left-write-common-padding);
 }
 
-.model-card-header-content {
+.model-card-main-header-content {
   height: var(--card-header-height);
   vertical-align: middle;
   line-height: var(--card-header-height);
 }
 
-.model-card-header-content__button {
+.model-card-main-header-content__button {
   display: inline-block;
   width: var(--card-header-height);
   height: var(--card-header-height);
@@ -287,28 +287,19 @@
 }
 
 /* mat-iconを直接指定しないとフォントサイズが変わらない */
-.model-card-header-content__button mat-icon {
+.model-card-main-header-content__button mat-icon {
   font-size: var(--extra-large-font-size);
 }
 
-.model-card-contents {
-  /* height=「親要素のheight」-「兄弟要素のheight」 */
-  height: calc(100% - 40px);
-  font-size: var(--medium-font-size);
-  background-color: var(--card-bg-color);
-  display: flex;
-  overflow-y: auto;
-}
-
-.factor {
-  height: 100%;
-  flex: 1;
-}
-
-.factor-header {
+.model-card-sub-header {
   height: var(--factor-header-height);
   font-size: var(--medium-font-size);
   display: flex;
+}
+
+.factor-header {
+  display: flex;
+  flex: 1;
   justify-content: center;
   align-items: center;
 }
@@ -323,6 +314,20 @@
 
 .factor-header--lower {
   background-color: var(--claim-low-color);
+}
+
+.model-card-contents {
+  /* height=「親要素のheight」-「兄弟要素のheight」 */
+  height: calc(100% - 40px - 32px);
+  font-size: var(--medium-font-size);
+  background-color: var(--card-bg-color);
+  display: flex;
+  overflow-y: auto;
+}
+
+.factor {
+  height: 100%;
+  flex: 1;
 }
 
 .factor-contens {
