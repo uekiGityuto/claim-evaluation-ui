@@ -136,6 +136,8 @@ export class DetailComponent implements OnInit {
     this.scoringDate = fraudScoreView.scoringDate;
     // 事案カテゴリマトリクスをセット
     this.categoryMatrix = this.setCategoryMatrix(fraudScoreView.scoreCategories);
+    // モデルのソート
+    fraudScoreView = this.modelSort(fraudScoreView);
     // スコア詳細のセット
     this.scoreDetails = [];
     fraudScoreView.scoreDetail.forEach((scoreDetail, i) => {
@@ -205,6 +207,14 @@ export class DetailComponent implements OnInit {
       }
     });
     return categoryMatrix;
+  }
+
+  // モデルのソート
+  modelSort(fraudScoreView: FraudScore): FraudScore {
+    fraudScoreView.scoreDetail.sort((a, b) => {
+      return (a.modelType === environment.priority_model) ? -1 : 1;
+    });
+    return fraudScoreView;
   }
 
   // 推論結果の要因をソート
