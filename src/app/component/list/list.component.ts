@@ -117,7 +117,7 @@ export class ListComponent implements OnInit {
     this.searchList(this.param);
 
     // フォームの各要素をnullで初期化
-    this.searchControl.reset();
+    // this.searchControl.reset();
     // console.log('this.searchControl(初期化後)', this.searchControl.value);
   }
 

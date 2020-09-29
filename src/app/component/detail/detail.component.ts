@@ -306,7 +306,7 @@ export class DetailComponent implements OnInit {
         backgroundColor: [environment.ncpd_bg_color],
         borderColor: [environment.ncpd_border_color],
         // TODO: 多分y-axis-2の間違い
-        yAxisID: 'y-axis-1',
+        yAxisID: 'y-axis-2',
         steppedLine: true,
         borderWidth: 2
       }],

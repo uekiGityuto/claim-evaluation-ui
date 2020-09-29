@@ -58,10 +58,10 @@ body {
   margin-right: 16px;
 }
 
-.card {
+/* .card {
   box-shadow: 0 0 4px var(--shadow-color);
-  /* border-radius: 10px; */
-}
+  border-radius: 10px;
+} */
 
 .high-font-color {
   color: var(--claim-high-color);
@@ -80,14 +80,6 @@ body {
   justify-content: center;
   align-items: center;
 }
-
-/* .font-size-l {
-  font-size: var(--large-font-size);
-}
-
-.font-size-xl {
-  font-size: var(--extra-large-font-size);
-} */
 
 /* エラーメッセージ用 */
 
@@ -115,8 +107,9 @@ body {
   font-size: var(--large-font-size);
 }
 
-.error-message__sub:first-child {
-  margin-top: 24px;
+/* TODO:以下効かないので調査して修正 */
+.error-message__sub:first-of-type {
+  margin-top: 28px;
 }
 
 /* ngClassディレクティブ用 */
