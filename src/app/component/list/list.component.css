@@ -1,12 +1,6 @@
 /* CSS Grid対応のため記述 */
 /* autoprefixer grid: on */
 
-/* 共通 */
-
-/* form input:invalid {
-  border: solid 1px red;
-} */
-
 /* ヘッダエリア */
 
 .list-header-card {
@@ -147,64 +141,6 @@
 }
 
 .pager__input:invalid {
-  border: solid 1px red;
-}
-
-/* お試しスタイルエリア */
-
-/* input text */
-
-.cp_iptxt {
-  position: relative;
-  /* width: 80%; */
-  /* margin: 40px 3%; */
-  flex: 1;
-}
-
-.cp_iptxt input[type='text'], .cp_iptxt select {
-  /* font: 15px/24px sans-serif; */
-  box-sizing: border-box;
-  /* width: 100%; */
-  padding: 0.3em;
-  transition: 0.3s;
-  letter-spacing: 1px;
-  color: #aaaaaa;
-  border: 1px solid #1b2538;
-  border-radius: 4px;
-}
-
-.ef input[type='text']:focus, .ef select:focus {
-  border: 1px solid #da3c41;
-  outline: none;
-  box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
-}
-
-.cp_iptxt2 {
-  position: relative;
-  /* width: 80%; */
-  width: 64px;
-  /* margin: 40px 3%; */
-  /* flex: 1; */
-}
-
-.cp_iptxt2 input[type='text'] {
-  /* font: 15px/24px sans-serif; */
-  box-sizing: border-box;
-  /* width: 100%; */
-  padding: 0.3em;
-  transition: 0.3s;
-  letter-spacing: 1px;
-  color: #aaaaaa;
-  border: 1px solid #1b2538;
-  border-radius: 4px;
-}
-
-.ef2 {
-  width: 64px;
-}
-
-.ef2 input[type='text']:focus {
-  border: 1px solid #da3c41;
-  outline: none;
-  box-shadow: 0 0 5px 1px rgba(218, 60, 65, .5);
+  background-color: #fbd7d6;
+  border: solid 1px #ff5f58;
 }

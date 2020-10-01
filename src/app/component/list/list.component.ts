@@ -1,5 +1,6 @@
+import { DatePipe } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
@@ -40,6 +41,7 @@ export class ListComponent implements OnInit {
   param: SearchForm;
 
   constructor(private route: ActivatedRoute,
+    private datepipe: DatePipe,
     private router: Router,
     private httpClient: HttpClient,
     private userInfo: UserInfoContainerService
@@ -71,7 +73,6 @@ export class ListComponent implements OnInit {
       validators: [this.isInputMoreThanOne, this.isButenKyotenRadio]
     });
 
-    this.claims = [];
   }
 
   // 認可処理
@@ -99,10 +100,8 @@ export class ListComponent implements OnInit {
       return;
     }
 
-    // console.log('this.searchControl', this.searchControl.value);
-
     // フォームの配列の各要素を{key, value}形式に変換
-    this.setKeyArrayElement(this.searchControl);
+    this.searchControl = this.setKeyArrayElement(this.searchControl);
 
     // フォームの全要素に対してnullを空文字に変換
     Object.keys(this.searchControl.value)
@@ -122,7 +121,7 @@ export class ListComponent implements OnInit {
   }
 
   // フォームの配列の各要素を{key, value}形式に変換
-  setKeyArrayElement(form :FormGroup) {
+  setKeyArrayElement(form: FormGroup): FormGroup {
     // フォームコントロールの事案カテゴリ要素にkeyをつける（nullならば空の配列に変換）
     if (form.value.claimCategoryInfo) {
       form.value.claimCategoryInfo.forEach(
@@ -143,13 +142,18 @@ export class ListComponent implements OnInit {
     } else {
       form.value.insuranceKindInfo = [];
     }
+    return form;
   }
 
   // HTTPリクエストのボディ部を作成
-  createPostBody(form :FormGroup, param: SearchForm, userId: string) {
+  createPostBody(form: FormGroup, param: SearchForm, userId: string) {
     // ボディ部に検索フォームの内容をディープコピー
     const { butenKyotenRadio, butenKyoten, ...rest } = form.value;
     param = JSON.parse(JSON.stringify(rest));
+
+    // 日付の形式を変換
+    param.fromLossDate = param.fromLossDate === '' ? '' : this.datepipe.transform(param.fromLossDate, 'yyyy-MM-dd');
+    param.toLossDate = param.toLossDate === '' ? '' : this.datepipe.transform(param.toLossDate, 'yyyy-MM-dd');
 
     // ボディ部の残り（検索フォーム以外の内容）をセット
     // param.REQ_USER_ID = userId;
@@ -173,7 +177,6 @@ export class ListComponent implements OnInit {
   // ソート処理
   listSort(sort: Sort) {
     // console.log(this.param);
-    // TODO: environmentからの取得方法の書き方を他と合わせる
     this.param.labelType = environment[sort.active];
     this.param.order = environment[sort.direction];
     // console.log(this.param);
@@ -234,15 +237,14 @@ export class ListComponent implements OnInit {
 
     // 事案一覧を取得
     // 本番用
-    this.httpClient.post<ClaimList>(claimsUri, params ,{ headers: headers})
-    // スタブ用
-    // this.httpClient.get(claimsUri)
+    this.httpClient.post<ClaimList>(claimsUri, params, { headers: headers })
+      // スタブ用
+      // this.httpClient.get(claimsUri)
       .subscribe(
         response => {
           // console.log('response:', response);
           this.isError = false;
           // ビュー要素を取得
-          // this.claims = [];
           response.claim.forEach((claim: Claim, i) => {
             const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
             this.claims[i] = { ...claim, categoryClass };
