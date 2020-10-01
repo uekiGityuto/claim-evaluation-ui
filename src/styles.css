@@ -19,7 +19,8 @@
   --claim-high-color: #f0554e;
   --claim-middle-color: #f3ca3e;
   --claim-low-color: #2ac940;
-  --shadow-color: #808080;
+  --dark-shadow-color: #494848;
+  --light-shadow-color: #acacac;
   --main-header-height: 48px;
   --card-header-height: 40px;
   --factor-header-height: 32px;
@@ -51,17 +52,14 @@ body {
   background-color: var(--main-bg-color);
   display: flex;
   justify-content: flex-end;
+  box-shadow: 0 0 4px var(--dark-shadow-color);
+  box-shadow: 0 0 8px var(--light-shadow-color);
 }
 
 .main-header span {
   line-height: var(--main-header-height);
   margin-right: 16px;
 }
-
-/* .card {
-  box-shadow: 0 0 4px var(--shadow-color);
-  border-radius: 10px;
-} */
 
 .high-font-color {
   color: var(--claim-high-color);
@@ -117,16 +115,22 @@ body {
 .highBgColor {
   background-color: var(--claim-high-color);
   color: var(--main-font-color);
+  padding-right: 4px;
+  padding-left: 4px;
 }
 
 .middleBgColor {
   background-color: var(--claim-middle-color);
   color: var(--main-font-color);
+  padding-right: 4px;
+  padding-left: 4px;
 }
 
 .lowBgColor {
   background-color: var(--claim-low-color);
   color: var(--main-font-color);
+  padding-right: 4px;
+  padding-left: 4px;
 }
 
 .highColor {
@@ -144,7 +148,7 @@ body {
 /* クラスバインディング用 */
 
 .now {
-  background-color: #f0554e;
+  background-color: #f8bbb8;
 }
 
 /* mat-icon用 */
