@@ -162,8 +162,7 @@ export class DetailComponent implements OnInit {
     // スコア詳細のセット
     this.scoreDetails = [];
     fraudScoreView.scoreDetail.forEach((scoreDetail, i) => {
-      // TODO: 大文字小文字を確認
-      const categoryClass = new CategoryClass('high', 'middle', 'low', scoreDetail.rank);
+      const categoryClass = new CategoryClass('High', 'Middle', 'Low', scoreDetail.rank);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
