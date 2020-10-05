@@ -100,17 +100,8 @@ export class ListComponent implements OnInit {
       return;
     }
 
-    // フォームの配列の各要素を{key, value}形式に変換
-    this.searchControl = this.setKeyArrayElement(this.searchControl);
-
-    // フォームの全要素に対してnullを空文字に変換
-    Object.keys(this.searchControl.value)
-      .forEach(key => {
-        if (this.searchControl.value[key] === null) this.searchControl.value[key] = '';
-      });
-
-    // POSTボディ部に検索フォームの内容をディープコピー
-    this.param = this.createPostBody(this.searchControl, this.param, this.userId);
+    // HTTPリクエストのボディ部作成
+    this.param = new SearchForm(this.searchControl, this.datepipe);
 
     // 事案一覧取得
     this.searchList(this.param);
@@ -118,60 +109,6 @@ export class ListComponent implements OnInit {
     // フォームの各要素をnullで初期化
     // this.searchControl.reset();
     // console.log('this.searchControl(初期化後)', this.searchControl.value);
-  }
-
-  // フォームの配列の各要素を{key, value}形式に変換
-  setKeyArrayElement(form: FormGroup): FormGroup {
-    // フォームコントロールの事案カテゴリ要素にkeyをつける（nullならば空の配列に変換）
-    if (form.value.claimCategoryInfo) {
-      form.value.claimCategoryInfo.forEach(
-        (claimCategory, i) => {
-          claimCategory = { claimCategory: claimCategory };
-          form.value.claimCategoryInfo[i] = claimCategory;
-        });
-    } else {
-      form.value.claimCategoryInfo = [];
-    }
-    // フォームコントロールの保険種類要素にkeyをつける（nullならば空の配列に変換）
-    if (form.value.insuranceKindInfo) {
-      form.value.insuranceKindInfo.forEach(
-        (insuranceKind, i) => {
-          insuranceKind = { insuranceKind: insuranceKind };
-          form.value.insuranceKindInfo[i] = insuranceKind;
-        });
-    } else {
-      form.value.insuranceKindInfo = [];
-    }
-    return form;
-  }
-
-  // HTTPリクエストのボディ部を作成
-  createPostBody(form: FormGroup, param: SearchForm, userId: string) {
-    // ボディ部に検索フォームの内容をディープコピー
-    const { butenKyotenRadio, butenKyoten, ...rest } = form.value;
-    param = JSON.parse(JSON.stringify(rest));
-
-    // 日付の形式を変換
-    param.fromLossDate = param.fromLossDate === '' ? '' : this.datepipe.transform(param.fromLossDate, 'yyyy-MM-dd');
-    param.toLossDate = param.toLossDate === '' ? '' : this.datepipe.transform(param.toLossDate, 'yyyy-MM-dd');
-
-    // ボディ部の残り（検索フォーム以外の内容）をセット
-    // param.REQ_USER_ID = userId;
-    if (butenKyotenRadio === 'buten') {
-      param.butenKanji = butenKyoten;
-      param.kyotenKanji = '';
-    } else if (butenKyotenRadio === 'kyoten') {
-      param.butenKanji = '';
-      param.kyotenKanji = butenKyoten;
-    } else {
-      param.butenKanji = '';
-      param.kyotenKanji = '';
-    }
-    param.labelType = environment.lossDate;
-    param.order = environment.desc;
-    param.displayFrom = '1';
-    // console.log('POSTボディ部', param);
-    return param;
   }
 
   // ソート処理
