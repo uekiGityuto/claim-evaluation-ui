@@ -28,7 +28,8 @@
       <div class="claim-category-header">
         <div class="claim-category-header__item">
           <span>事案カテゴリ：</span>
-          <span [ngClass]="categoryClass">{{ claimCategory }}</span>
+          <span *ngIf="claimCategory; else nothingClaimCategory" [ngClass]="categoryClass">{{ claimCategory }}</span>
+          <ng-template #nothingClaimCategory><span>判定不能</span></ng-template>
         </div>
         <div class="claim-category-header__item">
           <span>スコアリング日：</span>
