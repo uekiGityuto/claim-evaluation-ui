@@ -5,7 +5,7 @@ import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-import { SearchForm } from '../../model/search-form';
+import { TargetClaimList } from '../../model/target-claim-list/target-claim-list';
 import { CategoryClass } from '../../model/category-class';
 import { ClaimView } from '../../model/claim-view';
 import { ClaimList } from '../../model/claim-list/claim-list';
@@ -38,7 +38,7 @@ export class ListComponent implements OnInit {
 
   // 検索用
   searchControl: FormGroup;
-  param: SearchForm;
+  param: TargetClaimList;
 
   constructor(private route: ActivatedRoute,
     private datepipe: DatePipe,
@@ -101,7 +101,7 @@ export class ListComponent implements OnInit {
     }
 
     // HTTPリクエストのボディ部作成
-    this.param = new SearchForm(this.searchControl, this.datepipe);
+    this.param = new TargetClaimList(this.searchControl, this.datepipe);
 
     // 事案一覧取得
     this.searchList(this.param);
@@ -167,7 +167,7 @@ export class ListComponent implements OnInit {
   }
 
   // 事案一覧取得処理
-  searchList(params: SearchForm): void {
+  searchList(params: TargetClaimList): void {
     console.log('postボディ:', params);
     const claimsUri = environment.claims_url;
     const headers = { 'Content-Type': 'application/json' };
