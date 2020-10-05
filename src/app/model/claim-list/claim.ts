@@ -4,8 +4,7 @@ export interface Claim {
   insuredNameKana: string;
   contractorNameKanji: string;
   contractorNameKana: string;
-  butenKanji: string;
-  kyotenKanji: string;
+  base: string;
   insuranceKind: string;
   lastUpdateDate: Date;
   lossDate: Date;

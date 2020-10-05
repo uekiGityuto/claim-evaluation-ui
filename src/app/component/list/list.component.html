@@ -78,8 +78,7 @@
           <th mat-sort-header="claimNumber">受付番号</th>
           <th mat-sort-header="insuredName">被保険者名</th>
           <th mat-sort-header="contractorName">契約者名</th>
-          <th mat-sort-header="butenKanji">担当部</th>
-          <th mat-sort-header="kyotenKanji">担当拠点</th>
+          <th mat-sort-header="butenKanji">担当部・<br>担当拠点</th>
           <th mat-sort-header="insuranceKind">保険種類</th>
           <th mat-sort-header="lastUpdateDate">最終更新日</th>
           <th mat-sort-header="lossDate">事故日</th>
@@ -89,9 +88,7 @@
           <td class="claim-list-dataset__data"><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
           <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">{{ claim.insuredNameKana }}</td>
           <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">{{ claim.contractorNameKana }}</td>
-          <!-- TODO:  担当部・担当拠点は分けないらしい -->
-          <td class="claim-list-dataset__data">{{ claim.butenKanji }}</td>
-          <td class="claim-list-dataset__data">{{ claim.kyotenKanji }}</td>
+          <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
           <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
           <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
           <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
