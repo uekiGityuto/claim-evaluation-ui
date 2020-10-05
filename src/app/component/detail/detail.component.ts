@@ -347,11 +347,11 @@ export class DetailComponent implements OnInit {
           type: 'linear',
           position: 'left',
           ticks: {
-            max: 120,
+            max: 1,
             min: 0,
-            stepSize: 20,
+            stepSize: 0.1,
             callback: (value, index, values) => {
-              return (value === 100 || value === 0) ? value : '';
+              return (value === 1 || value === 0) ? value : '';
             }
           },
           scaleLabel: {
@@ -362,9 +362,9 @@ export class DetailComponent implements OnInit {
           type: 'linear',
           display: false,
           ticks: {
-            max: 120,
+            max: 1,
             min: 0,
-            stepSize: 20
+            stepSize: 0.1
           },
           gridLines: {
             drawOnChartArea: false
@@ -392,7 +392,7 @@ export class DetailComponent implements OnInit {
         // 縦軸ラベル描写
         context.font = '12px "Meiryo UI"';
         context.fillStyle = '#000000';
-        context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
+        context.fillText('スコア', 2, Math.floor(chart.height / 2) + 10);
         // 日付ラベルと事案カテゴリラベルの表示位置を決める情報をセット
         let nLeft = 62;
         const nRight = 170;
@@ -412,6 +412,8 @@ export class DetailComponent implements OnInit {
             context.fillStyle = '#f3ca3e';
           } else if (label[1] === '低') {
             context.fillStyle = '#2ac940';
+          } else {
+            label[1] = '-';
           }
           nTextWidth = context.measureText(label[1]).width;
           context.fillText(label[1], nLeft - (nTextWidth / 2), 30);
