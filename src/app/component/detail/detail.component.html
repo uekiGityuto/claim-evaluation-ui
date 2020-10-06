@@ -16,11 +16,10 @@
     <div class="detail-header-card">
       <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
       <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
-      <span class="detail-header-card__item">契約者名：</span>
-      <span class="detail-header-card__item">{{ this.claim?.contractorNameKana }}</span>
-      <span class="detail-header-card__item">保険種類：{{ this.claim?.insuranceKindExt }}</span>
-      <span class="detail-header-card__item">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
-      <span class="detail-header-card__item">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
+      <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
+      <span class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
+      <span class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
+      <span class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
     </div>
 
     <!-- 事案カテゴリエリア -->

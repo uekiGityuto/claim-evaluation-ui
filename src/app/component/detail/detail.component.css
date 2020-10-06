@@ -67,6 +67,10 @@
   line-height: var(--card-header-height);
 }
 
+.detail-header-card__item--block {
+  display: inline-block;
+}
+
 .claim-category {
   height: 240px;
   display: flex;
