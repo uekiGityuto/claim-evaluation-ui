@@ -24,12 +24,11 @@ export const environment = {
   claimNumber: '1',
   insuredName: '2',
   contractorName: '3',
-  department: '4',
-  base: '5',
-  insuranceKind: '6',
-  lastUpdateDate: '7',
-  lossDate: '8',
-  claimCategory: '9',
+  base: '4',
+  insuranceKind: '5',
+  lastUpdateDate: '6',
+  lossDate: '7',
+  claimCategory: '8',
   asc: '00',
   desc: '01'
 };

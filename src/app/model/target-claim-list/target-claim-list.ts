@@ -44,13 +44,9 @@ export class TargetClaimList {
 
     // フォームの事案カテゴリをフィールドにセット
     this.claimCategoryInfo = [];
-    console.log('1', form.value.claimCategoryInfo);
-    console.log('2', form.value.claimCategoryInfo.length);
     if (form.value.claimCategoryInfo && form.value.claimCategoryInfo.length > 0) {
-      console.log('form.value.claimCategoryInfo:', form.value.claimCategoryInfo);
       form.value.claimCategoryInfo.forEach(
         claimCategory => {
-          console.log('claimCategory:', claimCategory);
           this.claimCategoryInfo.push(new ClaimCategory(claimCategory));
         });
     } else {

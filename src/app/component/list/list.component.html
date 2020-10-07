@@ -74,12 +74,12 @@
 
     <!-- 事案一覧テーブルエリア -->
     <ng-container *ngIf="claims.length != 0">
-      <table class="claim-list-card" matSort (matSortChange)="listSort($event)">
+      <table class="claim-list-card" matSort (matSortChange)="listSort($event)" matSortActive="lossDate" matSortDirection="desc">
         <tr class="claim-list-header">
           <th mat-sort-header="claimNumber">受付番号</th>
           <th mat-sort-header="insuredName">被保険者名</th>
           <th mat-sort-header="contractorName">契約者名</th>
-          <th mat-sort-header="butenKanji">担当部・<br>担当拠点</th>
+          <th mat-sort-header="base">担当部・<br>担当拠点</th>
           <th mat-sort-header="insuranceKind">保険種類</th>
           <th mat-sort-header="lastUpdateDate">最終更新日</th>
           <th mat-sort-header="lossDate">事故日</th>
