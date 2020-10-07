@@ -1,17 +1,17 @@
 {
-  "/fraud-detection/api/authorize/authorize": {
+  "/claim-evaluation/api/authorize/authorize": {
     "target": "http://localhost:8080",
     "secure": false
   },
-  "/fraud-detection/api/scores": {
+  "/claim-evaluation/api/scores": {
     "target": "http://localhost:8080",
     "secure": false
   },
-  "/fraud-detection/api/claims/transition": {
+  "/claim-evaluation/api/claims/transition": {
     "target": "http://localhost:8080",
     "secure": false
   },
-  "/fraud-detection/api/claims/get": {
+  "/claim-evaluation/api/claims/get": {
     "target": "http://localhost:8080",
     "secure": false
   }
