@@ -262,9 +262,9 @@ export class DetailComponent implements OnInit {
     // context.scale(2,2);
 
     // グローバル設定セット
-    Chart.defaults.global.defaultFontColor = '#000000';
-    Chart.defaults.global.defaultFontFamily = '"Meiryo UI", "Meiryo", "Yu Gothic UI", "Yu Gothic", "YuGothic"';
-    Chart.defaults.global.defaultFontSize = 12;
+    Chart.defaults.global.defaultFontColor = environment.chart_font_color;
+    Chart.defaults.global.defaultFontFamily = environment.chart_font_familiy;
+    Chart.defaults.global.defaultFontSize = environment.chart_font_size;
 
     // ラベルとデータセットのセット
     const labels: Array<string[]> = [];
@@ -274,8 +274,6 @@ export class DetailComponent implements OnInit {
       const scoringDate = new Date(fraudScore.scoringDate);
       labels[i] =
         [this.datepipe.transform(scoringDate, 'M/d'), fraudScore.claimCategory];
-      // series1[i] = parseFloat(fraudScore.scoreDetail[0].score);
-      // series2[i] = parseFloat(fraudScore.scoreDetail[1].score);
       series1[i] = fraudScore.scoreDetail[0].score;
       series2[i] = fraudScore.scoreDetail[1].score;
     });
@@ -288,8 +286,8 @@ export class DetailComponent implements OnInit {
         type: 'line',
         fill: false,
         data: series1,
-        backgroundColor: [environment.specialCase_bg_color],
-        borderColor: [environment.specialCase_border_color],
+        backgroundColor: [environment.chart_specialCase_bg_color],
+        borderColor: [environment.chart_specialCase_border_color],
         yAxisID: 'y-axis-1',
         steppedLine: true,
         borderWidth: 4
@@ -298,8 +296,8 @@ export class DetailComponent implements OnInit {
         type: 'line',
         fill: false,
         data: series2,
-        backgroundColor: [environment.ncpd_bg_color],
-        borderColor: [environment.ncpd_border_color],
+        backgroundColor: [environment.chart_ncpd_bg_color],
+        borderColor: [environment.chart_ncpd_border_color],
         yAxisID: 'y-axis-2',
         steppedLine: true,
         borderWidth: 2
@@ -392,8 +390,8 @@ export class DetailComponent implements OnInit {
     Chart.plugins.register({
       afterDatasetsDraw: (chart, easing) => {
         // 縦軸ラベル描写
-        context.font = '12px "Meiryo UI"';
-        context.fillStyle = '#000000';
+        context.font = environment.chart_label_font;
+        context.fillStyle = environment.chart_font_color;
         context.fillText('スコア', 2, Math.floor(chart.height / 2) + 10);
         // 日付ラベルと事案カテゴリラベルの表示位置を決める情報をセット
         let nLeft = 62;
@@ -402,18 +400,18 @@ export class DetailComponent implements OnInit {
         nLeft += nMove / 2;
         chartLines.data.labels.forEach(label => {
           // 日付ラベル表示
-          context.font = '16px "Meiryo UI"';
-          context.fillStyle = '#000000';
+          context.font = environment.chart_category_font;
+          context.fillStyle = environment.chart_font_color;
           let nTextWidth = context.measureText(label[0]).width;
           context.fillText(label[0], nLeft - (nTextWidth / 2), 10);
           // 事案カテゴリラベル表示
-          context.font = '16px "Meiryo UI"';
+          context.font = environment.chart_category_font;
           if (label[1] === '高') {
-            context.fillStyle = '#f0554e';
+            context.fillStyle = environment.chart_category_high_font_color;
           } else if (label[1] === '中') {
-            context.fillStyle = '#f3ca3e';
+            context.fillStyle = environment.chart_category_middle_font_color;
           } else if (label[1] === '低') {
-            context.fillStyle = '#2ac940';
+            context.fillStyle = environment.chart_category_low_font_color;
           } else {
             label[1] = '-';
           }
