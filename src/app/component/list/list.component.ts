@@ -112,7 +112,7 @@ export class ListComponent implements OnInit {
   }
 
   // ソート処理
-  listSort(sort: Sort) {
+  sortList(sort: Sort) {
     // console.log(this.param);
     this.param.labelType = environment[sort.active];
     this.param.order = environment[sort.direction];

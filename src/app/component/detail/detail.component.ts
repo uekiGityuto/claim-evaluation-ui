@@ -100,7 +100,7 @@ export class DetailComponent implements OnInit {
         this.claim.fraudScoreHistory = this.setModel(this.claim.fraudScoreHistory);
 
         // 不正請求スコア履歴を算出日の古い順にソート
-        this.claim.fraudScoreHistory = this.fraudScoreSort(this.claim.fraudScoreHistory);
+        this.claim.fraudScoreHistory = this.sortFraudScoreHistoryInAsc(this.claim.fraudScoreHistory);
 
         // 最新の推論結果を元にビュー要素を取得
         const end = this.claim.fraudScoreHistory.length - 1;
@@ -108,7 +108,7 @@ export class DetailComponent implements OnInit {
         this.getScoreInfo(fraudScoreView);
 
         // チャート作成
-        this.chartCreate(this.claim.fraudScoreHistory);
+        this.createChart(this.claim.fraudScoreHistory);
 
       }, error => {
         console.log('照会エラーメッセージ表示');
@@ -136,7 +136,7 @@ export class DetailComponent implements OnInit {
   }
 
   // 不正請求スコア履歴を算出日の古い順（昇順）にソート
-  fraudScoreSort(history: FraudScore[]): FraudScore[] {
+  sortFraudScoreHistoryInAsc(history: FraudScore[]): FraudScore[] {
     history.sort((a, b) => {
       return (new Date(a.scoringDate) > new Date(b.scoringDate) ? 1 : -1);
     });
@@ -154,7 +154,7 @@ export class DetailComponent implements OnInit {
     // 事案カテゴリマトリクスをセット
     this.categoryMatrix = this.setCategoryMatrix(fraudScoreView.scoreCategories);
     // モデルのソート
-    fraudScoreView = this.modelSort(fraudScoreView);
+    fraudScoreView = this.sortModel(fraudScoreView);
     // スコア詳細のセット
     this.scoreDetails = [];
     fraudScoreView.scoreDetail.forEach((scoreDetail, i) => {
@@ -163,7 +163,7 @@ export class DetailComponent implements OnInit {
       // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
     // 推論結果の要因をソート
-    this.raiseLowerReasons = this.reasonSort(this.scoreDetails);
+    this.raiseLowerReasons = this.sortReasonInAbsoluteDesc(this.scoreDetails);
   }
 
   // 事案カテゴリマトリクスのセット
@@ -226,7 +226,7 @@ export class DetailComponent implements OnInit {
   }
 
   // モデルのソート
-  modelSort(fraudScoreView: FraudScore): FraudScore {
+  sortModel(fraudScoreView: FraudScore): FraudScore {
     fraudScoreView.scoreDetail.sort((a, b) => {
       return (a.modelType === environment.priority_model) ? -1 : 1;
     });
@@ -234,7 +234,7 @@ export class DetailComponent implements OnInit {
   }
 
   // 推論結果の要因をソート
-  reasonSort(scoreDetails: ScoreDetail[]): RaiseLowerReason[] {
+  sortReasonInAbsoluteDesc(scoreDetails: ScoreDetail[]): RaiseLowerReason[] {
     const raiseLowerReasons: RaiseLowerReason[] = [];
     // モデル毎に上昇要因と減少要因に分けて、絶対値の降順に並び変える
     scoreDetails.forEach((scoreDetail, i) => {
@@ -255,7 +255,7 @@ export class DetailComponent implements OnInit {
   }
 
   // チャート作成
-  chartCreate(history: FraudScore[]): void {
+  createChart(history: FraudScore[]): void {
 
     // canvasの取得
     const context: CanvasRenderingContext2D = this.elementRef.nativeElement.getContext('2d');
