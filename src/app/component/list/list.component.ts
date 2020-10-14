@@ -73,6 +73,16 @@ export class ListComponent implements OnInit {
       validators: [this.isInputMoreThanOne, this.isButenKyotenRadio]
     });
 
+    // mat-selectのスタイル調整
+    const matSelectTrigger: HTMLElement[] = Array.prototype.slice.call(document.getElementsByClassName('mat-select-trigger'));
+    matSelectTrigger.forEach(matSelectValue => {
+      matSelectValue.style.height = environment.form_size;
+    });
+    const matSelectValues: HTMLElement[] = Array.prototype.slice.call(document.getElementsByClassName('mat-select-value'));
+    matSelectValues.forEach(matSelectValue => {
+      matSelectValue.style.verticalAlign = 'middle';
+    });
+
   }
 
   // 認可処理

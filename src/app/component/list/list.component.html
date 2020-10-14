@@ -13,18 +13,18 @@
         <input class="list-header-card-form-content__input" type="text" formControlName="claimNumber" placeholder="受付番号">
       </div>
       <div class="list-header-card-form-content">
-        <select class="list-header-card-form-content__input" formControlName="claimCategoryInfo" placeholder="事案カテゴリ" multiple>
-          <option value="01">高</option>
-          <option value="02">中</option>
-          <option value="03">低</option>
-        </select>
+        <mat-select class="list-header-card-form-content__select" formControlName="claimCategoryInfo" placeholder="事案カテゴリ" multiple>
+          <mat-option value="01">高</mat-option>
+          <mat-option value="02">中</mat-option>
+          <mat-option value="03">低</mat-option>
+        </mat-select>
       </div>
       <div class="list-header-card-form-content">
-        <select class="list-header-card-form-content__input" formControlName="insuranceKindInfo" placeholder="保険種類" multiple>
-          <option value="92">スポ安</option>
-          <option value="C1">抜本団体</option>
-          <option value="A1">傷害定額</option>
-        </select>
+        <mat-select class="list-header-card-form-content__select" formControlName="insuranceKindInfo" placeholder="保険種類" multiple>
+          <mat-option value="92">スポ安</mat-option>
+          <mat-option value="C1">抜本団体</mat-option>
+          <mat-option value="A1">傷害定額</mat-option>
+        </mat-select>
       </div>
       <div class="list-header-card-form-content list-header-card-form-content--from-lossdate">
         <input class="list-header-card-form-content__input" type="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
