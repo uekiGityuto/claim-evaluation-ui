@@ -1,9 +1,10 @@
 import { OnInit, Directive, ElementRef, Input } from '@angular/core';
 
 /**
- * Add ToolTip Directive and claim-list-ellipsis CSSclass
+ * 要素のエラースタイルを追加するためのディレクティブ
  * @author SKK231527 植木
  */
+// TODO: 不要なら削除
 @Directive({
   selector: '[appInvalidStyle]'
 })

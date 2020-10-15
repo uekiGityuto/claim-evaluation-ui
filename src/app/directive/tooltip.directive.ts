@@ -1,7 +1,7 @@
 import { OnInit, Directive, ElementRef, Input } from '@angular/core';
 
 /**
- * Add ToolTip Directive and claim-list-ellipsis CSSclass
+ * 要素にツールチップを付与するためのディレクティブ
  * @author SKK231527 植木
  */
 @Directive({
@@ -15,13 +15,9 @@ export class TooltipDirective implements OnInit {
 
   ngOnInit(): void {
     const element = this.elementRef.nativeElement;
-    // if (element.offsetWidth < element.scrollWidth) {
-    //   element.setAttribute('title', this.data);
-    // }
-
     const style = window.getComputedStyle(element);
     const dataLength = this.calcDataSize(this.data, style);
-    // 要素のレイアウト幅とdataのレングスを比較
+    // dataのレングスが要素のレイアウト幅より大きければ、title属性とCSSクラスを追加
     if (element.clientWidth < dataLength) {
       element.classList.add('claim-list-ellipsis');
       element.setAttribute('title', this.data);

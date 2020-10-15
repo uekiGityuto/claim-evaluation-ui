@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { NativeDateAdapter } from '@angular/material/core';
 
 /**
- * カレンダに表示する日付表記を(d日ではなく)dにする
+ * カレンダに表示する日付表記を(d日ではなく)dにするためのサービス
  * @author SKK231527 植木
  */
 @Injectable({

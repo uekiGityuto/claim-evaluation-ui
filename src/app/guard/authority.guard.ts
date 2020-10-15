@@ -3,6 +3,10 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Rout
 import { Observable } from 'rxjs';
 import { UserInfoContainerService } from '../service/user-info-container.service'
 
+/**
+ * ListComponentへのルーティング前に呼び出されるガード
+ * @author SKK231527 植木
+ */
 @Injectable({
   providedIn: 'root'
 })

@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
 
+/**
+ * ユーザ情報を保管するためのsingletonなサービス
+ * @author SKK231527 植木
+ */
 @Injectable({
   providedIn: 'root'
 })

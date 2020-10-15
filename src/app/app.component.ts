@@ -1,13 +1,11 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { UserInfoContainerService } from './service/user-info-container.service'
-import { AuthResult } from './model/auth-result';
-import { environment } from '../environments/environment';
+import { UserInfoContainerService } from './service/user-info-container.service';
+import { AuthorizationClientService } from './service/authorization-client.service';
 
 /**
- * Main App Component
+ * ルートコンポーネント
  * @author SKK231527 植木
  */
 @Component({
@@ -21,7 +19,7 @@ export class AppComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
-    private httpClient: HttpClient,
+    private client: AuthorizationClientService,
     private userInfo: UserInfoContainerService
   ) { }
 
@@ -57,14 +55,9 @@ export class AppComponent implements OnInit {
 
   // 認可処理
   authorize(param: string, userId: string): void {
-    // HTTPリクエストの各情報セット
-    const authUri = environment.authorize_url;
-    const params = { param: param, userId: userId };
-
-    this.httpClient.get(authUri, {
-      params: params
-    }).subscribe(
-      (response: AuthResult) => {
+    // 認可処理を実施して取得結果をセット
+    this.client.get(param, userId).subscribe(
+      response => {
         console.log('認可OK');
         this.userInfo.userId = response.userId;
         this.userInfo.authFlag = response.authFlag;

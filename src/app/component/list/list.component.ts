@@ -1,21 +1,20 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
 import { TargetClaimList } from '../../model/target-claim-list/target-claim-list';
 import { CategoryClass } from '../../model/category-class';
 import { ClaimView } from '../../model/claim-view';
-import { ClaimList } from '../../model/claim-list/claim-list';
 import { Claim } from '../../model/claim-list/claim';
 
 import { environment } from '../../../environments/environment';
+import { ClaimListClientService } from '../../service/claim-list-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 
 /**
- * List Component
+ * CE-S02事案一覧画面のコンポーネント
  * @author SKK231527 植木
  */
 @Component({
@@ -40,10 +39,9 @@ export class ListComponent implements OnInit {
   searchControl: FormGroup;
   param: TargetClaimList;
 
-  constructor(private route: ActivatedRoute,
-    private datepipe: DatePipe,
+  constructor(private datepipe: DatePipe,
     private router: Router,
-    private httpClient: HttpClient,
+    private client: ClaimListClientService,
     private userInfo: UserInfoContainerService
   ) { }
 
@@ -87,11 +85,7 @@ export class ListComponent implements OnInit {
 
   // 認可処理
   authorize(): void {
-    // 認可処理用のuri作成
-    const authUri = environment.transition_url;
-
-    // 認可処理を実施
-    this.httpClient.get(authUri).subscribe(
+      this.client.get().subscribe(
       response => {
         console.log('認可OK');
       }, error => {
@@ -103,7 +97,6 @@ export class ListComponent implements OnInit {
 
   // 検索処理
   search(): void {
-    // console.log(this.searchControl.value);
     // バリデーション
     if (this.searchControl.invalid) {
       console.log('バリデーションエラー');
@@ -123,10 +116,9 @@ export class ListComponent implements OnInit {
 
   // ソート処理
   sortList(sort: Sort) {
-    // console.log(this.param);
     this.param.labelType = environment[sort.active];
     this.param.order = environment[sort.direction];
-    // console.log(this.param);
+
     // 事案一覧取得
     this.searchList(this.param);
   }
@@ -178,19 +170,12 @@ export class ListComponent implements OnInit {
 
   // 事案一覧取得処理
   searchList(params: TargetClaimList): void {
-    console.log('postボディ:', params);
-    const claimsUri = environment.claims_url;
-    const headers = { 'Content-Type': 'application/json' };
-
     // 事案一覧を取得
-    // 本番用
-    this.httpClient.post<ClaimList>(claimsUri, params, { headers: headers })
-      // スタブ用
-      // this.httpClient.get(claimsUri)
-      .subscribe(
+    this.client.post(params).subscribe(
         response => {
-          // console.log('response:', response);
+          console.log('取得結果:', response);
           this.isError = false;
+
           // ビュー要素を取得
           response.claim.forEach((claim: Claim, i) => {
             const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
@@ -204,7 +189,6 @@ export class ListComponent implements OnInit {
         }, error => {
           console.log('検索エラーメッセージ表示');
           this.isError = true;
-          // this.router.navigate(['/list/error']);
         }
       );
   }

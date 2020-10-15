@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+/**
+ * CE-S02事案一覧画面＜認可エラー＞のコンポーネント
+ * @author SKK231527 植木
+ */
 @Component({
   selector: 'app-error',
   templateUrl: './error.component.html',
@@ -16,7 +20,6 @@ export class ErrorComponent implements OnInit {
     console.log(this.route.snapshot);
     console.log(param, userId);
     this.router.navigate(['list/error'], { queryParamsHandling: 'preserve' });
-    // this.router.navigate(['detail/error']);
   }
 
 }

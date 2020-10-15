@@ -1,6 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +9,6 @@ import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
 import { CategoryMatrixClass } from '../../model/category-matrix-class';
 import { RaiseLowerReason } from '../../model/raise-lower-reason';
-import { Scores } from '../../model/scores/scores';
 import { DetailClaim } from '../../model/scores/detail-claim';
 import { FraudScore } from '../../model/scores/fraud-score';
 import { ScoreDetail } from '../../model/scores/score-detail';
@@ -21,7 +19,7 @@ import { environment } from '../../../environments/environment';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 
 /**
- * Detail Component
+ * CE-S01スコア詳細画面のコンポーネント
  * @author SKK231527 植木
  */
 @Component({
@@ -29,7 +27,7 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css'],
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, AfterViewInit {
 
   // エラーメッセージ表示用
   isError = false;
@@ -57,7 +55,6 @@ export class DetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private title: Title,
-    private httpClient: HttpClient,
     private userInfo: UserInfoContainerService,
     private datepipe: DatePipe
   ) { }
@@ -67,33 +64,29 @@ export class DetailComponent implements OnInit {
     this.authFlag = this.userInfo.authFlag;
     this.userId = this.userInfo.userId;
 
-    // 受付番号取得
-    this.claimNumber = this.route.snapshot.paramMap.get('claimNumber');
     // HTMLのTitleタグの内容を更新
     this.title.setTitle(this.claimNumber);
 
-    // 事案情報取得
+    // スコア詳細取得
     this.getLatestClaimInfo(this.claimNumber);
   }
 
-  // 最新の事案情報取得
-  getLatestClaimInfo(claimNumber: string): void {
-    // HTTPリクエストの各情報セット
-    const scoresUri = environment.scores_url;
-    const params = { claimNumber: claimNumber };
-    const headers = { 'Content-Type': 'application/json' };
+  ngAfterViewInit(): void {
+    // チャート作成
+    this.createChart(this.claim.fraudScoreHistory);
+  }
 
-    // 事案情報を取得
-    this.httpClient.post<Scores>(scoresUri, params, {
-      headers: headers
-    }).subscribe(
+  // 最新のスコア詳細取得
+  getLatestClaimInfo(claimNumber: string): void {
+    // スコア詳細取得
+    this.route.data.subscribe(
       response => {
         console.log('取得結果:', response);
         console.log('推論結果取得OK');
         this.isError = false;
 
         // 取得結果をシャーローコピー
-        this.claim = { ...response.claim };
+        this.claim = { ...response['detail'].claim };
         console.log('claim:', this.claim);
 
         // モデルが1つしかない場合に対応するための処理
@@ -106,10 +99,6 @@ export class DetailComponent implements OnInit {
         const end = this.claim.fraudScoreHistory.length - 1;
         const fraudScoreView = this.claim.fraudScoreHistory[end];
         this.getScoreInfo(fraudScoreView);
-
-        // チャート作成
-        this.createChart(this.claim.fraudScoreHistory);
-
       }, error => {
         console.log('照会エラーメッセージ表示');
         this.isError = true;
@@ -160,7 +149,6 @@ export class DetailComponent implements OnInit {
     fraudScoreView.scoreDetail.forEach((scoreDetail, i) => {
       const categoryClass = new CategoryClass('High', 'Middle', 'Low', scoreDetail.rank);
       this.scoreDetails[i] = { ...scoreDetail, categoryClass };
-      // console.log('categoryClass', this.scoreDetails[i].categoryClass);
     });
     // 推論結果の要因をソート
     this.raiseLowerReasons = this.sortReasonInAbsoluteDesc(this.scoreDetails);
@@ -225,7 +213,7 @@ export class DetailComponent implements OnInit {
     return categoryMatrix;
   }
 
-  // モデルのソート
+  // モデルのソート（特殊事案推定モデル、NC/PD推定モデルの順にソート）
   sortModel(fraudScoreView: FraudScore): FraudScore {
     fraudScoreView.scoreDetail.sort((a, b) => {
       return (a.modelType === environment.priority_model) ? -1 : 1;
