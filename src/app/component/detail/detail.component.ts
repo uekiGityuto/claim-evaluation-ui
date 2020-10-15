@@ -9,13 +9,14 @@ import { CategoryClass } from '../../model/category-class';
 import { CategoryMatrix } from '../../model/category-matrix';
 import { CategoryMatrixClass } from '../../model/category-matrix-class';
 import { RaiseLowerReason } from '../../model/raise-lower-reason';
+import { ScoreDetailView } from '../../model/score-detail-view';
 import { DetailClaim } from '../../model/scores/detail-claim';
 import { FraudScore } from '../../model/scores/fraud-score';
 import { ScoreDetail } from '../../model/scores/score-detail';
 import { ScoreCategory } from '../../model/scores/score-category';
-import { ScoreDetailView } from '../../model/score-detail-view';
 
 import { environment } from '../../../environments/environment';
+
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 
 /**

@@ -1,7 +1,9 @@
 import { DatePipe } from '@angular/common';
 import { FormGroup } from '@angular/forms';
+
 import { ClaimCategory } from './claim-category';
 import { InsuranceKind } from './insurance-kind';
+
 import { environment } from '../../../environments/environment';
 
 export class TargetClaimList {

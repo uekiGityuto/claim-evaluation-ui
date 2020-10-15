@@ -4,12 +4,13 @@ import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
-import { TargetClaimList } from '../../model/target-claim-list/target-claim-list';
 import { CategoryClass } from '../../model/category-class';
-import { ClaimView } from '../../model/claim-view';
 import { Claim } from '../../model/claim-list/claim';
+import { ClaimView } from '../../model/claim-view';
+import { TargetClaimList } from '../../model/target-claim-list/target-claim-list';
 
 import { environment } from '../../../environments/environment';
+
 import { ClaimListClientService } from '../../service/claim-list-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 

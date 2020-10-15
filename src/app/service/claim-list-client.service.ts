@@ -2,8 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { TargetClaimList } from '../model/target-claim-list/target-claim-list';
 import { ClaimList } from '../model/claim-list/claim-list';
+import { TargetClaimList } from '../model/target-claim-list/target-claim-list';
+
 import { environment } from '../../environments/environment';
 
 /**

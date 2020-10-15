@@ -1,4 +1,3 @@
-import { AuthorityGuard } from './guard/authority.guard';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
@@ -6,6 +5,7 @@ import { DetailComponent } from './component/detail/detail.component';
 import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
 
+import { AuthorityGuard } from './guard/authority.guard';
 import { DetailResolverService } from './service/detail-resolver.service';
 
 const routes: Routes = [
