@@ -4,8 +4,9 @@
 /* ヘッダエリア */
 
 .list-header-card {
-  height: 104px;
+  height: 120px;
   background-color: var(--card-bg-color);
+  padding-top: 8px;
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
   box-shadow: 0 0 4px var(--dark-shadow-color);
@@ -15,7 +16,7 @@
 }
 
 .list-header-card * {
-  font-size: var(--large-font-size);
+  font-size: var(--medium-font-size);
 }
 
 .list-header-card-form {
@@ -27,7 +28,7 @@
 }
 
 .list-header-card-form-content {
-  padding-right: 8px;
+  padding-right: 12px;
 }
 
 .list-header-card-form-content:last-child {
@@ -59,7 +60,7 @@
   right: 8px;
 }
 
-.list-header-card-form-content__radio {
+.list-header-card-form-content-radio-group {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,8 +73,8 @@
   border-radius: 5px;
   background: #4676D7;
   color: #fff;
-  padding-right: 16px;
-  padding-left: 16px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 .list-header-card-form-content__button:disabled {
