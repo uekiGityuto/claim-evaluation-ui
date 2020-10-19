@@ -100,12 +100,12 @@
       <!-- ページャーエリア -->
       <div class="pager">
         <form>
-          <button *ngIf="displayFromPages > 1" mat-icon-button (click)="previous()">
+          <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
             <mat-icon>arrow_back_ios</mat-icon>
           </button>
           <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
           <span>　～　{{ toPages }}　/　{{ totalNumber }}</span>
-          <button *ngIf="toPages < totalNumber" mat-icon-button (click)="next()">
+          <button [style.visibility]="nextButtonVisibility" mat-icon-button (click)="next()">
             <mat-icon>arrow_forward_ios</mat-icon>
           </button>
           <button class="pager__update-button" mat-icon-button (click)="update()">

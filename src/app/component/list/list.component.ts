@@ -35,6 +35,8 @@ export class ListComponent implements OnInit {
   displayFromPages: number; // apiから受け取ったfromPagesの値
   toPages: number;
   totalNumber: number;
+  prevButtonVisibility: string;
+  nextButtonVisibility: string;
 
   // 検索用
   searchControl: FormGroup;
@@ -86,7 +88,7 @@ export class ListComponent implements OnInit {
 
   // 認可処理
   authorize(): void {
-      this.client.get().subscribe(
+    this.client.get().subscribe(
       response => {
         console.log('認可OK');
       }, error => {
@@ -128,13 +130,13 @@ export class ListComponent implements OnInit {
   previous(): void {
     if (this.displayFromPages <= 1) {
       console.log('reject prev');
-    } else {
-      console.log('accept prev');
-      // 1ページ戻ったときのfromPagesをセット
-      this.setDisplayFromPages();
-      // 事案一覧取得
-      this.searchList(this.param);
+      return;
     }
+    console.log('accept prev');
+    // 1ページ戻ったときのfromPagesをセット
+    this.setDisplayFromPages();
+    // 事案一覧取得
+    this.searchList(this.param);
   }
 
   // 1ページ戻ったときのfromPagesをセット
@@ -160,39 +162,43 @@ export class ListComponent implements OnInit {
 
   // 開始位置指定して検索処理
   update(): void {
-    if (this.fromPages < 0 || this.fromPages > this.totalNumber) {
+    if (this.fromPages <= 0 || this.fromPages > this.totalNumber) {
       console.log('reject update');
-    } else {
-      console.log('accept update');
-      this.param.displayFrom = String(this.fromPages);
-      this.searchList(this.param);
+      return;
     }
+    console.log('accept update');
+    this.param.displayFrom = String(this.fromPages);
+    this.searchList(this.param);
   }
 
   // 事案一覧取得処理
   searchList(params: TargetClaimList): void {
     // 事案一覧を取得
     this.client.post(params).subscribe(
-        response => {
-          console.log('取得結果:', response);
-          this.isError = false;
+      response => {
+        console.log('取得結果:', response);
+        this.isError = false;
 
-          // ビュー要素を取得
-          response.claim.forEach((claim: Claim, i) => {
-            const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
-            this.claims[i] = { ...claim, categoryClass };
-          });
-          this.order = response.order;
-          this.fromPages = response.fromPages;
-          this.displayFromPages = response.fromPages;
-          this.toPages = response.toPages;
-          this.totalNumber = response.totalNumber;
-        }, error => {
-          console.log('検索エラーメッセージ表示');
-          this.isError = true;
-        }
-      );
-  }
+        // ビュー要素を取得
+        response.claim.forEach((claim: Claim, i) => {
+          const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
+          this.claims[i] = { ...claim, categoryClass };
+        });
+        this.order = response.order;
+        this.fromPages = response.fromPages;
+        this.displayFromPages = response.fromPages;
+        this.toPages = response.toPages;
+        this.totalNumber = response.totalNumber;
+
+        // 1ページ戻るボタン、1ページ進むボタンの表示/非表示
+        this.prevButtonVisibility = this.displayFromPages > 1 ? 'visible' : 'hidden';
+        this.nextButtonVisibility = this.toPages < this.totalNumber ? 'visible' : 'hidden';
+      }, error => {
+        console.log('検索エラーメッセージ表示');
+        this.isError = true;
+      }
+    );
+  };
 
   // TODO: validationは切り離すか要検討
 

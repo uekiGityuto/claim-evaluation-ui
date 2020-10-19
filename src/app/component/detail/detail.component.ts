@@ -61,6 +61,9 @@ export class DetailComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
+    // 受付番号
+    this.claimNumber = this.route.snapshot.paramMap.get('claimNumber');
+
     // ユーザ情報取得
     this.authFlag = this.userInfo.authFlag;
     this.userId = this.userInfo.userId;
@@ -87,7 +90,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
         this.isError = false;
 
         // 取得結果をシャーローコピー
-        this.claim = { ...response['detail'].claim };
+        this.claim = { ...response.detail.claim };
         console.log('claim:', this.claim);
 
         // モデルが1つしかない場合に対応するための処理
@@ -387,14 +390,16 @@ export class DetailComponent implements OnInit, AfterViewInit {
         const nRight = 170;
         const nMove = (chart.width - nLeft - nRight) / chartLines.data.labels.length;
         nLeft += nMove / 2;
+        // const nLabel = chartLines.data.labels.length;
         chartLines.data.labels.forEach(label => {
           // 日付ラベル表示
-          context.font = environment.chart_category_font;
+          // context.font = nLabel < 11 ? environment.chart_category_large_font : environment.chart_category_small_font;
+          context.font = environment.chart_date_label_font;
           context.fillStyle = environment.chart_font_color;
           let nTextWidth = context.measureText(label[0]).width;
           context.fillText(label[0], nLeft - (nTextWidth / 2), 10);
           // 事案カテゴリラベル表示
-          context.font = environment.chart_category_font;
+          context.font = environment.chart_category_label_font;
           if (label[1] === '高') {
             context.fillStyle = environment.chart_category_high_font_color;
           } else if (label[1] === '中') {
