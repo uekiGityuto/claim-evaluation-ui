@@ -15,23 +15,19 @@ import { ScoresClientService } from './scores-client.service';
 @Injectable({
   providedIn: 'root'
 })
-export class DetailResolverService implements Resolve<Scores> {
+export class DetailResolverService implements Resolve<any> {
 
   constructor(private client: ScoresClientService, private router: Router) { }
 
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<Scores> {
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<any> {
     const claimNumber = route.paramMap.get('claimNumber');
-    return this.client.post(claimNumber).pipe(
-      take(1),
-      mergeMap(response => {
-        console.log('受信確認');
-        if (response) {
-          return of(response);
-        } else {
-          this.router.navigate(['/list/error']);
-          return EMPTY;
-        }
-      })
-    );
+    try {
+      const response = this.client.post(claimNumber);
+      console.log('受信確認');
+      console.log(response)
+      return response;
+    } catch(e) {
+      this.router.navigate(['/list/error']);
+    }
   }
 }
