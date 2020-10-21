@@ -76,8 +76,10 @@ export class DetailComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // チャート作成
-    this.createChart(this.claim.fraudScoreHistory);
+    if (!this.isError) {
+      // チャート作成
+      this.createChart(this.claim.fraudScoreHistory);
+    }
   }
 
   // 最新のスコア詳細取得
@@ -86,6 +88,11 @@ export class DetailComponent implements OnInit, AfterViewInit {
     this.route.data.subscribe(
       response => {
         console.log('取得結果:', response);
+        if (!response.detail) {
+          console.log('照会エラーメッセージ表示');
+          this.isError = true;
+          return;
+        }
         console.log('推論結果取得OK');
         this.isError = false;
 

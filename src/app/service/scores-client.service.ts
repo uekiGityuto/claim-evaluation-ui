@@ -18,14 +18,14 @@ export class ScoresClientService {
 
   constructor(private httpClient: HttpClient) { }
 
-  post(claimNumber: string): Observable<any> {
+  post(claimNumber: string): Observable<Scores> {
     // HTTPリクエストの各情報セット
     const scoresUri = environment.scores_url;
     const params = { claimNumber: claimNumber };
     const headers = { 'Content-Type': 'application/json' };
 
     // スコア詳細を取得し、取得結果を呼び出し元に返す
-    return this.httpClient.post(scoresUri, params, { headers: headers });
+    return this.httpClient.post<Scores>(scoresUri, params, { headers: headers });
   }
 
 }
