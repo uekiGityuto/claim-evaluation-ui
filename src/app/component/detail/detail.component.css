@@ -17,7 +17,7 @@
 
 /* mat-iconを直接指定しないとフォントサイズが変わらない */
 .main-header__button mat-icon {
-  font-size: var(--extra-extra-large-font-size);
+  font-size: var(--extra-large-font-size);
 }
 
 .detail-header-card {
@@ -41,7 +41,7 @@
 /* 事案カテゴリエリア */
 
 .claim-category-card {
-  height: 280px;
+  height: 248px;
   background-color: var(--card-bg-color);
   margin-top: 12px;
   margin-right: var(--left-write-common-margin);
@@ -72,7 +72,7 @@
 }
 
 .claim-category {
-  height: 240px;
+  height: 216px;
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -82,7 +82,7 @@
 
 .claim-category-matrix {
   width: 392px;
-  height: 216px;
+  height: 200px;
   display: grid;
       grid-template:
         "...           ... ...            ...          ...           ...        " 12px

@@ -2,10 +2,10 @@
 /* autoprefixer grid: autoplace */
 
 :root {
-  --window-height: 1080px;
+  --window-height: 100vh;
   --extra-extra-large-font-size: 38px;
   --extra-large-font-size: 28px;
-  --large-font-size: 21px;
+  --large-font-size: 20px;
   --medium-font-size: 16px;
   --small-font-size: 12px;
   --main-bg-color: #22459c;
@@ -21,8 +21,8 @@
   --claim-low-color: #2ac940;
   --dark-shadow-color: #494848;
   --light-shadow-color: #acacac;
-  --main-header-height: 48px;
-  --card-header-height: 40px;
+  --main-header-height: 40px;
+  --card-header-height: 32px;
   --factor-header-height: 32px;
   --left-write-common-padding: 12px;
   --left-write-common-margin: 8px;
