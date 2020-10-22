@@ -391,7 +391,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
         // 縦軸ラベル描写
         context.font = environment.chart_label_font;
         context.fillStyle = environment.chart_font_color;
-        context.fillText('スコア', 2, Math.floor(chart.height / 2) + 10);
+        context.fillText('スコア', 2, Math.floor(chart.height / 2) + 20);
         // 日付ラベルと事案カテゴリラベルの表示位置を決める情報をセット
         let nLeft = 62;
         const nRight = 170;
