@@ -94,16 +94,20 @@
 
 .claim-list-card {
   width: 1264px;
-  /* height: 780px; */
   flex: 1;
   margin-top: 24px;
   margin-right: auto;
   margin-left: auto;
   background-color: var(--card-bg-color);
-  border-collapse: collapse;
   box-shadow: 0 0 4px var(--dark-shadow-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-radius: 4px;
+}
+
+.claim-list {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
 }
 
 .claim-list-header {

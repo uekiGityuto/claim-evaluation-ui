@@ -10,24 +10,28 @@
   <div class="list-header-card">
     <form class="list-header-card-form" [(formGroup)]="searchControl">
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="claimNumber" placeholder="受付番号">
+        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="claimNumber"
+          placeholder="受付番号">
       </div>
       <div class="list-header-card-form-content">
-        <mat-select class="list-header-card-form-content__select" formControlName="claimCategoryInfo" placeholder="事案カテゴリ" multiple>
+        <mat-select class="list-header-card-form-content__select" formControlName="claimCategoryInfo"
+          placeholder="事案カテゴリ" multiple>
           <mat-option value="01">高</mat-option>
           <mat-option value="02">中</mat-option>
           <mat-option value="03">低</mat-option>
         </mat-select>
       </div>
       <div class="list-header-card-form-content">
-        <mat-select class="list-header-card-form-content__select" formControlName="insuranceKindInfo" placeholder="保険種類" multiple>
+        <mat-select class="list-header-card-form-content__select" formControlName="insuranceKindInfo" placeholder="保険種類"
+          multiple>
           <mat-option value="92">スポ安</mat-option>
           <mat-option value="C1">抜本団体</mat-option>
           <mat-option value="A1">傷害定額</mat-option>
         </mat-select>
       </div>
       <div class="list-header-card-form-content list-header-card-form-content--from-lossdate">
-        <input class="list-header-card-form-content__input" matInput matType="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
+        <input class="list-header-card-form-content__input" matInput matType="text" [matDatepicker]="pickerFrom"
+          placeholder="事故日from" formControlName="fromLossDate">
         <span class="list-header-card-form-content__datepicker">
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom></mat-datepicker>
@@ -37,33 +41,45 @@
         <span>～</span>
       </div>
       <div class="list-header-card-form-content list-header-card-form-content--to-lossdate">
-        <input class="list-header-card-form-content__input" matInput matType=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="toLossDate">
+        <input class="list-header-card-form-content__input" matInput matType=text [matDatepicker]="pickerTo"
+          placeholder="事故日to" formControlName="toLossDate">
         <span class="list-header-card-form-content__datepicker">
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo></mat-datepicker>
         </span>
       </div>
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="insuredNameKana" placeholder="被保険者名（カナ）">
+        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="insuredNameKana"
+          placeholder="被保険者名（カナ）">
       </div>
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="insuredNameKanji" placeholder="被保険者名（漢字）">
+        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="insuredNameKanji"
+          placeholder="被保険者名（漢字）">
       </div>
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="contractorNameKana" placeholder="契約者名（カナ）">
+        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="contractorNameKana"
+          placeholder="契約者名（カナ）">
       </div>
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="contractorNameKanji" placeholder="契約者名（漢字）">
+        <input class="list-header-card-form-content__input" matInput matType="text"
+          formControlName="contractorNameKanji" placeholder="契約者名（漢字）">
       </div>
-      <mat-radio-group class="list-header-card-form-content list-header-card-form-content-radio-group" formControlName="butenKyotenRadio">
-        <div><mat-radio-button value="buten"><span>担当部</span></mat-radio-button></div>
-        <div><mat-radio-button value="kyoten"><span>担当拠点</span></mat-radio-button></div>
+      <mat-radio-group class="list-header-card-form-content list-header-card-form-content-radio-group"
+        formControlName="butenKyotenRadio">
+        <div>
+          <mat-radio-button value="buten"><span>担当部</span></mat-radio-button>
+        </div>
+        <div>
+          <mat-radio-button value="kyoten"><span>担当拠点</span></mat-radio-button>
+        </div>
       </mat-radio-group>
       <div class="list-header-card-form-content">
-        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="butenKyoten" placeholder="担当部・担当拠点">
+        <input class="list-header-card-form-content__input" matInput matType="text" formControlName="butenKyoten"
+          placeholder="担当部・担当拠点">
       </div>
       <div class="list-header-card-form-content">
-        <button class="list-header-card-form-content__button" [disabled]="searchControl.invalid" (click)="search()">検索</button>
+        <button class="list-header-card-form-content__button" [disabled]="searchControl.invalid"
+          (click)="search()">検索</button>
       </div>
     </form>
   </div>
@@ -74,28 +90,35 @@
 
     <!-- 事案一覧テーブルエリア -->
     <ng-container *ngIf="claims.length != 0">
-      <table class="claim-list-card" matSort (matSortChange)="sortList($event)" matSortActive="lossDate" matSortDirection="desc" matSortDisableClear>
-        <tr class="claim-list-header">
-          <th mat-sort-header="claimNumber">受付番号</th>
-          <th mat-sort-header="insuredName">被保険者名</th>
-          <th mat-sort-header="contractorName">契約者名</th>
-          <th mat-sort-header="base">担当部・<br>担当拠点</th>
-          <th mat-sort-header="insuranceKind">保険種類</th>
-          <th mat-sort-header="lastUpdateDate">最終更新日</th>
-          <th mat-sort-header="lossDate">事故日</th>
-          <th mat-sort-header="claimCategory">事案カテゴリ</th>
-        </tr>
-        <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
-          <td class="claim-list-dataset__data"><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-          <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">{{ claim.insuredNameKana }}</td>
-          <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">{{ claim.contractorNameKana }}</td>
-          <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
-          <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
-          <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-          <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-          <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category" [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
-        </tr>
-      </table>
+      <div class="claim-list-card">
+        <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate" matSortDirection="desc"
+          matSortDisableClear>
+          <tr class="claim-list-header">
+            <th mat-sort-header="claimNumber">受付番号</th>
+            <th mat-sort-header="insuredName">被保険者名</th>
+            <th mat-sort-header="contractorName">契約者名</th>
+            <th mat-sort-header="base">担当部・<br>担当拠点</th>
+            <th mat-sort-header="insuranceKind">保険種類</th>
+            <th mat-sort-header="lastUpdateDate">最終更新日</th>
+            <th mat-sort-header="lossDate">事故日</th>
+            <th mat-sort-header="claimCategory">事案カテゴリ</th>
+          </tr>
+          <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
+            <td class="claim-list-dataset__data"><a
+                [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+            <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">
+              {{ claim.insuredNameKana }}</td>
+            <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">
+              {{ claim.contractorNameKana }}</td>
+            <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
+            <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
+            <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+            <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+            <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category"
+                [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
+          </tr>
+        </table>
+      </div>
 
       <!-- ページャーエリア -->
       <div class="pager">
@@ -103,7 +126,8 @@
           <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
             <mat-icon>arrow_back_ios</mat-icon>
           </button>
-          <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1" [max]="totalNumber">
+          <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1"
+            [max]="totalNumber">
           <span>　～　{{ toPages }}　/　{{ totalNumber }}</span>
           <button [style.visibility]="nextButtonVisibility" mat-icon-button (click)="next()">
             <mat-icon>arrow_forward_ios</mat-icon>
