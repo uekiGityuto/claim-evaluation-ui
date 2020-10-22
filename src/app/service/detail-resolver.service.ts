@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { Observable, EMPTY, of } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -24,8 +24,6 @@ export class DetailResolverService implements Resolve<Scores> {
     return this.client.post(claimNumber)
     .pipe(
       catchError(error => {
-        // this.router.navigate(['/list/error']);
-        // return EMPTY;
         return of(null);
       }));
   }

@@ -13,20 +13,21 @@
   display: inline-block;
   width: var(--main-header-height);
   height: var(--main-header-height);
+  margin-right: 16px;
 }
 
-/* mat-iconを直接指定しないとフォントサイズが変わらない */
 .main-header__button mat-icon {
-  font-size: var(--extra-large-font-size);
+  font-size: var(--extra-extra-large-font-size);
+  position: absolute;
 }
 
 .detail-header-card {
   font-size: var(--large-font-size);
   background-color: var(--card-bg-color);
-  padding-top: 8px;
+  padding-top: 4px;
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
-  padding-bottom: 8px;
+  padding-bottom: 4px;
   box-shadow: 0 0 4px var(--dark-shadow-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-bottom-right-radius: 4px;
@@ -41,7 +42,7 @@
 /* 事案カテゴリエリア */
 
 .claim-category-card {
-  height: 248px;
+  height: 228px;
   background-color: var(--card-bg-color);
   margin-top: 12px;
   margin-right: var(--left-write-common-margin);
@@ -72,17 +73,16 @@
 }
 
 .claim-category {
-  height: 216px;
+  height: 196px;
   display: flex;
   justify-content: space-around;
   align-items: center;
 }
 
-/* .claim-category-chart {} */
-
 .claim-category-matrix {
+  font-size: var(--medium-font-size);
   width: 392px;
-  height: 200px;
+  height: 180px;
   display: grid;
       grid-template:
         "...           ... ...            ...          ...           ...        " 12px
@@ -97,13 +97,11 @@
 }
 
 .claim-category-matrix__ncpd-label {
-  font-size: var(--medium-font-size);
   text-align: center;
   grid-area: ncpd-label;
 }
 
 .claim-category-matrix__special-label {
-  font-size: var(--medium-font-size);
   text-align: center;
   grid-area: special-label;
   -webkit-writing-mode: vertical-rl;
@@ -160,7 +158,6 @@
 }
 
 .claim-category-matrix__high-high {
-  font-size: var(--large-font-size);
   grid-area: high-high;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -170,7 +167,6 @@
 }
 
 .claim-category-matrix__high-middle {
-  font-size: var(--large-font-size);
   grid-area: high-middle;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -180,7 +176,6 @@
 }
 
 .claim-category-matrix__high-low {
-  font-size: var(--large-font-size);
   grid-area: high-low;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -190,7 +185,6 @@
 }
 
 .claim-category-matrix__middle-high {
-  font-size: var(--large-font-size);
   grid-area: middle-high;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -200,7 +194,6 @@
 }
 
 .claim-category-matrix__middle-middle {
-  font-size: var(--large-font-size);
   grid-area: middle-middle;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -210,7 +203,6 @@
 }
 
 .claim-category-matrix__middle-low {
-  font-size: var(--large-font-size);
   grid-area: middle-low;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -220,7 +212,6 @@
 }
 
 .claim-category-matrix__low-high {
-  font-size: var(--large-font-size);
   grid-area: low-high;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -230,7 +221,6 @@
 }
 
 .claim-category-matrix__low-middle {
-  font-size: var(--large-font-size);
   grid-area: low-middle;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -240,7 +230,6 @@
 }
 
 .claim-category-matrix__low-low {
-  font-size: var(--large-font-size);
   grid-area: low-low;
   border-top: solid 1px;
   border-left: solid 1px;
@@ -256,7 +245,6 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* 表示モデルが増えたとき用(overflow: hidden;なので表示されないが） */
   flex-wrap: wrap;
   overflow: hidden;
   margin-top: 12px;
@@ -298,7 +286,6 @@
   top: -2.5px;
 }
 
-/* mat-iconを直接指定しないとフォントサイズが変わらない */
 .model-card-main-header-content__button mat-icon {
   font-size: var(--extra-large-font-size);
 }

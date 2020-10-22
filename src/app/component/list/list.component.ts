@@ -70,7 +70,6 @@ export class ListComponent implements OnInit {
       butenKyoten: new FormControl()
     }, {
       // 複数項目に対してのvalidation
-      // TODO: 全てのFormControlについて一回ずつ（つまり11回）実施してしまうので他に良い方法がないか検討
       validators: [this.isInputMoreThanOne, this.isButenKyotenRadio]
     });
 
@@ -111,10 +110,6 @@ export class ListComponent implements OnInit {
 
     // 事案一覧取得
     this.searchList(this.param);
-
-    // フォームの各要素をnullで初期化
-    // this.searchControl.reset();
-    // console.log('this.searchControl(初期化後)', this.searchControl.value);
   }
 
   // ソート処理
@@ -199,8 +194,6 @@ export class ListComponent implements OnInit {
       }
     );
   };
-
-  // TODO: validationは切り離すか要検討
 
   // 一つ以上フォーム入力されているか検証（butenKyotenRadioは除外）
   isInputMoreThanOne(control: AbstractControl) {

@@ -3,10 +3,10 @@
 
 :root {
   --window-height: 100vh;
-  --extra-extra-large-font-size: 38px;
-  --extra-large-font-size: 28px;
-  --large-font-size: 20px;
-  --medium-font-size: 16px;
+  --extra-extra-large-font-size: 28px;
+  --extra-large-font-size: 21px;
+  --large-font-size: 16px;
+  --medium-font-size: 14px;
   --small-font-size: 12px;
   --main-bg-color: #22459c;
   --base-bg-color: #f0f0f0;
@@ -21,7 +21,7 @@
   --claim-low-color: #2ac940;
   --dark-shadow-color: #494848;
   --light-shadow-color: #acacac;
-  --main-header-height: 40px;
+  --main-header-height: 32px;
   --card-header-height: 32px;
   --factor-header-height: 32px;
   --left-write-common-padding: 12px;
@@ -104,8 +104,6 @@ body {
 .error-message__sub {
   font-size: var(--large-font-size);
 }
-
-/* TODO:以下効かないので調査して修正 */
 
 .error-message__sub:first-of-type {
   margin-top: 28px;

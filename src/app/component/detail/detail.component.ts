@@ -400,7 +400,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
         // const nLabel = chartLines.data.labels.length;
         chartLines.data.labels.forEach(label => {
           // 日付ラベル表示
-          // context.font = nLabel < 11 ? environment.chart_category_large_font : environment.chart_category_small_font;
           context.font = environment.chart_date_label_font;
           context.fillStyle = environment.chart_font_color;
           let nTextWidth = context.measureText(label[0]).width;

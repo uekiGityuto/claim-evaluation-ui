@@ -1,10 +1,18 @@
 /* CSS Grid対応のため記述 */
 /* autoprefixer grid: on */
 
+/* 全体 */
+
+.main {
+  height: calc(var(--window-height) - var(--main-header-height));
+  display: flex;
+  flex-direction: column;
+}
+
 /* ヘッダエリア */
 
 .list-header-card {
-  height: 120px;
+  height: 100px;
   background-color: var(--card-bg-color);
   padding-top: 8px;
   padding-right: var(--left-write-common-padding);
@@ -38,13 +46,13 @@
 
 .list-header-card-form-content__input {
   width: 200px;
-  height: 40px;
+  height: 32px;
 }
 
 .list-header-card-form-content__select {
   outline: solid 1px #767676;
   width: 200px;
-  height: 40px;
+  height: 32px;
 }
 
 .list-header-card-form-content--from-lossdate {
@@ -58,6 +66,7 @@
 .list-header-card-form-content__datepicker {
   position: absolute;
   right: 8px;
+  top: -3px
 }
 
 .list-header-card-form-content-radio-group {
@@ -67,7 +76,7 @@
 }
 
 .list-header-card-form-content__button {
-  height: 40px;
+  height: 32px;
   appearance: none;
   border: 0;
   border-radius: 5px;
@@ -85,8 +94,9 @@
 
 .claim-list-card {
   width: 1264px;
-  height: 780px;
-  margin-top: 40px;
+  /* height: 780px; */
+  flex: 1;
+  margin-top: 24px;
   margin-right: auto;
   margin-left: auto;
   background-color: var(--card-bg-color);
@@ -97,7 +107,7 @@
 }
 
 .claim-list-header {
-  height: 80px;
+  height: 56px;
   font-size: var(--large-font-size);
   background-color: var(--card-header-bg-color);
   padding-right: var(--left-write-common-padding);
@@ -113,10 +123,6 @@
 
 .claim-list-dataset__data {
   border-bottom: 1px solid #cacaca;
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 0; */
 }
 
 .claim-list-dataset__claim-category {

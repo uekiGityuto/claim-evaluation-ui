@@ -5,7 +5,7 @@
   </div>
 </header>
 
-<main>
+<main class="main">
   <!-- サブヘッダエリア -->
   <div class="list-header-card">
     <form class="list-header-card-form" [(formGroup)]="searchControl">
@@ -28,7 +28,7 @@
       </div>
       <div class="list-header-card-form-content list-header-card-form-content--from-lossdate">
         <input class="list-header-card-form-content__input" matInput matType="text" [matDatepicker]="pickerFrom" placeholder="事故日from" formControlName="fromLossDate">
-        <span class=list-header-card-form-content__datepicker>
+        <span class="list-header-card-form-content__datepicker">
           <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
           <mat-datepicker #pickerFrom></mat-datepicker>
         </span>
@@ -38,7 +38,7 @@
       </div>
       <div class="list-header-card-form-content list-header-card-form-content--to-lossdate">
         <input class="list-header-card-form-content__input" matInput matType=text [matDatepicker]="pickerTo" placeholder="事故日to" formControlName="toLossDate">
-        <span class=list-header-card-form-content__datepicker>
+        <span class="list-header-card-form-content__datepicker">
           <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
           <mat-datepicker #pickerTo></mat-datepicker>
         </span>
