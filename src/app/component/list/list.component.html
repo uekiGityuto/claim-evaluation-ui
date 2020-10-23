@@ -85,61 +85,70 @@
   </div>
 
   <ng-container *ngIf="!isError; else error">
+    <ng-container *ngIf="isData; else noData">
 
-    <!-- 正常 -->
+      <!-- 正常 -->
 
-    <!-- 事案一覧テーブルエリア -->
-    <ng-container *ngIf="claims.length != 0">
-      <div class="claim-list-card">
-        <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate" matSortDirection="desc"
-          matSortDisableClear>
-          <tr class="claim-list-header">
-            <th mat-sort-header="claimNumber">受付番号</th>
-            <th mat-sort-header="insuredName">被保険者名</th>
-            <th mat-sort-header="contractorName">契約者名</th>
-            <th mat-sort-header="base">担当部・<br>担当拠点</th>
-            <th mat-sort-header="insuranceKind">保険種類</th>
-            <th mat-sort-header="lastUpdateDate">最終更新日</th>
-            <th mat-sort-header="lossDate">事故日</th>
-            <th mat-sort-header="claimCategory">事案カテゴリ</th>
-          </tr>
-          <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle">
-            <td class="claim-list-dataset__data"><a
-                [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-            <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">
-              {{ claim.insuredNameKana }}</td>
-            <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">
-              {{ claim.contractorNameKana }}</td>
-            <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
-            <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
-            <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-            <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-            <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category"
-                [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
-          </tr>
-        </table>
-      </div>
+      <!-- 事案一覧テーブルエリア -->
+      <ng-container *ngIf="claims.length != 0">
+        <div class="claim-list-card" id="claim-list-card">
+          <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate"
+            matSortDirection="desc" matSortDisableClear>
+            <tr class="claim-list-header" id="claim-list-header">
+              <th mat-sort-header="claimNumber">受付番号</th>
+              <th mat-sort-header="insuredName">被保険者名</th>
+              <th mat-sort-header="contractorName">契約者名</th>
+              <th mat-sort-header="base">担当部・<br>担当拠点</th>
+              <th mat-sort-header="insuranceKind">保険種類</th>
+              <th mat-sort-header="lastUpdateDate">最終更新日</th>
+              <th mat-sort-header="lossDate">事故日</th>
+              <th mat-sort-header="claimCategory">事案カテゴリ</th>
+            </tr>
+            <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle" appDatasetHeight>
+              <td class="claim-list-dataset__data"><a
+                  [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+              <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">
+                {{ claim.insuredNameKana }}</td>
+              <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">
+                {{ claim.contractorNameKana }}</td>
+              <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
+              <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
+              <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+              <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+              <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category"
+                  [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
+            </tr>
+          </table>
+        </div>
 
-      <!-- ページャーエリア -->
-      <div class="pager">
-        <form>
-          <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
-            <mat-icon>arrow_back_ios</mat-icon>
-          </button>
-          <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1"
-            [max]="totalNumber">
-          <span>　～　{{ toPages }}　/　{{ totalNumber }}</span>
-          <button [style.visibility]="nextButtonVisibility" mat-icon-button (click)="next()">
-            <mat-icon>arrow_forward_ios</mat-icon>
-          </button>
-          <button class="pager__update-button" mat-icon-button (click)="update()">
-            <mat-icon>refresh</mat-icon>
-          </button>
-        </form>
-      </div>
+        <!-- ページャーエリア -->
+        <div class="pager">
+          <form>
+            <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
+              <mat-icon>arrow_back_ios</mat-icon>
+            </button>
+            <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1"
+              [max]="totalNumber">
+            <span>　～　{{ toPages }}　/　{{ totalNumber }}</span>
+            <button [style.visibility]="nextButtonVisibility" mat-icon-button (click)="next()">
+              <mat-icon>arrow_forward_ios</mat-icon>
+            </button>
+            <button class="pager__update-button" mat-icon-button (click)="update()">
+              <mat-icon>refresh</mat-icon>
+            </button>
+          </form>
+        </div>
+      </ng-container>
+
     </ng-container>
-
   </ng-container>
+
+  <!-- 検索結果がない -->
+  <ng-template #noData>
+    <div class="no-data-message-box">
+      <p class="no-data-message">検索結果が存在しません</p>
+    </div>
+  </ng-template>
 
   <!-- 検索エラー -->
   <ng-template #error>

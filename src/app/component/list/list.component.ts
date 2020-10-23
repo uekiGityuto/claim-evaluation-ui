@@ -27,6 +27,9 @@ export class ListComponent implements OnInit {
   // エラーメッセージ表示用
   isError = false;
 
+  // 検索結果がない場合のメッセージ表示用
+  isData = true;
+
   // ビュー表示用
   userId: string;
   claims: ClaimView[] = [];
@@ -176,6 +179,12 @@ export class ListComponent implements OnInit {
 
         // ビュー要素の初期化
         this.initializeViewElemnet();
+
+        // 検索結果が無い場合の判定条件
+        if (!response.claim || response.claim.length === 0) {
+          this.isData = false;
+          return;
+        }
 
         // ビュー要素の取得
         response.claim.forEach((claim: Claim, i) => {
