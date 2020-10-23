@@ -174,7 +174,10 @@ export class ListComponent implements OnInit {
         console.log('取得結果:', response);
         this.isError = false;
 
-        // ビュー要素を取得
+        // ビュー要素の初期化
+        this.initializeViewElemnet();
+
+        // ビュー要素の取得
         response.claim.forEach((claim: Claim, i) => {
           const categoryClass = new CategoryClass('高', '中', '低', claim.claimCategory);
           this.claims[i] = { ...claim, categoryClass };
@@ -194,6 +197,16 @@ export class ListComponent implements OnInit {
       }
     );
   };
+
+  // ビュー要素の初期化処理
+  initializeViewElemnet() {
+    this.claims = [];
+    this.order = null;
+    this.fromPages = null;
+    this.displayFromPages = null;
+    this.toPages = null;
+    this.totalNumber = null;
+  }
 
   // 一つ以上フォーム入力されているか検証（butenKyotenRadioは除外）
   isInputMoreThanOne(control: AbstractControl) {
