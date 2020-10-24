@@ -51,7 +51,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
 
   // chart用
   @ViewChild('claimCategoryChart')
-  elementRef: ElementRef;
+  claimCategoryChart: ElementRef;
 
   constructor(private route: ActivatedRoute,
     private router: Router,
@@ -257,7 +257,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
   createChart(history: FraudScore[]): void {
 
     // canvasの取得
-    const context: CanvasRenderingContext2D = this.elementRef.nativeElement.getContext('2d');
+    const context: CanvasRenderingContext2D = this.claimCategoryChart.nativeElement.getContext('2d');
     // context.scale(2,2);
 
     // グローバル設定セット

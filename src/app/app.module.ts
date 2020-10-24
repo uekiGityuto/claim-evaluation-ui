@@ -22,9 +22,7 @@ import { DetailComponent } from './component/detail/detail.component';
 import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
 import { TooltipDirective } from './directive/tooltip.directive';
-// import { InvalidStyleDirective } from './directive/invalid-style.directive';
 import { JPDateAdapter } from './service/jp-date-adapter.service';
-import { DatasetHeightDirective } from './directive/dataset-height.directive';
 
 @NgModule({
   declarations: [
@@ -32,9 +30,7 @@ import { DatasetHeightDirective } from './directive/dataset-height.directive';
     DetailComponent,
     ListComponent,
     ErrorComponent,
-    TooltipDirective,
-    DatasetHeightDirective,
-    // InvalidStyleDirective
+    TooltipDirective
   ],
   imports: [
     BrowserModule,

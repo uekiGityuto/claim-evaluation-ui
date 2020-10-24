@@ -119,8 +119,6 @@
 }
 
 .claim-list-dataset {
-  /* height: calc(100% / 10); */
-  /* height: 0.1em; */
   font-size: var(--medium-font-size);
   background-color: var(--card-bg-color);
   padding-right: var(--left-write-common-padding);

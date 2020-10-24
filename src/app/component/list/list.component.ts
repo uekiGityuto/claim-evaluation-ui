@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, AfterViewChecked } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
@@ -42,6 +42,10 @@ export class ListComponent implements OnInit, AfterViewChecked {
   nextButtonVisibility: string;
 
   // 事案一覧の行の高さ決め処理用
+  @ViewChild('claimListCard')
+  claimListCard: ElementRef;
+  @ViewChild('claimListHeader')
+  claimListHeader: ElementRef;
   syoki = 0;
   afterFirstSearch = 1;
   afterSecondSearch = 2;
@@ -100,8 +104,8 @@ export class ListComponent implements OnInit, AfterViewChecked {
     if(this.serchStatus !== this.afterFirstSearch) {
       return;
     }
-    const claimListCardHeight = document.getElementById('claim-list-card').offsetHeight;
-    const claimListHeaderHeight = document.getElementById('claim-list-header').offsetHeight;
+    const claimListCardHeight = this.claimListCard.nativeElement.offsetHeight;
+    const claimListHeaderHeight = this.claimListHeader.nativeElement.offsetHeight;
     const claimListDatasetHeight = (claimListCardHeight - claimListHeaderHeight) / 10;
     this.rowHeight = claimListDatasetHeight;
     this.serchStatus = this.afterSecondSearch;
