@@ -107,8 +107,11 @@ export class ListComponent implements OnInit, AfterViewChecked {
     const claimListCardHeight = this.claimListCard.nativeElement.offsetHeight;
     const claimListHeaderHeight = this.claimListHeader.nativeElement.offsetHeight;
     const claimListDatasetHeight = (claimListCardHeight - claimListHeaderHeight) / 10;
-    this.rowHeight = claimListDatasetHeight;
-    this.serchStatus = this.afterSecondSearch;
+    // 「Expression has changed after it was checked.」例外を回避するためheight更新処理を非同期化
+    setTimeout(() => {
+      this.rowHeight = claimListDatasetHeight;
+      this.serchStatus = this.afterSecondSearch;
+    }, 0);
   }
 
   // 認可処理
