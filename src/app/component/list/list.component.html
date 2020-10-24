@@ -123,12 +123,12 @@
 
         <!-- ページャーエリア -->
         <div class="pager">
-          <form>
+          <div>
             <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
               <mat-icon>arrow_back_ios</mat-icon>
             </button>
             <input class="pager__input" name="page" type="number" [(ngModel)]="fromPages" required min="1"
-              [max]="totalNumber">
+              [max]="totalNumber" (keyup.enter)="update()">
             <span>　～　{{ toPages }}　/　{{ totalNumber }}</span>
             <button [style.visibility]="nextButtonVisibility" mat-icon-button (click)="next()">
               <mat-icon>arrow_forward_ios</mat-icon>
@@ -136,7 +136,7 @@
             <button class="pager__update-button" mat-icon-button (click)="update()">
               <mat-icon>refresh</mat-icon>
             </button>
-          </form>
+          </div>
         </div>
       </ng-container>
 
