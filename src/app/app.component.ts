@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
 
     // クエリパラメータがセットされていれば認可処理を実施
     if (param === '' || userId === '') {
-      console.log('Queryチェックエラー');
       this.isError = true;
     } else {
       this.authorize(param, userId);
@@ -58,14 +57,12 @@ export class AppComponent implements OnInit {
     // 認可処理を実施して取得結果をセット
     this.client.get(param, userId).subscribe(
       response => {
-        console.log('認可OK');
         this.userInfo.userId = response.userId;
         this.userInfo.authFlag = response.authFlag;
 
         // スコア詳細画面を表示
         this.displayDetail(response.claimNumber);
       }, error => {
-        console.log('認可NG');
         this.isError = true;
       }
     );
@@ -73,7 +70,6 @@ export class AppComponent implements OnInit {
 
   // スコア詳細画面表示
   displayDetail(claimNumber: string): void {
-    console.log('スコア詳細画面を表示');
     this.router.navigate(['/detail', claimNumber]);
   }
 

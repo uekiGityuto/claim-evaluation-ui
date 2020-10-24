@@ -119,9 +119,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
   authorize(): void {
     this.client.get().subscribe(
       response => {
-        console.log('認可OK');
       }, error => {
-        console.log('認可エラーページに遷移');
         this.router.navigate(['/list/error']);
       }
     );
@@ -131,7 +129,6 @@ export class ListComponent implements OnInit, AfterViewChecked {
   search(): void {
     // バリデーション
     if (this.searchControl.invalid) {
-      console.log('バリデーションエラー');
       return;
     }
 
@@ -154,10 +151,8 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 1ページ戻る処理
   previous(): void {
     if (this.displayFromPages <= 1) {
-      console.log('reject prev');
       return;
     }
-    console.log('accept prev');
     // 1ページ戻ったときのfromPagesをセット
     this.setDisplayFromPages();
     // 事案一覧取得
@@ -176,9 +171,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 1ページ進む処理
   next(): void {
     if (this.toPages >= this.totalNumber) {
-      console.log('reject next');
     } else {
-      console.log('accept next');
       this.param.displayFrom = String(this.toPages + 1);
       // 事案一覧取得
       this.searchList(this.param);
@@ -188,10 +181,8 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 開始位置指定して検索処理
   update(): void {
     if (this.fromPages <= 0 || this.fromPages > this.totalNumber) {
-      console.log('reject update');
       return;
     }
-    console.log('accept update');
     this.param.displayFrom = String(this.fromPages);
     this.searchList(this.param);
   }
@@ -208,7 +199,6 @@ export class ListComponent implements OnInit, AfterViewChecked {
     // 事案一覧を取得
     this.client.post(params).subscribe(
       response => {
-        console.log('取得結果:', response);
 
         // 検索結果が無い場合の判定条件
         if (!response.claim || response.claim.length === 0) {
@@ -239,7 +229,6 @@ export class ListComponent implements OnInit, AfterViewChecked {
         this.searchStatus = this.normal;
 
       }, error => {
-        console.log('検索エラーメッセージ表示');
         this.searchStatus = this.error;
       }
     );

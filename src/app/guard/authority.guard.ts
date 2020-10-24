@@ -21,7 +21,6 @@ export class AuthorityGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     if (!this.userInfo.authFlag) {
-      console.log('認可エラーページに遷移');
       this.router.navigate(['/list/error']);
       return false;
     }

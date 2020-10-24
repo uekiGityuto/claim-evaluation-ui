@@ -7,7 +7,6 @@ import { InsuranceKind } from './insurance-kind';
 import { environment } from '../../../environments/environment';
 
 export class TargetClaimList {
-  // REQ_USER_ID: string;
   private claimNumber: string;
   private claimCategoryInfo: ClaimCategory[];
   private insuranceKindInfo: InsuranceKind[];

@@ -351,7 +351,7 @@
   overflow-y: auto;
 }
 
-/* 推論結果が存在しない時のメッセージ用 */
+/* モデルが存在しない時のメッセージ用 */
 
 .no-model-message {
   font-size: var(--extra-large-font-size);

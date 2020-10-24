@@ -87,18 +87,14 @@ export class DetailComponent implements OnInit, AfterViewInit {
     // スコア詳細取得
     this.route.data.subscribe(
       response => {
-        console.log('取得結果:', response);
         if (!response.detail) {
-          console.log('照会エラーメッセージ表示');
           this.isError = true;
           return;
         }
-        console.log('推論結果取得OK');
         this.isError = false;
 
         // 取得結果をシャーローコピー
         this.claim = { ...response.detail.claim };
-        console.log('claim:', this.claim);
 
         // モデルが1つしかない場合に対応するための処理
         this.claim.fraudScoreHistory = this.setModel(this.claim.fraudScoreHistory);
@@ -111,7 +107,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
         const fraudScoreView = this.claim.fraudScoreHistory[end];
         this.getScoreInfo(fraudScoreView);
       }, error => {
-        console.log('照会エラーメッセージ表示');
         this.isError = true;
       }
     );
@@ -258,7 +253,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
 
     // canvasの取得
     const context: CanvasRenderingContext2D = this.claimCategoryChart.nativeElement.getContext('2d');
-    // context.scale(2,2);
 
     // グローバル設定セット
     Chart.defaults.global.defaultFontColor = environment.chart_font_color;
@@ -366,8 +360,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
       },
       events: ['click'],
       onClick: (event, elements) => {
-        // console.log('tooltip_active', chartLines['tooltip']['_active']);
-        console.log('elements', elements);
         this.changeDate(elements, history);
       }
     };
@@ -378,12 +370,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
       data: chartData,
       options: chartOptions
     });
-
-    // 初期表示時に最新日付のポイントにtooltipを表示する場合は、
-    // chartLines['tooltip']['_active']に最新日付の要素をpushすれば出来ると思う。
-    // ただ、2個あるグラフの内、どちらにtooltipを表示させるのか、それとも2つともに表示させるのか、
-    // 正直どちらも微妙なので一旦、初期表示時にtooltipを表示させていない
-    // https://stackoverrun.com/ja/q/10823207
 
     // データセット描写後処理
     Chart.plugins.register({
@@ -426,10 +412,8 @@ export class DetailComponent implements OnInit, AfterViewInit {
   // 表示対象の日付変更
   changeDate(elements, history: FraudScore[]) {
     if (!elements || elements.length === 0) {
-      console.log('要素が選択出来ていません');
     } else {
       const element = elements[0];
-      console.log('onClick._index:', element['_index'.toString()]);
       const fraudScoreView = history[element['_index'.toString()]];
       this.getScoreInfo(fraudScoreView);
     }
@@ -437,7 +421,6 @@ export class DetailComponent implements OnInit, AfterViewInit {
 
   // 事案一覧ページに遷移
   displayList(): void {
-    console.log('事案一覧ページへ遷移');
     this.router.navigate(['list']);
   };
 
