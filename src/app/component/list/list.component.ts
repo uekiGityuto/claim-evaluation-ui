@@ -25,13 +25,11 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
 })
 export class ListComponent implements OnInit, AfterViewChecked {
   // 検索状態管理用
-  isError = false;
-
-  // 検索結果がない場合のメッセージ表示用
-  isData = true;
-
-  // 検索中レイアウト表示用
-  isSearching = false;
+  normal = 0;
+  error = 1;
+  noData = 2;
+  searching = 3;
+  searchStatus = this.normal;
 
   // ビュー表示用
   userId: string;
@@ -202,7 +200,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
   searchList(params: TargetClaimList): void {
 
     // 検索中のレイアウトに変更
-    this.isSearching = true;
+    this.searchStatus = this.searching;
 
     // ビュー要素の初期化
     this.initializeViewElemnet();
@@ -211,15 +209,12 @@ export class ListComponent implements OnInit, AfterViewChecked {
     this.client.post(params).subscribe(
       response => {
         console.log('取得結果:', response);
-        this.isError = false;
-        this.isSearching = false;
 
         // 検索結果が無い場合の判定条件
         if (!response.claim || response.claim.length === 0) {
-          this.isData = false;
+          this.searchStatus = this.noData;
           return;
         }
-        this.isData = true;
 
         // ビュー要素の取得
         response.claim.forEach((claim: Claim, i) => {
@@ -241,10 +236,11 @@ export class ListComponent implements OnInit, AfterViewChecked {
           this.serchTimes = this.one;
         }
 
+        this.searchStatus = this.normal;
+
       }, error => {
         console.log('検索エラーメッセージ表示');
-        this.isError = true;
-        this.isSearching = false;
+        this.searchStatus = this.error;
       }
     );
   };

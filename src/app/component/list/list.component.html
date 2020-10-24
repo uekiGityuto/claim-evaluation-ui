@@ -84,11 +84,11 @@
     </form>
   </div>
 
-  <ng-container *ngIf="!isError; else error">
-    <ng-container *ngIf="isData; else noData">
+  <ng-container *ngIf="searchStatus !== error; else errorMessage">
+    <ng-container *ngIf="searchStatus !== noData; else noDataMessage">
 
       <!-- 事案一覧テーブルエリア -->
-      <ng-container *ngIf="!isSearching; else searching">
+      <ng-container *ngIf="searchStatus !== searching; else searchingLayout">
         <ng-container *ngIf="serchTimes !== zero">
           <div class="claim-list-card" #claimListCard>
             <ng-container *ngIf="claims.length !== 0">
@@ -148,28 +148,28 @@
     </ng-container>
   </ng-container>
 
+  <!-- 検索中 -->
+  <ng-template #searchingLayout>
+    <div class="searching">
+      <div class="loader-wrap">
+        <div class="loader">Loading...</div>
+      </div>
+    </div>
+  </ng-template>
+
   <!-- 検索結果がない -->
-  <ng-template #noData>
+  <ng-template #noDataMessage>
     <div class="no-data-message-box">
       <p class="no-data-message">検索結果が存在しません</p>
     </div>
   </ng-template>
 
   <!-- 検索エラー -->
-  <ng-template #error>
+  <ng-template #errorMessage>
     <div class="error-message-box">
       <div class="error-message">
         <p class="error-message__main">検索結果を取得出来ません。</p>
         <p class="error-message__sub">担当者にお問い合わせください。</p>
-      </div>
-    </div>
-  </ng-template>
-
-  <!-- 検索中 -->
-  <ng-template #searching>
-    <div class="searching">
-      <div class="loader-wrap">
-        <div class="loader">Loading...</div>
       </div>
     </div>
   </ng-template>
