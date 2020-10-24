@@ -66,8 +66,8 @@
 
 .list-header-card-form-content__datepicker {
   position: absolute;
-  right: 8px;
-  top: -3px
+  right: 32px;
+  top: -4px
 }
 
 .list-header-card-form-content-radio-group {
@@ -120,6 +120,7 @@
 
 .claim-list-dataset {
   /* height: calc(100% / 10); */
+  /* height: 0.1em; */
   font-size: var(--medium-font-size);
   background-color: var(--card-bg-color);
   padding-right: var(--left-write-common-padding);

@@ -104,14 +104,14 @@
               <th mat-sort-header="lossDate">事故日</th>
               <th mat-sort-header="claimCategory">事案カテゴリ</th>
             </tr>
-            <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle" appDatasetHeight>
+            <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle" [style.height.px] = "rowHeight">
               <td class="claim-list-dataset__data"><a
                   [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana" style="width: 160px">
+              <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana">
                 {{ claim.insuredNameKana }}</td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana" style="width: 160px">
+              <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana">
                 {{ claim.contractorNameKana }}</td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.base" style="width: 160px">{{ claim.base }}</td>
+              <td class="claim-list-dataset__data" [appTooltip]="claim.base">{{ claim.base }}</td>
               <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
               <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
               <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>

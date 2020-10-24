@@ -116,6 +116,7 @@ body {
   color: var(--main-font-color);
   padding-right: 4px;
   padding-left: 4px;
+  border-radius: 2px;
 }
 
 .middleBgColor {
@@ -123,6 +124,7 @@ body {
   color: var(--main-font-color);
   padding-right: 4px;
   padding-left: 4px;
+  border-radius: 2px
 }
 
 .lowBgColor {
@@ -130,6 +132,7 @@ body {
   color: var(--main-font-color);
   padding-right: 4px;
   padding-left: 4px;
+  border-radius: 2px
 }
 
 .highColor {

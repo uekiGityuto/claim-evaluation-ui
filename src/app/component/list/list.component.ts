@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
@@ -23,7 +23,7 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.css']
 })
-export class ListComponent implements OnInit {
+export class ListComponent implements OnInit, AfterViewChecked {
   // エラーメッセージ表示用
   isError = false;
 
@@ -40,6 +40,13 @@ export class ListComponent implements OnInit {
   totalNumber: number;
   prevButtonVisibility: string;
   nextButtonVisibility: string;
+
+  // 事案一覧の行の高さ決め処理用
+  syoki = 0;
+  afterFirstSearch = 1;
+  afterSecondSearch = 2;
+  serchStatus = this.syoki;
+  rowHeight = 0;
 
   // 検索用
   searchControl: FormGroup;
@@ -86,6 +93,18 @@ export class ListComponent implements OnInit {
       matSelectValue.style.verticalAlign = 'middle';
     });
 
+  }
+
+  // 事案一覧の行の高さ決め処理
+  ngAfterViewChecked(): void {
+    if(this.serchStatus !== this.afterFirstSearch) {
+      return;
+    }
+    const claimListCardHeight = document.getElementById('claim-list-card').offsetHeight;
+    const claimListHeaderHeight = document.getElementById('claim-list-header').offsetHeight;
+    const claimListDatasetHeight = (claimListCardHeight - claimListHeaderHeight) / 10;
+    this.rowHeight = claimListDatasetHeight;
+    this.serchStatus = this.afterSecondSearch;
   }
 
   // 認可処理
@@ -200,6 +219,12 @@ export class ListComponent implements OnInit {
         // 1ページ戻るボタン、1ページ進むボタンの表示/非表示
         this.prevButtonVisibility = this.displayFromPages > 1 ? 'visible' : 'hidden';
         this.nextButtonVisibility = this.toPages < this.totalNumber ? 'visible' : 'hidden';
+
+        // 事案一覧の行の高さ決め処理をするためのフラグ立て
+        if(this.serchStatus === this.syoki) {
+          this.serchStatus = this.afterFirstSearch;
+        }
+
       }, error => {
         console.log('検索エラーメッセージ表示');
         this.isError = true;
