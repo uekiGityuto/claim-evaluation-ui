@@ -24,11 +24,14 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
   styleUrls: ['./list.component.css']
 })
 export class ListComponent implements OnInit, AfterViewChecked {
-  // エラーメッセージ表示用
+  // 検索状態管理用
   isError = false;
 
   // 検索結果がない場合のメッセージ表示用
   isData = true;
+
+  // 検索中レイアウト表示用
+  isSearching = false;
 
   // ビュー表示用
   userId: string;
@@ -42,14 +45,14 @@ export class ListComponent implements OnInit, AfterViewChecked {
   nextButtonVisibility: string;
 
   // 事案一覧の行の高さ決め処理用
+  zero = 0;
+  one = 1;
+  twoMore = 2;
+  serchTimes = this.zero;
   @ViewChild('claimListCard')
   claimListCard: ElementRef;
   @ViewChild('claimListHeader')
   claimListHeader: ElementRef;
-  syoki = 0;
-  afterFirstSearch = 1;
-  afterSecondSearch = 2;
-  serchStatus = this.syoki;
   rowHeight = 0;
 
   // 検索用
@@ -101,7 +104,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
   // 事案一覧の行の高さ決め処理
   ngAfterViewChecked(): void {
-    if(this.serchStatus !== this.afterFirstSearch) {
+    if(this.serchTimes !== this.one) {
       return;
     }
     const claimListCardHeight = this.claimListCard.nativeElement.offsetHeight;
@@ -110,7 +113,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
     // 「Expression has changed after it was checked.」例外を回避するためheight更新処理を非同期化
     setTimeout(() => {
       this.rowHeight = claimListDatasetHeight;
-      this.serchStatus = this.afterSecondSearch;
+      this.serchTimes = this.twoMore;
     }, 0);
   }
 
@@ -197,20 +200,26 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
   // 事案一覧取得処理
   searchList(params: TargetClaimList): void {
+
+    // 検索中のレイアウトに変更
+    this.isSearching = true;
+
+    // ビュー要素の初期化
+    this.initializeViewElemnet();
+
     // 事案一覧を取得
     this.client.post(params).subscribe(
       response => {
         console.log('取得結果:', response);
         this.isError = false;
-
-        // ビュー要素の初期化
-        this.initializeViewElemnet();
+        this.isSearching = false;
 
         // 検索結果が無い場合の判定条件
         if (!response.claim || response.claim.length === 0) {
           this.isData = false;
           return;
         }
+        this.isData = true;
 
         // ビュー要素の取得
         response.claim.forEach((claim: Claim, i) => {
@@ -227,14 +236,15 @@ export class ListComponent implements OnInit, AfterViewChecked {
         this.prevButtonVisibility = this.displayFromPages > 1 ? 'visible' : 'hidden';
         this.nextButtonVisibility = this.toPages < this.totalNumber ? 'visible' : 'hidden';
 
-        // 事案一覧の行の高さ決め処理をするためのフラグ立て
-        if(this.serchStatus === this.syoki) {
-          this.serchStatus = this.afterFirstSearch;
+        // 事案一覧の行の高さ決め処理をする場合の判定条件
+        if(this.serchTimes === this.zero) {
+          this.serchTimes = this.one;
         }
 
       }, error => {
         console.log('検索エラーメッセージ表示');
         this.isError = true;
+        this.isSearching = false;
       }
     );
   };
@@ -242,11 +252,6 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // ビュー要素の初期化処理
   initializeViewElemnet() {
     this.claims = [];
-    this.order = null;
-    this.fromPages = null;
-    this.displayFromPages = null;
-    this.toPages = null;
-    this.totalNumber = null;
   }
 
   // 一つ以上フォーム入力されているか検証（butenKyotenRadioは除外）

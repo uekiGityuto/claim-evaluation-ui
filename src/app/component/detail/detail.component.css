@@ -351,6 +351,8 @@
   overflow-y: auto;
 }
 
+/* 推論結果が存在しない時のメッセージ用 */
+
 .message {
   font-size: var(--extra-large-font-size);
   margin-top: 240px;

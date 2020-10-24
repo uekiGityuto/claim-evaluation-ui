@@ -87,41 +87,46 @@
   <ng-container *ngIf="!isError; else error">
     <ng-container *ngIf="isData; else noData">
 
-      <!-- 正常 -->
-
       <!-- 事案一覧テーブルエリア -->
-      <ng-container *ngIf="claims.length != 0">
-        <div class="claim-list-card" #claimListCard>
-          <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate"
-            matSortDirection="desc" matSortDisableClear>
-            <tr class="claim-list-header" #claimListHeader>
-              <th mat-sort-header="claimNumber">受付番号</th>
-              <th mat-sort-header="insuredName">被保険者名</th>
-              <th mat-sort-header="contractorName">契約者名</th>
-              <th mat-sort-header="base">担当部・<br>担当拠点</th>
-              <th mat-sort-header="insuranceKind">保険種類</th>
-              <th mat-sort-header="lastUpdateDate">最終更新日</th>
-              <th mat-sort-header="lossDate">事故日</th>
-              <th mat-sort-header="claimCategory">事案カテゴリ</th>
-            </tr>
-            <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle" [style.height.px] = "rowHeight">
-              <td class="claim-list-dataset__data"><a
-                  [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana">
-                {{ claim.insuredNameKana }}</td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana">
-                {{ claim.contractorNameKana }}</td>
-              <td class="claim-list-dataset__data" [appTooltip]="claim.base">{{ claim.base }}</td>
-              <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
-              <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-              <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-              <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category"
-                  [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
-            </tr>
-          </table>
-        </div>
+      <ng-container *ngIf="!isSearching; else searching">
+        <ng-container *ngIf="serchTimes !== zero">
+          <div class="claim-list-card" #claimListCard>
+            <ng-container *ngIf="claims.length !== 0">
+              <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate"
+                matSortDirection="desc" matSortDisableClear>
+                <tr class="claim-list-header" #claimListHeader>
+                  <th mat-sort-header="claimNumber">受付番号</th>
+                  <th mat-sort-header="insuredName">被保険者名</th>
+                  <th mat-sort-header="contractorName">契約者名</th>
+                  <th mat-sort-header="base">担当部・<br>担当拠点</th>
+                  <th mat-sort-header="insuranceKind">保険種類</th>
+                  <th mat-sort-header="lastUpdateDate">最終更新日</th>
+                  <th mat-sort-header="lossDate">事故日</th>
+                  <th mat-sort-header="claimCategory">事案カテゴリ</th>
+                </tr>
+                <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle"
+                  [style.height.px]="rowHeight">
+                  <td class="claim-list-dataset__data"><a
+                      [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+                  <td class="claim-list-dataset__data" [appTooltip]="claim.insuredNameKana">
+                    {{ claim.insuredNameKana }}</td>
+                  <td class="claim-list-dataset__data" [appTooltip]="claim.contractorNameKana">
+                    {{ claim.contractorNameKana }}</td>
+                  <td class="claim-list-dataset__data" [appTooltip]="claim.base">{{ claim.base }}</td>
+                  <td class="claim-list-dataset__data">{{ claim.insuranceKind }}</td>
+                  <td class="claim-list-dataset__data">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+                  <td class="claim-list-dataset__data">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+                  <td class="claim-list-dataset__data"><span class="claim-list-dataset__claim-category"
+                      [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
+                </tr>
+              </table>
+            </ng-container>
+          </div>
+        </ng-container>
+      </ng-container>
 
-        <!-- ページャーエリア -->
+      <!-- ページャーエリア -->
+      <ng-container *ngIf="serchTimes !== zero">
         <div class="pager">
           <div>
             <button [style.visibility]="prevButtonVisibility" mat-icon-button (click)="previous()">
@@ -156,6 +161,15 @@
       <div class="error-message">
         <p class="error-message__main">検索結果を取得出来ません。</p>
         <p class="error-message__sub">担当者にお問い合わせください。</p>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- 検索中 -->
+  <ng-template #searching>
+    <div class="searching">
+      <div class="loader-wrap">
+        <div class="loader">Loading...</div>
       </div>
     </div>
   </ng-template>
