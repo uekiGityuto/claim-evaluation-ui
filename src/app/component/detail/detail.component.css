@@ -353,10 +353,16 @@
 
 /* モデルが存在しない時のメッセージ用 */
 
-.no-model-message {
-  font-size: var(--extra-large-font-size);
-  margin-top: auto;
-  margin-bottom: auto;
+.no-model-message-box {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   margin-right: auto;
   margin-left: auto;
+}
+
+.no-model-message {
+  font-size: var(--extra-large-font-size);
 }

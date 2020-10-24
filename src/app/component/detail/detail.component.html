@@ -17,9 +17,12 @@
       <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
       <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
       <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
-      <span class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
-      <span class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
-      <span class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
+      <span
+        class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
+      <span
+        class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
+      <span
+        class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
     </div>
 
     <!-- 事案カテゴリエリア -->
@@ -139,7 +142,9 @@
   </ng-template>
 
   <ng-template #nothingModel>
-    <p class="no-model-message">推論結果が存在しません。</p>
+    <div class="no-model-message-box">
+      <p class="no-model-message">推論結果が存在しません。</p>
+    </div>
   </ng-template>
 
 </div>
