@@ -353,9 +353,10 @@
 
 /* 推論結果が存在しない時のメッセージ用 */
 
-.message {
+.no-model-message {
   font-size: var(--extra-large-font-size);
-  margin-top: 240px;
+  margin-top: auto;
+  margin-bottom: auto;
   margin-right: auto;
   margin-left: auto;
 }

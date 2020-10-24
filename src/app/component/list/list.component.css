@@ -206,6 +206,7 @@
 }
 
 /* 検索中のloadingレイアウト用 */
+
 .searching {
   flex: 1;
 }
