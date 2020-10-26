@@ -30,7 +30,7 @@ Run `ng generate component component-name` to generate a new component. You can 
 ## Build
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.  
 [追記]ビルド時の--base-hrefオプションに'/www'をセットする。  
-開発用の場合以下のコマンドを実行。  
+例）開発用の場合。
 `ng build claim-evaluation --baseHref=/www/`
 
 ## Further help
