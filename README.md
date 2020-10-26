@@ -1,20 +1,20 @@
 # git
-git clone <github uri>
-git config --global --add user.name <name> ex> "Jesica"
-git congig --global --add user.pasword <password> ex> "12345678"
-git pull origin master
-git add .
-git commit -m "description"
-git push origin master
+`git clone <github uri>`  
+`git config --global --add user.name <name>` ex> "Jesica"  
+`git congig --global --add user.pasword <password>` ex> "12345678"  
+`git pull origin master`  
+`git add .`  
+`git commit -m "description"` 
+`git push origin master`
 
 # install
-npm install
-npm install --save
-npm install --save-dev
+`npm install`  
+`npm install --save`  
+`npm install --save-dev`
 
 # 起動
-cd ...[your project]
-ng serve --proxy-config proxy.config.json
+`cd ...[your project]`  
+`ng serve --proxy-config proxy.config.json`
 
 # URL 
 ~~browserで次のURLで接続すると画面が表示される。
