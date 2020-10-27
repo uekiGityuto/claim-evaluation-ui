@@ -56,6 +56,8 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 検索用
   searchControl: FormGroup;
   param: TargetClaimList;
+  @ViewChild('searchButton')
+  searchButton: ElementRef;
 
   constructor(private datepipe: DatePipe,
     private router: Router,
@@ -191,6 +193,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
   searchList(params: TargetClaimList): void {
     // 検索中のレイアウトに変更
     this.searchStatus = this.searching;
+    this.searchButton.nativeElement.setAttribute('disabled', 'disabled');
 
     // ビュー要素の初期化
     this.initializeViewElemnet();
@@ -226,6 +229,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
         }
 
         this.searchStatus = this.normal;
+        this.searchButton.nativeElement.removeAttribute('disabled');
 
       }, error => {
         this.searchStatus = this.error;
@@ -238,7 +242,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
     this.claims = [];
   }
 
-  // 一つ以上フォーム入力されているか検証（butenKyotenRadioは除外）
+  // 一つ以上フォーム入力されていない場合はバリデーションエラー（butenKyotenRadioは除外）
   isInputMoreThanOne(control: AbstractControl) {
     if (!control.value) {
       return { isInputMoreThanOne: { valid: false } };
@@ -268,7 +272,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
     };
   }
 
-  // butenKyotenを入力する時にbutenKyotenRadioも選択されているか検証
+  // butenKyoten入力時、butenKyotenRadioが選択されていなければバリデーションエラー
   isButenKyotenRadio(control: AbstractControl) {
     if (control.value && control.value.butenKyoten && !control.value.butenKyotenRadio) {
       return { isButenKyotenRadio: { valid: false } };

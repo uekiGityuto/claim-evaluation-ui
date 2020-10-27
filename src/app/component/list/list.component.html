@@ -78,7 +78,7 @@
           placeholder="担当部・担当拠点">
       </div>
       <div class="list-header-card-form-content">
-        <button class="list-header-card-form-content__button" [disabled]="searchControl.invalid"
+        <button #searchButton class="list-header-card-form-content__button" [disabled]="searchControl.invalid"
           (click)="search()">検索</button>
       </div>
     </form>
@@ -90,11 +90,11 @@
       <!-- 事案一覧テーブルエリア -->
       <ng-container *ngIf="searchStatus !== searching; else searchingLayout">
         <ng-container *ngIf="serchTimes !== zero">
-          <div class="claim-list-card" #claimListCard>
+          <div #claimListCard class="claim-list-card">
             <ng-container *ngIf="claims.length !== 0">
               <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate"
                 matSortDirection="desc" matSortDisableClear>
-                <tr class="claim-list-header" #claimListHeader>
+                <tr #claimListHeader class="claim-list-header">
                   <th class="claim-list-header__item" mat-sort-header="claimNumber">受付番号</th>
                   <th class="claim-list-header__item" mat-sort-header="insuredName">被保険者名</th>
                   <th class="claim-list-header__item" mat-sort-header="contractorName">契約者名</th>
