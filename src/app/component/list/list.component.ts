@@ -189,7 +189,6 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
   // 事案一覧取得処理
   searchList(params: TargetClaimList): void {
-
     // 検索中のレイアウトに変更
     this.searchStatus = this.searching;
 

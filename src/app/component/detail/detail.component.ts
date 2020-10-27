@@ -17,6 +17,7 @@ import { ScoreCategory } from '../../model/scores/score-category';
 
 import { environment } from '../../../environments/environment';
 
+import { ScoresClientService } from '../../service/scores-client.service';
 import { UserInfoContainerService } from '../../service/user-info-container.service';
 
 /**
@@ -30,8 +31,11 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
 })
 export class DetailComponent implements OnInit, AfterViewInit {
 
-  // エラーメッセージ表示用
-  isError = false;
+  // 照会状態管理用
+  normal = 0;
+  error = 1;
+  inquiring = 2;
+  inquiryStatus = this.normal;
 
   // ビュー表示用（共通部分）
   claimNumber: string;
@@ -56,6 +60,7 @@ export class DetailComponent implements OnInit, AfterViewInit {
   constructor(private route: ActivatedRoute,
     private router: Router,
     private title: Title,
+    private client: ScoresClientService,
     private userInfo: UserInfoContainerService,
     private datepipe: DatePipe
   ) { }
@@ -76,25 +81,25 @@ export class DetailComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    if (!this.isError) {
-      // チャート作成
-      this.createChart(this.claim.fraudScoreHistory);
-    }
+    // if (this.inquiryStatus !== this.error) {
+    //   // チャート作成
+    //   this.createChart(this.claim.fraudScoreHistory);
+    // }
   }
 
   // 最新のスコア詳細取得
   getLatestClaimInfo(claimNumber: string): void {
+    // 照会中のレイアウトに変更
+    this.inquiryStatus = this.inquiring;
+
     // スコア詳細取得
-    this.route.data.subscribe(
+    this.client.post(claimNumber).subscribe(
       response => {
-        if (!response.detail) {
-          this.isError = true;
-          return;
-        }
-        this.isError = false;
+        // 照会結果表示のレイアウトに変更
+        this.inquiryStatus = this.normal;
 
         // 取得結果をシャーローコピー
-        this.claim = { ...response.detail.claim };
+        this.claim = { ...response.claim };
 
         // モデルが1つしかない場合に対応するための処理
         this.claim.fraudScoreHistory = this.setModel(this.claim.fraudScoreHistory);
@@ -106,8 +111,16 @@ export class DetailComponent implements OnInit, AfterViewInit {
         const end = this.claim.fraudScoreHistory.length - 1;
         const fraudScoreView = this.claim.fraudScoreHistory[end];
         this.getScoreInfo(fraudScoreView);
+
+        // 照会結果表示のレイアウトに変更
+        // this.inquiryStatus = this.normal;
+
+        // チャート作成
+        setTimeout(() => {
+          this.createChart(this.claim.fraudScoreHistory);
+        }, 1000);
       }, error => {
-        this.isError = true;
+        this.inquiryStatus = this.error;
       }
     );
   }

@@ -8,142 +8,152 @@
     <span>{{ userId }}</span>
   </header>
 
-  <ng-container *ngIf="!isError; else error">
+  <ng-container *ngIf="inquiryStatus !== error; else errorMessage">
+    <ng-container *ngIf="inquiryStatus !== inquiring; else inquiringLayout">
 
-    <!-- 正常 -->
+      <!-- 正常 -->
 
-    <!-- サブヘッダエリア -->
-    <div class="detail-header-card">
-      <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
-      <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
-      <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
-      <span
-        class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
-      <span
-        class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
-      <span
-        class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
-    </div>
-
-    <!-- 事案カテゴリエリア -->
-    <div class="claim-category-card">
-      <div class="claim-category-header">
-        <div class="claim-category-header__item">
-          <span>事案カテゴリ：</span>
-          <span *ngIf="claimCategory; else nothingClaimCategory" [ngClass]="categoryClass">{{ claimCategory }}</span>
-          <ng-template #nothingClaimCategory><span>判定不能</span></ng-template>
-        </div>
-        <div class="claim-category-header__item">
-          <span>スコアリング日：</span>
-          <span>{{ scoringDate | date : 'M月d日' }}</span>
-        </div>
+      <!-- サブヘッダエリア -->
+      <div class="detail-header-card">
+        <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
+        <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
+        <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
+        <span
+          class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
+        <span
+          class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
+        <span
+          class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
       </div>
-      <div class="claim-category">
-        <div class="claim-category-chart">
-          <canvas #claimCategoryChart width="824px" height="180px"></canvas>
-        </div>
-        <div class="claim-category-matrix">
-          <div class="claim-category-matrix__ncpd-label">NC/PD推定モデル</div>
-          <div class="claim-category-matrix__special-label">特殊事案モデル</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.highBgColor"
-            class="claim-category-matrix__ncpd-high">High</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.middleBgColor"
-            class="claim-category-matrix__ncpd-middle">Middle</div>
-          <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.lowBgColor"
-            class="claim-category-matrix__ncpd-low">Low</div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.highBgColor"
-            class="claim-category-matrix__special-high">High</div>
-          <div class="claim-category-matrix__high-high"><span
-              [ngClass]="categoryMatrix?.highHighColor">{{ categoryMatrix?.highHigh }}</span></div>
-          <div class="claim-category-matrix__high-middle"><span
-              [ngClass]="categoryMatrix?.highMiddleColor">{{ categoryMatrix?.highMiddle }}</span></div>
-          <div class="claim-category-matrix__high-low"><span
-              [ngClass]="categoryMatrix?.highLowColor">{{ categoryMatrix?.highLow }}</span></div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.middleBgColor"
-            class="claim-category-matrix__special-middle">Middle</div>
-          <div class="claim-category-matrix__middle-high"><span
-              [ngClass]="categoryMatrix?.middleHighColor">{{ categoryMatrix?.middleHigh }}</span></div>
-          <div class="claim-category-matrix__middle-middle"><span
-              [ngClass]="categoryMatrix?.middleMiddleColor">{{ categoryMatrix?.middleMiddle }}</span></div>
-          <div class="claim-category-matrix__middle-low"><span
-              [ngClass]="categoryMatrix?.middleLowColor">{{ categoryMatrix?.middleLow }}</span></div>
-          <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.lowBgColor"
-            class="claim-category-matrix__special-low">Low</div>
-          <div class="claim-category-matrix__low-high"><span
-              [ngClass]="categoryMatrix?.lowHighColor">{{ categoryMatrix?.lowHigh }}</span></div>
-          <div class="claim-category-matrix__low-middle"><span
-              [ngClass]="categoryMatrix?.lowMiddleColor">{{ categoryMatrix?.lowMiddle }}</span></div>
-          <div class="claim-category-matrix__low-low"><span
-              [ngClass]="categoryMatrix?.lowLowColor">{{ categoryMatrix?.lowLow }}</span></div>
-        </div>
-      </div>
-    </div>
 
-    <!-- モデルエリア -->
-    <div class="model">
-      <ng-container *ngFor="let scoreDetail of scoreDetails; index as i">
-        <div class="model-card">
-          <div class="model-card-header">
-            <div class="model-card-main-header">
-              <div class="model-card-main-header-content">
-                <span>{{ scoreDetail.modelType }}</span>
-                <button class="model-card-main-header-content__button" mat-icon-button (click)="displayHelp()">
-                  <mat-icon inline="true">help</mat-icon>
-                </button>
-                <span>： </span>
-                <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
-              </div>
-              <div class="model-card-main-header-content">
-                <span *ngIf="scoreDetail.score; else nothingScore">スコア：{{ scoreDetail.score }}</span>
-                <ng-template #nothingScore><span>スコア：-</span></ng-template>
-              </div>
-            </div>
-            <div class="model-card-sub-header">
-              <div class="factor-header factor-header--raise">
-                <p class="factor-header__item">スコア上昇要因↑</p>
-              </div>
-              <div class="factor-header factor-header--lower">
-                <p class="factor-header__item">スコア減少要因↓</p>
-              </div>
-            </div>
+      <!-- 事案カテゴリエリア -->
+      <div class="claim-category-card">
+        <div class="claim-category-header">
+          <div class="claim-category-header__item">
+            <span>事案カテゴリ：</span>
+            <span *ngIf="claimCategory; else nothingClaimCategory" [ngClass]="categoryClass">{{ claimCategory }}</span>
+            <ng-template #nothingClaimCategory><span>判定不能</span></ng-template>
           </div>
-          <div class="model-card-contents">
-            <ng-container *ngIf="scoreDetail.modelPresence; else nothingModel">
-              <div class="factor">
-                <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
-                  <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
-                  <p class="factor-contens__feature">{{ reason.featureName }}</p>
-                  <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
-                </div>
-              </div>
-              <div class="factor">
-                <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
-                  <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
-                  <p class="factor-contens__feature">{{ reason.featureName }}</p>
-                  <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
-                </div>
-              </div>
-            </ng-container>
+          <div class="claim-category-header__item">
+            <span>スコアリング日：</span>
+            <span>{{ scoringDate | date : 'M月d日' }}</span>
           </div>
         </div>
-      </ng-container>
-    </div>
+        <div class="claim-category">
+          <div class="claim-category-chart">
+            <canvas #claimCategoryChart width="824px" height="180px"></canvas>
+          </div>
+          <div class="claim-category-matrix">
+            <div class="claim-category-matrix__ncpd-label">NC/PD推定モデル</div>
+            <div class="claim-category-matrix__special-label">特殊事案モデル</div>
+            <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.highBgColor"
+              class="claim-category-matrix__ncpd-high">High</div>
+            <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.middleBgColor"
+              class="claim-category-matrix__ncpd-middle">Middle</div>
+            <div [class.now]="scoreDetails && scoreDetails[1].categoryClass.lowBgColor"
+              class="claim-category-matrix__ncpd-low">Low</div>
+            <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.highBgColor"
+              class="claim-category-matrix__special-high">High</div>
+            <div class="claim-category-matrix__high-high"><span
+                [ngClass]="categoryMatrix?.highHighColor">{{ categoryMatrix?.highHigh }}</span></div>
+            <div class="claim-category-matrix__high-middle"><span
+                [ngClass]="categoryMatrix?.highMiddleColor">{{ categoryMatrix?.highMiddle }}</span></div>
+            <div class="claim-category-matrix__high-low"><span
+                [ngClass]="categoryMatrix?.highLowColor">{{ categoryMatrix?.highLow }}</span></div>
+            <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.middleBgColor"
+              class="claim-category-matrix__special-middle">Middle</div>
+            <div class="claim-category-matrix__middle-high"><span
+                [ngClass]="categoryMatrix?.middleHighColor">{{ categoryMatrix?.middleHigh }}</span></div>
+            <div class="claim-category-matrix__middle-middle"><span
+                [ngClass]="categoryMatrix?.middleMiddleColor">{{ categoryMatrix?.middleMiddle }}</span></div>
+            <div class="claim-category-matrix__middle-low"><span
+                [ngClass]="categoryMatrix?.middleLowColor">{{ categoryMatrix?.middleLow }}</span></div>
+            <div [class.now]="scoreDetails && scoreDetails[0].categoryClass.lowBgColor"
+              class="claim-category-matrix__special-low">Low</div>
+            <div class="claim-category-matrix__low-high"><span
+                [ngClass]="categoryMatrix?.lowHighColor">{{ categoryMatrix?.lowHigh }}</span></div>
+            <div class="claim-category-matrix__low-middle"><span
+                [ngClass]="categoryMatrix?.lowMiddleColor">{{ categoryMatrix?.lowMiddle }}</span></div>
+            <div class="claim-category-matrix__low-low"><span
+                [ngClass]="categoryMatrix?.lowLowColor">{{ categoryMatrix?.lowLow }}</span></div>
+          </div>
+        </div>
+      </div>
 
+      <!-- モデルエリア -->
+      <div class="model">
+        <ng-container *ngFor="let scoreDetail of scoreDetails; index as i">
+          <div class="model-card">
+            <div class="model-card-header">
+              <div class="model-card-main-header">
+                <div class="model-card-main-header-content">
+                  <span>{{ scoreDetail.modelType }}</span>
+                  <button class="model-card-main-header-content__button" mat-icon-button (click)="displayHelp()">
+                    <mat-icon inline="true">help</mat-icon>
+                  </button>
+                  <span>： </span>
+                  <span [ngClass]="scoreDetail.categoryClass">{{ scoreDetail.rank }}</span>
+                </div>
+                <div class="model-card-main-header-content">
+                  <span *ngIf="scoreDetail.score; else nothingScore">スコア：{{ scoreDetail.score }}</span>
+                  <ng-template #nothingScore><span>スコア：-</span></ng-template>
+                </div>
+              </div>
+              <div class="model-card-sub-header">
+                <div class="factor-header factor-header--raise">
+                  <p class="factor-header__item">スコア上昇要因↑</p>
+                </div>
+                <div class="factor-header factor-header--lower">
+                  <p class="factor-header__item">スコア減少要因↓</p>
+                </div>
+              </div>
+            </div>
+            <div class="model-card-contents">
+              <ng-container *ngIf="scoreDetail.modelPresence; else nothingModel">
+                <div class="factor">
+                  <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.raiseReason">
+                    <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                    <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                    <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+                  </div>
+                </div>
+                <div class="factor">
+                  <div class="factor-contens" *ngFor="let reason of raiseLowerReasons[i]?.lowerReason">
+                    <p class="factor-contens__score">スコア：{{ reason.reason }}</p>
+                    <p class="factor-contens__feature">{{ reason.featureName }}</p>
+                    <p class="factor-contens__feature-description">{{ reason.featureDescription }}</p>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+
+    </ng-container>
   </ng-container>
 
+  <!-- 片方のモデルが存在しない -->
+  <ng-template #nothingModel>
+    <div class="no-model-message-box">
+      <p class="no-model-message">推論結果が存在しません。</p>
+    </div>
+  </ng-template>
+
+  <!-- 検索中 -->
+  <ng-template #inquiringLayout>
+    <div class="inquiring">
+      <app-loading></app-loading>
+    </div>
+  </ng-template>
+
   <!-- 照会エラーメッセージ -->
-  <ng-template #error>
+  <ng-template #errorMessage>
     <div class="error-message-box">
       <div class="error-message">
         <p class="error-message__main">受付番号「{{ claimNumber }}」についてのデータ取得が出来ませんでした。</p>
         <p class="error-message__sub">担当者にお問い合わせください。</p>
       </div>
-    </div>
-  </ng-template>
-
-  <ng-template #nothingModel>
-    <div class="no-model-message-box">
-      <p class="no-model-message">推論結果が存在しません。</p>
     </div>
   </ng-template>
 

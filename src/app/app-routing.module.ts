@@ -6,16 +6,9 @@ import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
 
 import { AuthorityGuard } from './guard/authority.guard';
-import { DetailResolverService } from './service/detail-resolver.service';
 
 const routes: Routes = [
-  {
-    path: 'detail/:claimNumber',
-    component: DetailComponent,
-    resolve: {
-      detail: DetailResolverService
-    }
-  },
+  { path: 'detail/:claimNumber', component: DetailComponent  },
   { path: 'list/error', component: ErrorComponent },
   { path: 'list', component: ListComponent, canActivate: [AuthorityGuard] }
 ];

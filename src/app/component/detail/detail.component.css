@@ -366,3 +366,9 @@
 .no-model-message {
   font-size: var(--extra-large-font-size);
 }
+
+/* 検索中のloadingレイアウト用 */
+
+.inquiring {
+  flex: 1;
+}
