@@ -134,7 +134,7 @@
   border-bottom: 1px solid #cacaca;
 }
 
-.claim-list-dataset :last-of-type {
+.claim-list-dataset:last-of-type {
   border-bottom: none;
 }
 
@@ -212,18 +212,19 @@
 }
 
 .loader-wrap {
-  /* display: flex;
+  height: 100%;
+  width: 100%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%; */
-  margin: 200px;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .loader {
   color: #4948488c;
   font-size: 20px;
-  margin: 100px auto;
+  /* margin: 100px auto; */
   width: 1em;
   height: 1em;
   border-radius: 50%;
