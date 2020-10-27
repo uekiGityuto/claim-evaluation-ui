@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -29,12 +29,13 @@ import { UserInfoContainerService } from '../../service/user-info-container.serv
   templateUrl: './detail.component.html',
   styleUrls: ['./detail.component.css'],
 })
-export class DetailComponent implements OnInit, AfterViewInit {
+export class DetailComponent implements OnInit, AfterViewChecked {
 
   // 照会状態管理用
   normal = 0;
   error = 1;
   inquiring = 2;
+  complete = 3;
   inquiryStatus = this.normal;
 
   // ビュー表示用（共通部分）
@@ -80,11 +81,15 @@ export class DetailComponent implements OnInit, AfterViewInit {
     this.getLatestClaimInfo(this.claimNumber);
   }
 
-  ngAfterViewInit(): void {
-    // if (this.inquiryStatus !== this.error) {
-    //   // チャート作成
-    //   this.createChart(this.claim.fraudScoreHistory);
-    // }
+  ngAfterViewChecked(): void {
+    if (this.inquiryStatus !== this.normal || this.claimCategoryChart === null) {
+      return;
+    }
+    // チャート作成
+    setTimeout(() => () => {
+      this.createChart(this.claim.fraudScoreHistory);
+      this.inquiryStatus = this.complete;
+    }, 0);
   }
 
   // 最新のスコア詳細取得
