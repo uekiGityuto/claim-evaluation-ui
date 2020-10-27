@@ -86,10 +86,8 @@ export class DetailComponent implements OnInit, AfterViewChecked {
       return;
     }
     // チャート作成
-    setTimeout(() => () => {
-      this.createChart(this.claim.fraudScoreHistory);
-      this.inquiryStatus = this.complete;
-    }, 0);
+    this.createChart(this.claim.fraudScoreHistory);
+    this.inquiryStatus = this.complete;
   }
 
   // 最新のスコア詳細取得
@@ -117,13 +115,6 @@ export class DetailComponent implements OnInit, AfterViewChecked {
         const fraudScoreView = this.claim.fraudScoreHistory[end];
         this.getScoreInfo(fraudScoreView);
 
-        // 照会結果表示のレイアウトに変更
-        // this.inquiryStatus = this.normal;
-
-        // チャート作成
-        setTimeout(() => {
-          this.createChart(this.claim.fraudScoreHistory);
-        }, 1000);
       }, error => {
         this.inquiryStatus = this.error;
       }
