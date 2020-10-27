@@ -23,6 +23,7 @@ import { ListComponent } from './component/list/list.component';
 import { ErrorComponent } from './component/error/error.component';
 import { TooltipDirective } from './directive/tooltip.directive';
 import { JPDateAdapter } from './service/jp-date-adapter.service';
+import { LoadingComponent } from './component/loading/loading.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { JPDateAdapter } from './service/jp-date-adapter.service';
     DetailComponent,
     ListComponent,
     ErrorComponent,
-    TooltipDirective
+    TooltipDirective,
+    LoadingComponent
   ],
   imports: [
     BrowserModule,
