@@ -180,3 +180,17 @@ body {
   font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+/* Angular Materialのスタイル上書き */
+
+.cdk-overlay-backdrop {
+  background-color: #494848;
+}
+
+.cdk-overlay-transparent-backdrop, .cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 0.3;
+}
+
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+  opacity: 0.3;
+}

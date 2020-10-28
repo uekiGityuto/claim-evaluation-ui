@@ -9,7 +9,8 @@
 }
 
 .loader {
-  color: #888787;
+  color: #494848;
+  opacity: 0.3;
   font-size: 20px;
   width: 1em;
   height: 1em;

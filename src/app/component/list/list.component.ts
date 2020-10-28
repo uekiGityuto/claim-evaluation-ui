@@ -314,5 +314,4 @@ export class ListComponent implements OnInit, AfterViewChecked {
       return { istoLossDate: { valid: false } };
     }
   }
-
 }
