@@ -58,8 +58,13 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 検索用
   searchControl: FormGroup;
   param: TargetClaimList;
+
+  // 検索中ボタン非活性用
   @ViewChild('searchButton')
   searchButton: ElementRef;
+
+  // 検索ボタン押下フラグ
+  isSearchButton = false;
 
   constructor(private datepipe: DatePipe,
     private router: Router,
@@ -134,10 +139,10 @@ export class ListComponent implements OnInit, AfterViewChecked {
   // 検索処理
   search(): void {
     // バリデーション
-    if (this.searchControl.invalid) {
+    if (this.searchControl.invalid || this.searchStatus === this.searching) {
       return;
     }
-
+    this.isSearchButton = true;
     // HTTPリクエストのボディ部作成
     this.param = new TargetClaimList(this.searchControl, this.datepipe);
 
@@ -205,11 +210,12 @@ export class ListComponent implements OnInit, AfterViewChecked {
     // 事案一覧を取得
     this.client.post(params).subscribe(
       response => {
+        this.searchButton.nativeElement.removeAttribute('disabled');
+        this.isSearchButton = false;
 
         // 検索結果が無い場合の判定条件
         if (!response.claim || response.claim.length === 0) {
           this.searchStatus = this.noData;
-          this.searchButton.nativeElement.removeAttribute('disabled');
           return;
         }
 
@@ -234,11 +240,9 @@ export class ListComponent implements OnInit, AfterViewChecked {
         }
 
         this.searchStatus = this.normal;
-        this.searchButton.nativeElement.removeAttribute('disabled');
 
       }, error => {
         this.searchStatus = this.error;
-        this.searchButton.nativeElement.removeAttribute('disabled');
       }
     );
   };

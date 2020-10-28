@@ -88,7 +88,7 @@
     <ng-container *ngIf="searchStatus !== noData; else noDataMessage">
 
       <!-- 事案一覧テーブルエリア -->
-      <ng-container *ngIf="serchTimes !== zero || searchStatus !== searching; else searchingLayout">
+      <ng-container *ngIf="!isSearchButton || searchStatus !== searching; else searchingLayout">
         <ng-container *ngIf="serchTimes !== zero">
           <div #claimListCard class="claim-list-card">
             <!-- <ng-container *ngIf="claims.length !== 0"> -->
