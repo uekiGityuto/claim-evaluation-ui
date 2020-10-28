@@ -3,6 +3,7 @@ import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@ang
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
+import { Title } from '@angular/platform-browser';
 
 import * as moment from 'moment';
 
@@ -68,6 +69,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
   constructor(private datepipe: DatePipe,
     private router: Router,
+    private title: Title,
     private client: ClaimListClientService,
     private userInfo: UserInfoContainerService
   ) { }
@@ -78,6 +80,9 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
     // 認可処理を実施
     this.authorize();
+
+    // HTMLのTitleタグの内容を更新
+    this.title.setTitle('事案一覧');
 
     // FormControlインスタンス（検索フォーム）作成
     this.searchControl = new FormGroup({

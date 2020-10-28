@@ -75,7 +75,7 @@ export class DetailComponent implements OnInit, AfterViewChecked {
     this.userId = this.userInfo.userId;
 
     // HTMLのTitleタグの内容を更新
-    this.title.setTitle(this.claimNumber);
+    this.title.setTitle(`スコア詳細: ${this.claimNumber}`);
 
     // スコア詳細取得
     this.getLatestClaimInfo(this.claimNumber);

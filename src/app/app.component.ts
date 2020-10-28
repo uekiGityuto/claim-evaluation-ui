@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 
 import { UserInfoContainerService } from './service/user-info-container.service';
 import { AuthorizationClientService } from './service/authorization-client.service';
@@ -19,11 +20,15 @@ export class AppComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
     private router: Router,
+    private title: Title,
     private client: AuthorizationClientService,
     private userInfo: UserInfoContainerService
   ) { }
 
   public ngOnInit(): void {
+    // HTMLのTitleタグの内容を更新
+    this.title.setTitle('スコア詳細: ');
+
     // クエリパラメータをセット
     const param = this.getQueryVariable('param');
     const userId = this.getQueryVariable('Uid');
