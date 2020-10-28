@@ -86,8 +86,6 @@
   color: #fff;
   padding-right: 20px;
   padding-left: 20px;
-  /* position: relative;
-  z-index: 2000; */
 }
 
 .list-header-card-form-content__button:disabled {
@@ -116,7 +114,7 @@
 }
 
 .claim-list-header {
-  height: 56px;
+  height: 32px;
   font-size: var(--large-font-size);
   background-color: var(--card-header-bg-color);
   padding-right: var(--left-write-common-padding);
@@ -125,6 +123,26 @@
 
 .claim-list-header__item {
   padding-left: 8px;
+}
+
+.claim-list-header__item--claim-number {
+  width: 120px;
+}
+
+.claim-list-header__item--insurance-kind {
+  width: 120px;
+}
+
+.claim-list-header__item--update-date {
+  width: 120px;
+}
+
+.claim-list-header__item--loss-date {
+  width: 120px;
+}
+
+.claim-list-header__item--claim-category {
+  width: 130px;
 }
 
 .claim-list-dataset {
