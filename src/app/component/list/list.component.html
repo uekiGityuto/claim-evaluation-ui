@@ -88,10 +88,10 @@
     <ng-container *ngIf="searchStatus !== noData; else noDataMessage">
 
       <!-- 事案一覧テーブルエリア -->
-      <ng-container *ngIf="searchStatus !== searching; else searchingLayout">
+      <ng-container *ngIf="serchTimes !== zero || searchStatus !== searching; else searchingLayout">
         <ng-container *ngIf="serchTimes !== zero">
           <div #claimListCard class="claim-list-card">
-            <ng-container *ngIf="claims.length !== 0">
+            <!-- <ng-container *ngIf="claims.length !== 0"> -->
               <table class="claim-list" matSort (matSortChange)="sortList($event)" matSortActive="lossDate"
                 matSortDirection="desc" matSortDisableClear>
                 <tr #claimListHeader class="claim-list-header">
@@ -119,7 +119,8 @@
                       [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
                 </tr>
               </table>
-            </ng-container>
+              <ng-container *ngIf="searchStatus !== searching; else searchingLayout"></ng-container>
+            <!-- </ng-container> -->
           </div>
         </ng-container>
       </ng-container>
