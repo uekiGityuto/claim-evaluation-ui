@@ -209,7 +209,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
         // 検索結果が無い場合の判定条件
         if (!response.claim || response.claim.length === 0) {
           this.searchStatus = this.noData;
-          this.searchButton.nativeElement.setAttribute('disabled', 'disabled');
+          this.searchButton.nativeElement.removeAttribute('disabled');
           return;
         }
 
