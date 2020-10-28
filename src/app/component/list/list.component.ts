@@ -238,6 +238,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
       }, error => {
         this.searchStatus = this.error;
+        this.searchButton.nativeElement.removeAttribute('disabled');
       }
     );
   };
