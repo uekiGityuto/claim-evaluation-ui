@@ -4,6 +4,8 @@ import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/fo
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
 
+import * as moment from 'moment';
+
 import { CategoryClass } from '../../model/category-class';
 import { Claim } from '../../model/claim-list/claim';
 import { ClaimView } from '../../model/claim-view';
@@ -77,6 +79,8 @@ export class ListComponent implements OnInit, AfterViewChecked {
       claimNumber: new FormControl(),
       claimCategoryInfo: new FormControl(),
       insuranceKindInfo: new FormControl(),
+      // fromLossDate: new FormControl(null, [this.isFromLossDate]),
+      // toLossDate: new FormControl(null, [this.isToLossDate]),
       fromLossDate: new FormControl(),
       toLossDate: new FormControl(),
       insuredNameKana: new FormControl(null, [Validators.pattern(/^[ァ-ヶー　]+$/)]),
@@ -278,6 +282,30 @@ export class ListComponent implements OnInit, AfterViewChecked {
       return { isButenKyotenRadio: { valid: false } };
     } else {
       return null;
+    }
+  }
+
+  // 事故日fromが日付形式でなければ精査エラー
+  isFromLossDate(control: AbstractControl) {
+    if (!control.value || !control.value.fromLossDate) {
+      return null;
+    }
+    if (moment.isDate(control.value.fromLossDate)) {
+      return null;
+    } else {
+      return { isFromLossDate: { valid: false } };
+    }
+  }
+
+  // 事故日toが日付形式でなければ精査エラー
+  isToLossDate(control: AbstractControl) {
+    if (!control.value || !control.value.toLossDate) {
+      return null;
+    }
+    if (moment.isDate(control.value.toLossDate)) {
+      return null;
+    } else {
+      return { istoLossDate: { valid: false } };
     }
   }
 
