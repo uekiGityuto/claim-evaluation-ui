@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { FormControl, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Sort } from '@angular/material/sort';
@@ -118,7 +118,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
 
   // 事案一覧の行の高さ決め処理
   ngAfterViewChecked(): void {
-    if(this.serchTimes !== this.one) {
+    if (this.serchTimes !== this.one) {
       return;
     }
     const claimListCardHeight = this.claimListCard.nativeElement.offsetHeight;
@@ -240,7 +240,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
         this.nextButtonVisibility = this.toPages < this.totalNumber ? 'visible' : 'hidden';
 
         // 事案一覧の行の高さ決め処理をする場合の判定条件
-        if(this.serchTimes === this.zero) {
+        if (this.serchTimes === this.zero) {
           this.serchTimes = this.one;
         }
 
@@ -319,4 +319,11 @@ export class ListComponent implements OnInit, AfterViewChecked {
       return { istoLossDate: { valid: false } };
     }
   }
+
+  // @HostListener('window:beforeunload', ['$event'])
+  // beforeUnload(event: BeforeUnloadEvent) {
+  //   event.returnValue = '表示を更新する場合は、GNetから再度アクセスしてください';
+  //   event.preventDefault();
+  // }
+
 }
