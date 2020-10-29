@@ -78,8 +78,10 @@
           placeholder="担当部・担当拠点">
       </div>
       <div class="list-header-card-form-content">
-        <button #searchButton class="list-header-card-form-content__button" [disabled]="searchControl.invalid"
-          (click)="search()">検索</button>
+        <!-- <button #searchButton class="list-header-card-form-content__button" [disabled]="searchControl.invalid"
+          (click)="search()">検索</button> -->
+        <button #searchButton class="list-header-card-form-content__button"
+          [disabled]="searchControl.invalid || searchStatus === searching" (click)="search()">検索</button>
       </div>
     </form>
   </div>
