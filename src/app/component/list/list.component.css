@@ -63,6 +63,11 @@
   height: 32px;
 }
 
+.list-header-card-form-content__input.ng-dirty.ng-invalid {
+  background-color: #fbd7d6;
+  border: 1px solid #ff5f58;
+}
+
 .list-header-card-form-content__select {
   outline: solid 1px #767676;
   width: 200px;
@@ -215,7 +220,7 @@
 
 .pager__input:invalid {
   background-color: #fbd7d6;
-  border: solid 1px #ff5f58;
+  border-color: #ff5f58;
 }
 
 /* 検索結果が存在しない時のメッセージ用 */
