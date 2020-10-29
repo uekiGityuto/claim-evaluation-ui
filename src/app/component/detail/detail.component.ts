@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, ViewChild, ElementRef, HostListener  } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -436,6 +436,14 @@ export class DetailComponent implements OnInit, AfterViewChecked {
   // ヘルプ表示
   displayHelp() {
     window.open(environment.help_url);
+  }
+
+  // F5禁止
+  @HostListener('document:keydown', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    if (event.key === 'F5') {
+      event.preventDefault();
+    }
   }
 
 }

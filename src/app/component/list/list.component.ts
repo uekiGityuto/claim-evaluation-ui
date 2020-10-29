@@ -72,7 +72,11 @@ export class ListComponent implements OnInit, AfterViewChecked {
     private title: Title,
     private client: ClaimListClientService,
     private userInfo: UserInfoContainerService
-  ) { }
+  ) {
+    this.router.routeReuseStrategy.shouldReuseRoute = () => {
+      return false;
+    };
+   }
 
   ngOnInit(): void {
     // ユーザ情報取得
@@ -320,18 +324,14 @@ export class ListComponent implements OnInit, AfterViewChecked {
     }
   }
 
-  // @HostListener('window:beforeunload', ['$event'])
-  // beforeUnload(event: BeforeUnloadEvent) {
-  //   event.returnValue = '表示を更新する場合は、GNetから再度アクセスしてください';
-  //   event.preventDefault();
-  // }
-
-  // @HostListener('document:keydown', ['$event'])
-  // onKeydownHandler(event: KeyboardEvent) {
-  //   if (event.key === 'F5') {
-  //     this.router.navigate(['list']);
-  //     this.ngOnInit();
-  //   }
-  // }
+  // F5実行時は画面再読み込み
+  @HostListener('document:keydown', ['$event'])
+  onKeydownHandler(event: KeyboardEvent) {
+    if (event.key === 'F5') {
+      this.router.navigate(['list']);
+      // this.ngOnInit();
+      event.preventDefault();
+    }
+  }
 
 }
