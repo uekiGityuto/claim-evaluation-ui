@@ -326,4 +326,12 @@ export class ListComponent implements OnInit, AfterViewChecked {
   //   event.preventDefault();
   // }
 
+  // @HostListener('document:keydown', ['$event'])
+  // onKeydownHandler(event: KeyboardEvent) {
+  //   if (event.key === 'F5') {
+  //     this.router.navigate(['list']);
+  //     this.ngOnInit();
+  //   }
+  // }
+
 }
