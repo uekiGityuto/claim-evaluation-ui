@@ -15,13 +15,13 @@
 
       <!-- サブヘッダエリア -->
       <div class="detail-header-card">
-        <span class="detail-header-card__item">事案番号：{{ this.claim?.claimNumber }}</span>
-        <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
-        <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
+        <span class="detail-header-card__item">受付番号：{{ this.claim?.claimNumber }}</span>
         <span
           class="detail-header-card__item detail-header-card__item--block">保険種類：{{ this.claim?.insuranceKindExt }}</span>
         <span
           class="detail-header-card__item detail-header-card__item--block">事故日：{{ this.claim?.lossDate | date : 'yyyy/M/d' }}</span>
+        <span class="detail-header-card__item">契約者名：{{ this.claim?.contractorNameKana }}</span>
+        <span class="detail-header-card__item">被保険者名：{{ this.claim?.insuredNameKana }}</span>
         <span
           class="detail-header-card__item detail-header-card__item--block">更新日：{{ this.claim?.updateDate | date : 'yyyy/M/d' }}</span>
       </div>
@@ -36,7 +36,7 @@
           </div>
           <div class="claim-category-header__item">
             <span>スコアリング日：</span>
-            <span>{{ scoringDate | date : 'M月d日' }}</span>
+            <span>{{ scoringDate | date : 'yyyy/M/d' }}</span>
           </div>
         </div>
         <div class="claim-category">

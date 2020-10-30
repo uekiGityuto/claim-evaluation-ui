@@ -19,7 +19,6 @@
   padding-top: 8px;
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
-  box-shadow: 0 0 4px var(--dark-shadow-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-bottom-right-radius: 4px;
   border-bottom-left-radius: 4px;
@@ -50,7 +49,7 @@
 }
 
 .list-header-card-form-content {
-  padding-right: 12px;
+  padding-right: 16px;
 }
 
 .list-header-card-form-content:last-child {
@@ -120,7 +119,6 @@
   margin-right: auto;
   margin-left: auto;
   background-color: var(--card-bg-color);
-  box-shadow: 0 0 4px var(--dark-shadow-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-radius: 4px;
 }
@@ -186,7 +184,7 @@
 /* tooltip.directive.tsで使用 */
 .claim-list-ellipsis {
   white-space: nowrap;
-  overflow: hidden;
+  overflow-y: hidden;
   text-overflow: ellipsis;
   max-width: 0;
 }
@@ -229,7 +227,6 @@
   height: 256px;
   width: 1200px;
   background-color: var(--card-bg-color);
-  box-shadow: 0 0 4px var(--dark-shadow-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-radius: 4px;
   margin-top: 152px;
