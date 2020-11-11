@@ -110,18 +110,17 @@
                 <th class="claim-list-header__item claim-list-header__item--claim-category"
                   mat-sort-header="claimCategory">事案カテゴリ</th>
               </tr>
-              <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" align="center" valign="middle"
-                [style.height.px]="rowHeight">
-                <td><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
-                <td [appTooltip]="claim.insuredNameKana">
+              <tr class="claim-list-dataset" #tableDatas *ngFor="let claim of claims" [style.height.px]="rowHeight">
+                <td class="claim-list-dataset__item"><a [routerLink]="['/detail', claim.claimNumber]">{{ claim.claimNumber }}</a></td>
+                <td class="claim-list-dataset__item" [appTooltip]="claim.insuredNameKana">
                   {{ claim.insuredNameKana }}</td>
-                <td [appTooltip]="claim.contractorNameKana">
+                <td class="claim-list-dataset__item" [appTooltip]="claim.contractorNameKana">
                   {{ claim.contractorNameKana }}</td>
-                <td [appTooltip]="claim.base">{{ claim.base }}</td>
-                <td>{{ claim.insuranceKind }}</td>
-                <td>{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
-                <td>{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
-                <td><span class="claim-list-dataset__claim-category"
+                <td class="claim-list-dataset__item" [appTooltip]="claim.base">{{ claim.base }}</td>
+                <td class="claim-list-dataset__item">{{ claim.insuranceKind }}</td>
+                <td class="claim-list-dataset__item">{{ claim.lastUpdateDate | date : 'yyyy/M/d' }}</td>
+                <td class="claim-list-dataset__item">{{ claim.lossDate | date : 'yyyy/M/d'}}</td>
+                <td class="claim-list-dataset__item"><span class="claim-list-dataset__claim-category"
                     [ngClass]="claim.categoryClass">{{ claim.claimCategory }}</span></td>
               </tr>
             </table>

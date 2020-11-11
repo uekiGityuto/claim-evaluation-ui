@@ -116,6 +116,7 @@ export class ListComponent implements OnInit, AfterViewChecked {
     const matSelectValues: HTMLElement[] = Array.prototype.slice.call(document.getElementsByClassName('mat-select-value'));
     matSelectValues.forEach(matSelectValue => {
       matSelectValue.style.verticalAlign = 'middle';
+      matSelectValue.style.paddingLeft = '2px';
     });
 
   }

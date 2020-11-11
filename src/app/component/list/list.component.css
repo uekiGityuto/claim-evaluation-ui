@@ -165,14 +165,15 @@
   background-color: var(--card-bg-color);
   padding-right: var(--left-write-common-padding);
   padding-left: var(--left-write-common-padding);
-}
-
-.claim-list-dataset {
   border-bottom: 1px solid #cacaca;
 }
 
 .claim-list-dataset:last-of-type {
   border-bottom: none;
+}
+
+.claim-list-dataset__item {
+  padding-left: 8px;
 }
 
 .claim-list-dataset__claim-category {
