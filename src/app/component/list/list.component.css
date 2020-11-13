@@ -7,7 +7,7 @@
   height: calc(var(--window-height) - var(--main-header-height));
   display: flex;
   flex-direction: column;
-  overflow-y: hidden;
+  /* overflow-y: hidden; */
   padding-bottom: 8px;
 }
 
@@ -124,6 +124,7 @@
 }
 
 .claim-list {
+  max-height: 100%;
   width: 100%;
   border-collapse: collapse;
 }
@@ -194,9 +195,6 @@
 
 .pager {
   height: 40px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   display: flex;
   justify-content: center;
   align-items: center;
