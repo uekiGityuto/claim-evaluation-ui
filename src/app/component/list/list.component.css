@@ -121,6 +121,7 @@
   background-color: var(--card-bg-color);
   box-shadow: 0 0 8px var(--light-shadow-color);
   border-radius: 4px;
+  overflow-y: auto;
 }
 
 .claim-list {
